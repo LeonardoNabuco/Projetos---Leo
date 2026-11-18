@@ -121,7 +121,7 @@ table.cgt td{padding:10px;border-bottom:1px solid var(--line);vertical-align:mid
 tr.cg{cursor:pointer}tr.cg:hover td,tr.cg.open td{background:#f7faf9}
 .cbar{display:inline-block;width:calc(100% - 34px);height:8px;background:#eef1f3;border-radius:4px;overflow:hidden;vertical-align:middle;margin-right:6px}.cbar i{display:block;height:100%}.c-r{background:#dc2626}.c-y{background:#eab308}.c-g{background:#16a34a}
 table.cgl{width:100%;border-collapse:collapse;font-size:12px}table.cgl th{text-align:left;color:var(--mut);padding:5px 6px;border-bottom:1px solid var(--line)}table.cgl td{padding:5px 6px;border-bottom:1px solid #eef1f3}
-.shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:calc(100vh - 53px)}
+.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:calc(100vh - 53px)}
 #side{background:var(--card);border-right:1px solid var(--line)}
 .menu{position:sticky;top:0;padding:12px 10px;display:flex;flex-direction:column;gap:2px}
 .mi{border:none;background:transparent;justify-content:flex-start;width:100%;padding:8px 10px;border-radius:8px;color:#3b4a54;font-weight:500;gap:8px}
@@ -129,7 +129,7 @@ table.cgl{width:100%;border-collapse:collapse;font-size:12px}table.cgl th{text-a
 .mic2{width:20px;text-align:center}.ml{flex:1;text-align:left}
 .mg{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin:14px 10px 6px}
 #selProj{width:100%;margin-bottom:6px;font-weight:600}
-.pbtns{display:flex;gap:4px;margin-bottom:8px}.pbtns button{flex:1;justify-content:center;padding:4px 2px!important}
+.pbtns{display:flex;gap:4px;margin-bottom:8px}.pbtns button{flex:1 1 0;min-width:0;justify-content:center;padding:4px 3px!important;white-space:nowrap;font-size:11.5px}.pbtns button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .menubtn{display:none;border:none;font-size:20px;padding:2px 8px}
 main{max-width:none!important;margin:0!important;padding:18px 22px!important}
 .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -329,7 +329,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.4</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.5</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -637,7 +637,9 @@ if(!S||!Array.isArray(S.projetos)||!S.projetos.length){const p=novoProjeto("Meu 
 S.projetos.forEach(normaliza);
 let cfg={key:"",model:"claude-sonnet-5-5"};try{Object.assign(cfg,JSON.parse(localStorage.getItem(CFG))||{})}catch(e){}
 const projVis=()=>S.projetos.filter(p=>!p.oculto);
-const P=()=>{const v=projVis();return v.find(p=>p.id===S.cur)||v[0]||S.projetos.find(p=>p.id===S.cur)||S.projetos[0]};
+let mostrarOcultos=false;
+const projMenu=()=>mostrarOcultos&&podeGerir()?S.projetos:projVis();
+const P=()=>{const v=projMenu();return v.find(p=>p.id===S.cur)||v[0]||S.projetos.find(p=>p.id===S.cur)||S.projetos[0]};
 const podeGerir=()=>!USER||ehGestor();
 let saveT=null,stState="ok";
 const chaveLocal=()=>USER?KEY+"_u_"+USER.id:KEY;
@@ -922,13 +924,13 @@ function render(){
  $("side").innerHTML=`<nav class="menu ${menuAberto?"aberto":""}">
   ${it("painel","📊",ehGestor()||!USER?"Painel gerencial":"Meu painel")}
   <div class="mg">Projeto</div>
-  <select id="selProj" title="Projeto aberto">${projVis().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}</option>`).join("")}</select>
-  <div class="pbtns"><button class="sm" data-act="proj-new" title="Novo projeto">+ Novo</button>${projVis().length?`<button class="sm" data-act="proj-dup">Duplicar</button>`:""}${podeGerir()&&projVis().length?`<button class="sm" data-act="proj-ocultar" title="Ocultar projeto (somente gestor)">Ocultar</button>`:""}</div>
-  ${projVis().length?`${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
+  <select id="selProj" title="Projeto aberto">${projMenu().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${x.oculto?"🙈 ":""}${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}${x.oculto?" (oculto)":""}</option>`).join("")}</select>
+  ${podeGerir()?`<div class="pbtns"><button class="sm" data-act="proj-new" title="Abrir novo projeto">+ Novo</button>${projMenu().length?(P().oculto?`<button class="sm" data-act="proj-reexibir" data-arg="${P().id}" title="Reexibir este projeto">Reexibir</button>`:`<button class="sm" data-act="proj-ocultar" title="Ocultar este projeto">Ocultar</button>`):""}<button class="sm ${mostrarOcultos?"on":""}" data-act="mostrar-ocultos" title="${mostrarOcultos?"Esconder projetos ocultos do menu":"Mostrar projetos ocultos no menu"} (${S.projetos.filter(x=>x.oculto).length} oculto(s))">${mostrarOcultos?"✓ Ocultos":"👁 Ocultos"}</button></div>`:""}
+  ${projMenu().length?`${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
   ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
-  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:`<p class="hint" style="margin:6px 10px">Nenhum projeto visível. Use "+ Novo" para abrir um projeto.</p>`}
+  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:`<p class="hint" style="margin:6px 10px">${podeGerir()?"Nenhum projeto visível. Use \"+ Novo\" para abrir um projeto.":"Nenhum projeto disponível. Peça ao gestor para abrir um projeto ou incluir você na equipe."}</p>`}
  </nav>`;
- if(tab==="carga"||!projVis().length)tab="painel";
+ if(tab==="carga"||!projMenu().length)tab="painel";
  if(!sel||!p.etapas.some(e=>e.id===sel))sel=(ativas(p)[0]||p.etapas[0]||{}).id;
  $("app").innerHTML=({painel:rPainel,mapa:rMapa,gest:rGest,docs:rDocs,perg:rPerg,visual:rVisual,ader:rAder,aud:rAud,aten:rAten,exp:rExp}[tab]||rPainel)();
  setSt();
@@ -961,7 +963,7 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
   +node({ic:"🖨",t:"Imprimir / PDF",s:"Pela impressão do navegador",act:"print"})
   +node({ic:"🔗",t:"Fluxograma e texto",s:"Mermaid e texto para copiar",act:"tab",arg:"exp"})
   +node({ic:"💾",t:"Backup do projeto",s:"Salvar em arquivo .json",act:"dl-json"});
- return `<div class="hero"><div><h2>${esc(p.nome)}</h2><div class="sub">${[I.cliente,I.tipo,I.esp].filter(Boolean).map(esc).join(" · ")||"Dados do projeto ainda não preenchidos"}</div>${p.abertura?`<div class="sub" style="font-size:11px">Aberto em ${fmtData(p.abertura.data.slice(0,10))}${p.abertura.por?" por "+esc(p.abertura.por):""}${p.abertura.modo&&p.abertura.modo!=="novo"?" · "+esc(p.abertura.modo):""}</div>`:""}</div>
+ return `<div class="hero"><div><h2>${esc(p.nome)}${p.oculto?` <span class="tag a" style="vertical-align:middle">🙈 oculto</span>`:""}</h2><div class="sub">${[I.cliente,I.tipo,I.esp].filter(Boolean).map(esc).join(" · ")||"Dados do projeto ainda não preenchidos"}</div>${p.abertura?`<div class="sub" style="font-size:11px">Aberto em ${fmtData(p.abertura.data.slice(0,10))}${p.abertura.por?" por "+esc(p.abertura.por):""}${p.abertura.modo&&p.abertura.modo!=="novo"?" · "+esc(p.abertura.modo):""}</div>`:""}</div>
  <div class="fatual"><div class="l">Fase atual</div><div class="fv">${esc(faseNome(I.fase))}</div></div>${cd}</div>
  ${prox}
  <div class="mgrid">
@@ -1380,11 +1382,12 @@ document.addEventListener("click",async ev=>{
   case"dl-json":baixar(new Blob([JSON.stringify({tipo:"ppi-projeto",v:1,projeto:p},null,1)],{type:"application/json"}),nomeArq("backup","json"));return;
   case"dl-all":baixar(new Blob([JSON.stringify({tipo:"ppi-todos",v:1,projetos:S.projetos},null,1)],{type:"application/json"}),"Projetos de implantação - backup completo.json");return;
   case"imp-json":$("fileJson").click();return;
-  case"proj-new":abrirFormProjeto("novo");return;
-  case"proj-dup":abrirFormProjeto("dup");return;
+  case"proj-new":if(!podeGerir()){toast("Somente o gestor pode abrir projetos");return}abrirFormProjeto("novo");return;
+  case"mostrar-ocultos":if(!podeGerir())return;mostrarOcultos=!mostrarOcultos;if(!mostrarOcultos&&P().oculto){const v=projVis();if(v.length)S.cur=v[0].id}break;
+  case"proj-dup":return;
   case"proj-ocultar":{if(!podeGerir()){toast("Somente o gestor pode ocultar projetos");return}const alvo=P();
    confirmar({titulo:"Ocultar projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> deixará de aparecer para toda a equipe (painel, menu e indicadores). Nenhum dado é apagado: o gestor pode reexibi-lo a qualquer momento no Painel gerencial.`,ok:"Ocultar projeto"},
-    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};alvo.upd=Date.now();marcar(alvo.id);const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel";sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
+    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};alvo.upd=Date.now();marcar(alvo.id);if(!mostrarOcultos){const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel"}sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
   case"proj-reexibir":{if(!podeGerir())return;const alvo=S.projetos.find(x=>x.id===arg);if(!alvo)return;
    confirmar({titulo:"Reexibir projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> volta a aparecer para a equipe.`,ok:"Reexibir"},()=>{delete alvo.oculto;alvo.upd=Date.now();marcar(alvo.id);persist();render();toast("Projeto reexibido")});return}
   case"proj-renomear":{if(!podeGerir()){toast("Somente o gestor pode alterar o nome do projeto");return}abrirRenomear();return}
