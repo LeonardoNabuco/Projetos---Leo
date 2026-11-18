@@ -273,6 +273,18 @@ table.ad textarea{min-height:34px}
 @keyframes sp{to{transform:rotate(360deg)}}
 details>summary{cursor:pointer;font-weight:600}
 #print{display:none}
+#modal{position:fixed;inset:0;background:rgba(29,42,51,.45);z-index:90;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.mcard{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:100%;max-width:720px;padding:24px 26px}
+.mcard h2{margin:0 0 4px;font-size:21px}.mcard .msub{color:var(--mut);font-size:13px;margin-bottom:16px}
+.msec{font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px;border-top:1px solid var(--line);padding-top:14px}
+.mg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mg2 .full{grid-column:1/-1}
+.mg2 label{display:block;font-size:12px;color:var(--mut);font-weight:600;margin-bottom:4px}.mg2 label b{color:#b91c1c}
+.mg2 input,.mg2 select{width:100%}
+.mg2 label.eqm{display:inline-flex;margin:0;font-size:13px;color:var(--ink);font-weight:500}.mg2 label.eqm input{width:auto}
+.mfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.merr{background:#fde8e8;color:#b91c1c;border-radius:8px;padding:8px 12px;font-size:13px;margin-top:12px}
+.inv{border-color:#dc2626!important;background:#fff8f8}
+@media(max-width:560px){.mg2{grid-template-columns:1fr}}
 #login{position:fixed;inset:0;background:linear-gradient(135deg,#e3f3f1,#f5f7f8);z-index:100;align-items:center;justify-content:center;padding:20px}
 .lcard{background:#fff;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:28px 30px;width:100%;max-width:400px}
 .lbrand{font-weight:700;color:var(--acc);font-size:14px;margin-bottom:8px}
@@ -315,9 +327,10 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.2</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.3</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
+<div id="modal" style="display:none"></div>
 <div class="toast" id="toast"></div>
 <input type="file" id="fileJson" accept=".json,application/json" hidden>
 
@@ -812,7 +825,7 @@ function toggleMic(key){
 /* ============ RELATÓRIO / EXPORTAÇÕES ============ */
 const fmtData=d=>d&&/^\d{4}-\d{2}-\d{2}$/.test(d)?d.split("-").reverse().join("/"):(d||"");
 function relatorio(p=P()){const I=p.info;
- return{titulo:p.nome,meta:[["Cliente",I.cliente],["Sede",I.sede],["Filiais / unidades",I.unidades],["Tipo de estabelecimento",I.tipo],["Especialidades",I.esp],["Gestor do sistema",I.gestor],["Técnico alocado",I.responsavel],["Líder técnico",I.lider],["Técnicos envolvidos",I.tecnicos],["Gerente do projeto",I.gerente],["Fase atual",faseNome(I.fase)],["Kickoff",fmtData(I.kickoff)],["Previsão do Start",fmtData(I.start)],["Observações",I.obs]].filter(x=>x[1]),
+ return{titulo:p.nome,meta:[["Abertura do projeto",p.abertura?fmtData(p.abertura.data.slice(0,10))+(p.abertura.por?" por "+p.abertura.por:""):""],["Cliente",I.cliente],["Sede",I.sede],["Filiais / unidades",I.unidades],["Tipo de estabelecimento",I.tipo],["Especialidades",I.esp],["Gestor do sistema",I.gestor],["Técnico alocado",I.responsavel],["Líder técnico",I.lider],["Técnicos envolvidos",I.tecnicos],["Gerente do projeto",I.gerente],["Fase atual",faseNome(I.fase)],["Kickoff",fmtData(I.kickoff)],["Previsão do Start",fmtData(I.start)],["Observações",I.obs]].filter(x=>x[1]),
   tec:p.tecnico||[],
   et:ativas(p).map((e,i)=>({n:i+1,id:e.id,tit:e.tit,setor:e.setor,linhas:resumo(e),passos:passos(e),dec:decisoes(e),al:alertas(e),nota:e.nota,pend:pendentes(e).map(q=>q.q)})),
   ader:p.aderencia.map(a=>({...a,etapaNome:nomeEtapa(p,a.etapa)})),sug:p.sugestoes||[],
@@ -944,7 +957,7 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
   +node({ic:"🖨",t:"Imprimir / PDF",s:"Pela impressão do navegador",act:"print"})
   +node({ic:"🔗",t:"Fluxograma e texto",s:"Mermaid e texto para copiar",act:"tab",arg:"exp"})
   +node({ic:"💾",t:"Backup do projeto",s:"Salvar em arquivo .json",act:"dl-json"});
- return `<div class="hero"><div><h2>${esc(p.nome)}</h2><div class="sub">${[I.cliente,I.tipo,I.esp].filter(Boolean).map(esc).join(" · ")||"Dados do projeto ainda não preenchidos"}</div></div>
+ return `<div class="hero"><div><h2>${esc(p.nome)}</h2><div class="sub">${[I.cliente,I.tipo,I.esp].filter(Boolean).map(esc).join(" · ")||"Dados do projeto ainda não preenchidos"}</div>${p.abertura?`<div class="sub" style="font-size:11px">Aberto em ${fmtData(p.abertura.data.slice(0,10))}${p.abertura.por?" por "+esc(p.abertura.por):""}${p.abertura.modo&&p.abertura.modo!=="novo"?" · "+esc(p.abertura.modo):""}</div>`:""}</div>
  <div class="fatual"><div class="l">Fase atual</div><div class="fv">${esc(faseNome(I.fase))}</div></div>${cd}</div>
  ${prox}
  <div class="mgrid">
@@ -1018,6 +1031,53 @@ function rEquipeProjeto(p){if(!USER||!EQUIPE.length)return"";const dono=pessoaPo
  const outros=EQUIPE.filter(u=>u.id!==p.owner);
  return `<div class="panel"><h2>Equipe do projeto</h2><p class="hint" style="font-size:13px">Quem pode ver e editar este projeto. Gestores têm acesso a todos os projetos.</p>
  <div class="eq"><span class="eqd">👑 ${esc(nomeU(dono)||"Você")} <small>responsável</small></span>${outros.map(u=>`<label class="eqm ${(p.membros||[]).includes(u.id)?"on":""}"><input type="checkbox" data-membro="${u.id}" ${(p.membros||[]).includes(u.id)?"checked":""}> ${esc(nomeU(u))}${u.papel==="gestor"?" <small>gestor</small>":""}</label>`).join("")}</div></div>`}
+let formModo=null;
+function fecharModal(){const m=$("modal");m.style.display="none";m.innerHTML="";formModo=null}
+function abrirFormProjeto(modo){formModo=modo;const base=modo==="dup"?P():null,I=base?base.info:{};
+ const hoje=hojeISO();const gest=ehGestor()&&EQUIPE.length;const eu=USER?USER.id:"";
+ const outros=EQUIPE.filter(u=>u.id!==eu);
+ const v=(id,val)=>esc(val||"");
+ $("modal").innerHTML=`<div class="mcard" role="dialog" aria-modal="true">
+  <h2>${modo==="dup"?"Duplicar projeto":"Abertura de novo projeto"}</h2>
+  <div class="msub">${modo==="dup"?`Será criada uma cópia de <b>${esc(base.nome)}</b> com a trilha, o fluxo e a aderência atuais. Revise os dados da nova cópia.`:"Registre os dados de abertura. O projeto só é criado ao clicar em \"Abrir projeto\"."} Campos com <b style="color:#b91c1c">*</b> são obrigatórios.</div>
+  <div class="msec">Identificação</div>
+  <div class="mg2">
+   <div class="full"><label>Nome do projeto <b>*</b></label><input type="text" id="np_nome" value="${v(0,base?base.nome+" (cópia)":"")}" placeholder="Ex.: Implantação Klingo · Clínica Vida"></div>
+   <div><label>Cliente <b>*</b></label><input type="text" id="np_cliente" value="${v(0,I.cliente)}"></div>
+   <div><label>Tipo de estabelecimento</label><select id="np_tipo"><option value=""></option>${TIPOS.map(o=>`<option ${I.tipo===o?"selected":""}>${o}</option>`).join("")}</select></div>
+   <div><label>Sede</label><input type="text" id="np_sede" value="${v(0,I.sede)}"></div>
+   <div><label>Filiais / unidades</label><input type="text" id="np_unid" value="${v(0,I.unidades)}"></div>
+   <div class="full"><label>Especialidades</label><input type="text" id="np_esp" value="${v(0,I.esp)}" placeholder="Ex.: cardiologia, ortopedia"></div></div>
+  <div class="msec">Cronograma</div>
+  <div class="mg2">
+   <div><label>Kickoff <b>*</b></label><input type="date" id="np_kick" value="${v(0,modo==="dup"?I.kickoff||hoje:hoje)}"></div>
+   <div><label>Previsão do Start</label><input type="date" id="np_start" value="${v(0,I.start)}"></div>
+   <div class="full"><label>Fase inicial</label><select id="np_fase">${FASES.map(f=>`<option value="${f}" ${(modo==="dup"?I.fase:"f0")===f?"selected":""}>${esc(faseNome(f))}</option>`).join("")}</select></div></div>
+  <div class="msec">Responsáveis</div>
+  <div class="mg2">
+   ${USER?`<div><label>Técnico responsável (dono) <b>*</b></label>${gest?`<select id="np_owner">${EQUIPE.map(u=>`<option value="${u.id}" ${u.id===eu?"selected":""}>${esc(nomeU(u))}${u.papel==="gestor"?" (gestor)":""}</option>`).join("")}</select>`:`<input type="text" value="${esc(nomeU(MEU)||USER.email||"")}" disabled>`}</div>`:""}
+   <div><label>Técnico alocado (texto)</label><input type="text" id="np_resp" value="${v(0,I.responsavel||(USER?nomeU(MEU):""))}"></div>
+   <div><label>Líder técnico</label><input type="text" id="np_lider" value="${v(0,I.lider)}"></div>
+   <div><label>Gerente do projeto</label><input type="text" id="np_ger" value="${v(0,I.gerente)}"></div>
+   <div><label>Gestor do sistema (cliente)</label><input type="text" id="np_gestor" value="${v(0,I.gestor)}"></div>
+   ${USER&&outros.length?`<div class="full"><label>Equipe do projeto (acesso para ver e editar)</label><div class="eq" style="margin-top:4px">${outros.map(u=>`<label class="eqm"><input type="checkbox" class="np_mem" value="${u.id}"> ${esc(nomeU(u))}</label>`).join("")}</div></div>`:""}
+  </div>
+  <div id="np_err"></div>
+  <div class="mfoot"><button data-act="np-cancelar">Cancelar</button><button class="pri" data-act="np-salvar">${modo==="dup"?"Criar cópia":"Abrir projeto"}</button></div></div>`;
+ $("modal").style.display="flex";setTimeout(()=>{const f=$("np_nome");if(f){f.focus();if(modo==="dup")f.select()}},30)}
+function salvarFormProjeto(){const g=id=>(($(id)||{}).value||"").trim();const err=[];
+ ["np_nome","np_cliente","np_kick"].forEach(id=>{const el=$(id);if(el){el.classList.toggle("inv",!g(id))}});
+ if(!g("np_nome"))err.push("Informe o nome do projeto.");if(!g("np_cliente"))err.push("Informe o cliente.");if(!g("np_kick"))err.push("Informe a data do kickoff.");
+ if(g("np_start")&&g("np_kick")&&g("np_start")<g("np_kick")){err.push("A previsão do Start não pode ser anterior ao kickoff.");$("np_start").classList.add("inv")}
+ if(S.projetos.some(x=>x.nome.trim().toLowerCase()===g("np_nome").toLowerCase()))err.push("Já existe um projeto com esse nome.");
+ if(err.length){$("np_err").innerHTML=`<div class="merr">${err.map(esc).join("<br>")}</div>`;return}
+ let n;if(formModo==="dup"){n=JSON.parse(JSON.stringify(P()));n.id=uid("p");n.criado=Date.now();n.membros=[]}else n=novoProjeto();
+ n.nome=g("np_nome");Object.assign(n.info,{cliente:g("np_cliente"),tipo:g("np_tipo"),sede:g("np_sede"),unidades:g("np_unid"),esp:g("np_esp"),kickoff:g("np_kick"),start:g("np_start"),fase:g("np_fase")||"f0",responsavel:g("np_resp"),lider:g("np_lider"),gerente:g("np_ger"),gestor:g("np_gestor")});
+ if(USER){n.owner=g("np_owner")||USER.id;n.membros=[...document.querySelectorAll(".np_mem:checked")].map(x=>x.value).filter(x=>x!==n.owner)}
+ n.abertura={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:formModo==="dup"?"duplicado de "+P().nome:"novo"};
+ S.projetos.push(n);S.cur=n.id;tab="mapa";sel=null;faseVista=null;iaMsg=null;iaUndo=null;menuAberto=false;fecharModal();save();render();
+ toast(formModo==="dup"?"Cópia criada":`Projeto "${n.nome}" aberto e salvo`,3500)}
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&$("modal").style.display==="flex")fecharModal();if(ev.key==="Enter"&&$("modal").style.display==="flex"&&ev.target.tagName==="INPUT"&&ev.target.type!=="checkbox"){ev.preventDefault();salvarFormProjeto()}});
 function rDados(){const p=P(),I=p.info;
  const sel_=(k,ops)=>`<select data-bind="info.${k}" style="width:100%"><option value=""></option>${ops.map(o=>`<option ${I[k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
  const txt=(k,ph)=>`<input type="text" data-bind="info.${k}" value="${esc(I[k])}" placeholder="${esc(ph||"")}">`;
@@ -1249,6 +1309,7 @@ document.addEventListener("click",async ev=>{
  const b=ev.target.closest("[data-act]");
  if(!b){if(delArm){delArm=false;render()}return}
  const act=b.dataset.act,arg=b.dataset.arg;
+ if(act==="np-salvar"||act==="np-cancelar"){ev.preventDefault();act==="np-salvar"?salvarFormProjeto():fecharModal();return}
  if(act.startsWith("login-")||act.startsWith("mig-")||act.startsWith("nome-")||act==="sair"||act==="nuvem-salvar"||act==="nuvem-remover"){ev.preventDefault();
   if(act==="login-go")acaoLogin();else if(act==="login-modo"){loginMsg=null;telaLogin(arg)}else if(act==="login-retry")iniciarNuvem();else if(act==="sair")sair();
   else if(act==="mig-sim"){const L=mostrarMigracao.lista||[];L.forEach(x=>{normaliza(x);x.owner=USER.id;x.membros=[];if(!S.projetos.some(y=>y.id===x.id)){S.projetos.push(x);marcar(x.id)}});
@@ -1297,8 +1358,8 @@ document.addEventListener("click",async ev=>{
   case"dl-json":baixar(new Blob([JSON.stringify({tipo:"ppi-projeto",v:1,projeto:p},null,1)],{type:"application/json"}),nomeArq("backup","json"));return;
   case"dl-all":baixar(new Blob([JSON.stringify({tipo:"ppi-todos",v:1,projetos:S.projetos},null,1)],{type:"application/json"}),"Projetos de implantação - backup completo.json");return;
   case"imp-json":$("fileJson").click();return;
-  case"proj-new":{const n=novoProjeto();S.projetos.push(n);S.cur=n.id;tab="mapa";sel=null;iaMsg=null;iaUndo=null;save();break}
-  case"proj-dup":{const c=JSON.parse(JSON.stringify(p));c.id=uid("p");if(USER){c.owner=USER.id;c.membros=[]}c.nome+=" (cópia)";c.criado=Date.now();S.projetos.push(c);S.cur=c.id;save();toast("Projeto duplicado");break}
+  case"proj-new":abrirFormProjeto("novo");return;
+  case"proj-dup":abrirFormProjeto("dup");return;
   case"proj-del":if(!delArm){delArm=true;break}delArm=false;S.projetos=S.projetos.filter(x=>x.id!==p.id);if(USER){sync.dirty.delete(p.id);sync.del.add(p.id);clearTimeout(sync.timer);sync.timer=setTimeout(enviarNuvem,500)}if(!S.projetos.length){S.projetos.push(novoProjeto());marcar(S.projetos[0].id)}S.cur=S.projetos[0].id;tab="mapa";sel=null;persist();toast("Projeto excluído");break;
  }
  render();
