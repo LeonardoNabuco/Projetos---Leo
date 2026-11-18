@@ -282,6 +282,8 @@ details>summary{cursor:pointer;font-weight:600}
 .mg2 input,.mg2 select{width:100%}
 .mg2 label.eqm{display:inline-flex;margin:0;font-size:13px;color:var(--ink);font-weight:500}.mg2 label.eqm input{width:auto}
 .mfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+#modal.centro{align-items:center}
+.mcard.cf{max-width:460px;text-align:center}.cfic{font-size:34px;margin-bottom:6px}.cftx{color:#3b4a54;font-size:14px;line-height:1.5}
 .merr{background:#fde8e8;color:#b91c1c;border-radius:8px;padding:8px 12px;font-size:13px;margin-top:12px}
 .inv{border-color:#dc2626!important;background:#fff8f8}
 @media(max-width:560px){.mg2{grid-template-columns:1fr}}
@@ -327,7 +329,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.3</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.4</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -634,7 +636,9 @@ let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!Array.isArray(S.projetos)||!S.projetos.length){const p=novoProjeto("Meu primeiro projeto");S={cur:p.id,projetos:[p]}}
 S.projetos.forEach(normaliza);
 let cfg={key:"",model:"claude-sonnet-5-5"};try{Object.assign(cfg,JSON.parse(localStorage.getItem(CFG))||{})}catch(e){}
-const P=()=>S.projetos.find(p=>p.id===S.cur)||S.projetos[0];
+const projVis=()=>S.projetos.filter(p=>!p.oculto);
+const P=()=>{const v=projVis();return v.find(p=>p.id===S.cur)||v[0]||S.projetos.find(p=>p.id===S.cur)||S.projetos[0]};
+const podeGerir=()=>!USER||ehGestor();
 let saveT=null,stState="ok";
 const chaveLocal=()=>USER?KEY+"_u_"+USER.id:KEY;
 function persist(){clearTimeout(saveT);saveT=null;
@@ -911,20 +915,20 @@ function imprimir(){const r=relatorio();let h=`<div class="k">PROJETO DE IMPLANT
 /* ============ TELAS ============ */
 let tab="painel",menuAberto=false,ganttAberto=new Set(),gestSub="trilha",faseVista=null,filtroTr="todas",trOpen=new Set(),sel=null,delArm=false,filtroAd="todos";
 function render(){
- const p=P();
+ const p=P();if(p&&p.oculto===undefined&&S.cur!==p.id)S.cur=p.id;
  $("userbox").innerHTML=USER?`<span class="ubox" title="${esc(USER.email||"")}">👤 ${esc(nomeU(MEU)||(USER.email||"").split("@")[0])}${ehGestor()?" · gestor":""}</span><button class="sm" data-act="sair">Sair</button>`:"";
  const T=totais();const at=T.al+T.gaps+pendenciasTrilha(p).length;
  const it=(k,ic,l,b)=>`<button class="mi ${tab===k?"on":""}" data-act="tab" data-arg="${k}"><span class="mic2">${ic}</span><span class="ml">${l}</span>${b?`<span class="badge">${b}</span>`:""}</button>`;
  $("side").innerHTML=`<nav class="menu ${menuAberto?"aberto":""}">
   ${it("painel","📊",ehGestor()||!USER?"Painel gerencial":"Meu painel")}
   <div class="mg">Projeto</div>
-  <select id="selProj" title="Projeto aberto">${S.projetos.slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}</option>`).join("")}</select>
-  <div class="pbtns"><button class="sm" data-act="proj-new" title="Novo projeto">+ Novo</button><button class="sm" data-act="proj-dup">Duplicar</button><button class="sm danger" data-act="proj-del">${delArm?"Confirmar":"Excluir"}</button></div>
-  ${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
+  <select id="selProj" title="Projeto aberto">${projVis().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}</option>`).join("")}</select>
+  <div class="pbtns"><button class="sm" data-act="proj-new" title="Novo projeto">+ Novo</button>${projVis().length?`<button class="sm" data-act="proj-dup">Duplicar</button>`:""}${podeGerir()&&projVis().length?`<button class="sm" data-act="proj-ocultar" title="Ocultar projeto (somente gestor)">Ocultar</button>`:""}</div>
+  ${projVis().length?`${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
   ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
-  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}
+  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:`<p class="hint" style="margin:6px 10px">Nenhum projeto visível. Use "+ Novo" para abrir um projeto.</p>`}
  </nav>`;
- if(tab==="carga")tab="painel";
+ if(tab==="carga"||!projVis().length)tab="painel";
  if(!sel||!p.etapas.some(e=>e.id===sel))sel=(ativas(p)[0]||p.etapas[0]||{}).id;
  $("app").innerHTML=({painel:rPainel,mapa:rMapa,gest:rGest,docs:rDocs,perg:rPerg,visual:rVisual,ader:rAder,aud:rAud,aten:rAten,exp:rExp}[tab]||rPainel)();
  setSt();
@@ -1031,8 +1035,21 @@ function rEquipeProjeto(p){if(!USER||!EQUIPE.length)return"";const dono=pessoaPo
  const outros=EQUIPE.filter(u=>u.id!==p.owner);
  return `<div class="panel"><h2>Equipe do projeto</h2><p class="hint" style="font-size:13px">Quem pode ver e editar este projeto. Gestores têm acesso a todos os projetos.</p>
  <div class="eq"><span class="eqd">👑 ${esc(nomeU(dono)||"Você")} <small>responsável</small></span>${outros.map(u=>`<label class="eqm ${(p.membros||[]).includes(u.id)?"on":""}"><input type="checkbox" data-membro="${u.id}" ${(p.membros||[]).includes(u.id)?"checked":""}> ${esc(nomeU(u))}${u.papel==="gestor"?" <small>gestor</small>":""}</label>`).join("")}</div></div>`}
-let formModo=null;
-function fecharModal(){const m=$("modal");m.style.display="none";m.innerHTML="";formModo=null}
+let formModo=null,cfCallback=null;
+function confirmar(o,cb){cfCallback=cb;$("modal").innerHTML=`<div class="mcard cf" role="alertdialog" aria-modal="true"><div class="cfic">${o.icone||"⚠️"}</div><h2>${o.titulo}</h2><div class="cftx">${o.texto}</div>
+ <div class="mfoot" style="justify-content:center"><button data-act="cf-cancelar">Cancelar</button><button class="pri" data-act="cf-ok">${o.ok||"Confirmar"}</button></div></div>`;
+ $("modal").style.display="flex";$("modal").classList.add("centro");setTimeout(()=>{const b=document.querySelector('[data-act="cf-cancelar"]');if(b)b.focus()},30)}
+function abrirRenomear(){const p=P();cfCallback=null;$("modal").innerHTML=`<div class="mcard" style="max-width:520px"><h2>Alterar nome do projeto</h2><div class="msub">Nome atual: <b>${esc(p.nome)}</b></div>
+ <div class="mg2"><div class="full"><label>Novo nome <b>*</b></label><input type="text" id="rn_nome" value="${esc(p.nome)}"></div></div><div id="rn_err"></div>
+ <div class="mfoot"><button data-act="cf-cancelar">Cancelar</button><button class="pri" data-act="rn-salvar">Continuar</button></div></div>`;
+ $("modal").style.display="flex";$("modal").classList.add("centro");setTimeout(()=>{const f=$("rn_nome");if(f){f.focus();f.select()}},30)}
+function salvarRenomear(){const p=P(),novo=(($("rn_nome")||{}).value||"").trim();const e=[];
+ if(!novo)e.push("Informe o novo nome.");else if(novo===p.nome)e.push("O nome informado é igual ao atual.");else if(S.projetos.some(x=>x.id!==p.id&&x.nome.trim().toLowerCase()===novo.toLowerCase()))e.push("Já existe um projeto com esse nome.");
+ if(e.length){$("rn_err").innerHTML=`<div class="merr">${e.map(esc).join("<br>")}</div>`;$("rn_nome").classList.add("inv");return}
+ const antigo=p.nome;
+ confirmar({titulo:"Confirmar alteração do nome?",texto:`O projeto <b>${esc(antigo)}</b> passará a se chamar <b>${esc(novo)}</b> para toda a equipe. A alteração fica registrada no histórico do projeto.`,ok:"Confirmar alteração",icone:"✏️"},
+  ()=>{p.renomeacoes=[...(p.renomeacoes||[]),{de:antigo,para:novo,por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()}];p.nome=novo;save();render();toast("Nome do projeto alterado")})}
+function fecharModal(){const m=$("modal");m.style.display="none";m.innerHTML="";m.classList.remove("centro");formModo=null}
 function abrirFormProjeto(modo){formModo=modo;const base=modo==="dup"?P():null,I=base?base.info:{};
  const hoje=hojeISO();const gest=ehGestor()&&EQUIPE.length;const eu=USER?USER.id:"";
  const outros=EQUIPE.filter(u=>u.id!==eu);
@@ -1077,13 +1094,14 @@ function salvarFormProjeto(){const g=id=>(($(id)||{}).value||"").trim();const er
  n.abertura={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:formModo==="dup"?"duplicado de "+P().nome:"novo"};
  S.projetos.push(n);S.cur=n.id;tab="mapa";sel=null;faseVista=null;iaMsg=null;iaUndo=null;menuAberto=false;fecharModal();save();render();
  toast(formModo==="dup"?"Cópia criada":`Projeto "${n.nome}" aberto e salvo`,3500)}
-document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&$("modal").style.display==="flex")fecharModal();if(ev.key==="Enter"&&$("modal").style.display==="flex"&&ev.target.tagName==="INPUT"&&ev.target.type!=="checkbox"){ev.preventDefault();salvarFormProjeto()}});
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&$("modal").style.display==="flex")fecharModal();if(ev.key==="Enter"&&$("modal").style.display==="flex"&&ev.target.tagName==="INPUT"&&ev.target.type!=="checkbox"){ev.preventDefault();if(ev.target.id==="rn_nome")salvarRenomear();else if(formModo)salvarFormProjeto()}});
 function rDados(){const p=P(),I=p.info;
  const sel_=(k,ops)=>`<select data-bind="info.${k}" style="width:100%"><option value=""></option>${ops.map(o=>`<option ${I[k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
  const txt=(k,ph)=>`<input type="text" data-bind="info.${k}" value="${esc(I[k])}" placeholder="${esc(ph||"")}">`;
  return `${rEquipeProjeto(p)} <div class="panel"><h2>Dados do projeto</h2>
  <div class="form">
-  <div class="full"><label>Nome do projeto</label><input type="text" data-bind="nome" value="${esc(p.nome)}"></div>
+  <div class="full"><label>Nome do projeto</label><div style="display:flex;gap:8px;align-items:center"><input type="text" value="${esc(p.nome)}" disabled style="flex:1;background:#f5f7f8;color:var(--ink);font-weight:600">${podeGerir()?`<button data-act="proj-renomear">✏️ Alterar nome</button>`:`<span class="hint" style="margin:0">Somente o gestor pode alterar o nome</span>`}</div>
+   ${(p.renomeacoes||[]).length?`<div class="hint">Histórico: ${p.renomeacoes.map(r=>`"${esc(r.de)}" → "${esc(r.para)}" (${fmtData(r.data.slice(0,10))}${r.por?", "+esc(r.por):""})`).join(" · ")}</div>`:""}</div>
   <div><label>Cliente</label>${txt("cliente")}</div><div><label>Sede</label>${txt("sede")}</div><div><label>Filiais / unidades</label>${txt("unidades","Ex.: Matriz e Filial Centro")}</div>
   <div><label>Tipo de estabelecimento</label>${sel_("tipo",TIPOS)}</div><div><label>Especialidades</label>${txt("esp","Ex.: cardiologia, ortopedia")}</div>
   <div><label>Gestor do sistema (cliente)</label>${txt("gestor")}</div>
@@ -1184,9 +1202,9 @@ function addDias(n){const d=new Date();d.setDate(d.getDate()+n);return d.getFull
 function cargaEquipe(){const hoje=hojeISO(),em7=addDias(7),em30=addDias(30);
  const reg=u=>({u,proj:[],ab:[],em:0,ar:0,atr:0,pc:0,v7:0,starts:[]});
  let base=EQUIPE.slice();
- if(!base.length){const nomes=new Map();S.projetos.forEach(p=>TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{const n=String(a.rw||"").trim();if(n&&!nomes.has(normT(n)))nomes.set(normT(n),{id:"txt:"+normT(n),nome:n})})));base=[...nomes.values()]}
+ if(!base.length){const nomes=new Map();projVis().forEach(p=>TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{const n=String(a.rw||"").trim();if(n&&!nomes.has(normT(n)))nomes.set(normT(n),{id:"txt:"+normT(n),nome:n})})));base=[...nomes.values()]}
  const P_=base.map(reg),sem=reg({id:"",nome:"Sem responsável"});
- S.projetos.forEach(p=>{const membrosP=[p.owner,...(p.membros||[])];
+ projVis().forEach(p=>{const membrosP=[p.owner,...(p.membros||[])];
   P_.forEach(x=>{if(membrosP.includes(x.u.id)){x.proj.push(p);if(p.info.start&&p.info.start>=hoje&&p.info.start<=em30)x.starts.push(p)}});
   TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{if(a.st==="CONCLUÍDO"||a.st==="NÃO APLICAR")return;const u=respDe(a);let alvo=u?P_.find(x=>x.u.id===u.id):null;if(!alvo&&!EQUIPE.length&&a.rw)alvo=P_.find(x=>x.u.id==="txt:"+normT(a.rw));if(!alvo)alvo=sem;
    alvo.ab.push({p,f:f.id,a});if(atrasada(a))alvo.atr++;else if(a.st==="PENDENTE CLIENTE")alvo.pc++;else if(a.st==="EM ANDAMENTO")alvo.em++;else alvo.ar++;if(!atrasada(a)&&a.fim&&a.fim>=hoje&&a.fim<=em7)alvo.v7++}))});
@@ -1198,7 +1216,7 @@ function spansProjeto(p){const fases=[];TRILHA.filter(f=>f.fase).forEach(f=>{con
  let a=p.info.kickoff||(fases.length?fases.reduce((m,x)=>x.a<m?x.a:m,fases[0].a):""),b=p.info.start||(fases.length?fases.reduce((m,x)=>x.b>m?x.b:m,fases[0].b):"");
  if(a&&b&&b<a)[a,b]=[b,a];return{a,b,fases}}
 function progressoProjeto(p){let t=0,o=0;TRILHA.forEach(f=>{const st=statusFase(p,f.id);t+=st.tot;o+=st.ok});return t?Math.round(o/t*100):0}
-function rGantt(){const hoje=hojeISO();const rows=S.projetos.map(p=>({p,...spansProjeto(p)}));
+function rGantt(){const hoje=hojeISO();const rows=projVis().map(p=>({p,...spansProjeto(p)}));
  const datas=[];rows.forEach(r=>{if(r.a)datas.push(r.a);if(r.b)datas.push(r.b);r.fases.forEach(x=>{datas.push(x.a,x.b)})});datas.push(hoje);
  let ini=datas.reduce((m,x)=>x<m?x:m),fim=datas.reduce((m,x)=>x>m?x:m);
  let d0=dt(ini);d0.setDate(1);let d1=dt(fim);d1=new Date(d1.getFullYear(),d1.getMonth()+1,1);
@@ -1232,9 +1250,9 @@ function rCargaSemanal(C){const seg=d=>{const x=new Date(d);const k=(x.getDay()+
 function rPainel(){const C=cargaEquipe(),hoje=hojeISO(),em30=addDias(30);
  const pessoas=[...C.pessoas,...(C.sem.ab.length?[C.sem]:[])];
  const tot=pessoas.reduce((a,x)=>({ab:a.ab+x.ab.length,atr:a.atr+x.atr,pc:a.pc+x.pc}),{ab:0,atr:0,pc:0});
- const ativos=S.projetos.filter(p=>p.info.fase!=="f7"||statusFase(p,"f7").c!=="g");
- const starts=S.projetos.filter(p=>p.info.start&&p.info.start>=hoje).sort((a,b)=>a.info.start.localeCompare(b.info.start));
- const media=S.projetos.length?Math.round(S.projetos.reduce((a,p)=>a+progressoProjeto(p),0)/S.projetos.length):0;
+ const ativos=projVis().filter(p=>p.info.fase!=="f7"||statusFase(p,"f7").c!=="g");
+ const starts=projVis().filter(p=>p.info.start&&p.info.start>=hoje).sort((a,b)=>a.info.start.localeCompare(b.info.start));
+ const PV=projVis();const media=PV.length?Math.round(PV.reduce((a,p)=>a+progressoProjeto(p),0)/PV.length):0;
  const max=Math.max(1,...C.pessoas.map(x=>x.ab.length));
  const barras=pessoas.length?pessoas.map(x=>{const id=x.u.id||"__sem",ab=cargaAberta===id;const seg=(n,c,l)=>n?`<i style="width:${Math.min(100,n/max*100)}%;background:${c}" title="${l}: ${n}"></i>`:"";
    let h=`<div class="pb ${ab?"open":""}" data-act="carga-ab" data-arg="${id}"><div class="pn"><b>${esc(nomeU(x.u)||x.u.nome)}</b><span>${x.u.id&&!String(x.u.id).startsWith("txt:")?`${x.proj.length} projeto${x.proj.length===1?"":"s"}`:""}</span></div>
@@ -1256,6 +1274,8 @@ function rPainel(){const C=cargaEquipe(),hoje=hojeISO(),em30=addDias(30);
   <div class="panel" style="margin:0"><div class="ptitle"><h3>Próximos Starts</h3></div>${starts.length?starts.slice(0,8).map(p=>{const d=Math.ceil((dt(p.info.start)-dt(hoje))/864e5);return `<div class="sx" data-act="abrir-proj" data-arg="${p.id}"><div class="sd2"><b>${fmtData(p.info.start).slice(0,5)}</b><span>${d===0?"hoje":d+" dia"+(d===1?"":"s")}</span></div><div><b>${esc(p.nome)}</b><div class="hint" style="margin:0">${esc(faseNome(p.info.fase))} · ${progressoProjeto(p)}% da trilha</div></div></div>`}).join(""):`<p class="hint">Nenhum Start agendado. Defina a previsão do Start em Gestão do projeto.</p>`}</div></div>
  <div class="panel"><div class="ptitle"><h3>Cronograma dos projetos (Gantt)</h3><span class="hint" style="margin:0">Clique em ▸ para abrir as fases · no nome para abrir o projeto</span></div>${rGantt()}</div>
  <div class="panel"><div class="ptitle"><h3>Carga semanal · próximas 8 semanas</h3></div>${rCargaSemanal(C)}</div>
+ ${podeGerir()&&S.projetos.some(x=>x.oculto)?`<div class="panel"><h3 style="margin:0 0 4px">Projetos ocultos</h3><p class="hint" style="font-size:13px;margin-top:0">Não aparecem para a equipe nem nos indicadores. Nenhum dado foi apagado.</p>
+ <table class="cgl"><tr><th>Projeto</th><th>Ocultado em</th><th>Por</th><th></th></tr>${S.projetos.filter(x=>x.oculto).map(x=>`<tr><td><b>${esc(x.nome)}</b></td><td>${x.oculto.data?fmtData(x.oculto.data.slice(0,10)):"—"}</td><td>${esc(x.oculto.por||"—")}</td><td><button class="sm" data-act="proj-reexibir" data-arg="${x.id}">Reexibir</button></td></tr>`).join("")}</table></div>`:""}
  ${ehGestor()?`<div class="panel"><h3 style="margin:0 0 4px">Equipe</h3><p class="hint" style="font-size:13px;margin-top:0">Todos que criaram conta no app. Gestores veem e editam todos os projetos.</p>
  <table class="cgl"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`:""}`}
 function rCarga(){if(!ehGestor())return"";const C=cargaEquipe(),hoje=hojeISO();
@@ -1309,6 +1329,8 @@ document.addEventListener("click",async ev=>{
  const b=ev.target.closest("[data-act]");
  if(!b){if(delArm){delArm=false;render()}return}
  const act=b.dataset.act,arg=b.dataset.arg;
+ if(act==="cf-ok"||act==="cf-cancelar"){ev.preventDefault();const cb=cfCallback;fecharModal();if(act==="cf-ok"&&cb)cb();return}
+ if(act==="rn-salvar"){ev.preventDefault();salvarRenomear();return}
  if(act==="np-salvar"||act==="np-cancelar"){ev.preventDefault();act==="np-salvar"?salvarFormProjeto():fecharModal();return}
  if(act.startsWith("login-")||act.startsWith("mig-")||act.startsWith("nome-")||act==="sair"||act==="nuvem-salvar"||act==="nuvem-remover"){ev.preventDefault();
   if(act==="login-go")acaoLogin();else if(act==="login-modo"){loginMsg=null;telaLogin(arg)}else if(act==="login-retry")iniciarNuvem();else if(act==="sair")sair();
@@ -1360,7 +1382,13 @@ document.addEventListener("click",async ev=>{
   case"imp-json":$("fileJson").click();return;
   case"proj-new":abrirFormProjeto("novo");return;
   case"proj-dup":abrirFormProjeto("dup");return;
-  case"proj-del":if(!delArm){delArm=true;break}delArm=false;S.projetos=S.projetos.filter(x=>x.id!==p.id);if(USER){sync.dirty.delete(p.id);sync.del.add(p.id);clearTimeout(sync.timer);sync.timer=setTimeout(enviarNuvem,500)}if(!S.projetos.length){S.projetos.push(novoProjeto());marcar(S.projetos[0].id)}S.cur=S.projetos[0].id;tab="mapa";sel=null;persist();toast("Projeto excluído");break;
+  case"proj-ocultar":{if(!podeGerir()){toast("Somente o gestor pode ocultar projetos");return}const alvo=P();
+   confirmar({titulo:"Ocultar projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> deixará de aparecer para toda a equipe (painel, menu e indicadores). Nenhum dado é apagado: o gestor pode reexibi-lo a qualquer momento no Painel gerencial.`,ok:"Ocultar projeto"},
+    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};alvo.upd=Date.now();marcar(alvo.id);const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel";sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
+  case"proj-reexibir":{if(!podeGerir())return;const alvo=S.projetos.find(x=>x.id===arg);if(!alvo)return;
+   confirmar({titulo:"Reexibir projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> volta a aparecer para a equipe.`,ok:"Reexibir"},()=>{delete alvo.oculto;alvo.upd=Date.now();marcar(alvo.id);persist();render();toast("Projeto reexibido")});return}
+  case"proj-renomear":{if(!podeGerir()){toast("Somente o gestor pode alterar o nome do projeto");return}abrirRenomear();return}
+  case"proj-del":if(!podeGerir())return;if(!delArm){delArm=true;break}delArm=false;S.projetos=S.projetos.filter(x=>x.id!==p.id);if(USER){sync.dirty.delete(p.id);sync.del.add(p.id);clearTimeout(sync.timer);sync.timer=setTimeout(enviarNuvem,500)}if(!S.projetos.length){S.projetos.push(novoProjeto());marcar(S.projetos[0].id)}S.cur=S.projetos[0].id;tab="mapa";sel=null;persist();toast("Projeto excluído");break;
  }
  render();
 });
