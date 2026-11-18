@@ -425,7 +425,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.12.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.13.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1509,7 +1509,7 @@ function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
  if(!filtros.some(([v])=>v===filtroTr))filtroTr="todas";
  const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":filtroTr==="concluidas"?x.st==="CONCLUÍDO":atrasada(x)));
  const grupos=[...new Set(vis.map(x=>x.g))];
- const card=x=>{const op=trOpen.has(x.id),u=respDe(x),late=atrasada(x),tem=x.obs||x.ru||x.link;
+ const card=x=>{const op=trOpen.has(x.id),u=respDe(x),late=atrasada(x),tem=x.obs||x.link;
   return `<div class="ativ st-${stSlug(x.st)} ${late?"late":""} ${op?"open":""}">
    <div class="arow">
     <div class="atit"><div class="att">${x.cod?`<span class="acod">${esc(x.cod)}</span>`:""}${esc(x.t)||'<i style="color:var(--mut)">Atividade sem descrição</i>'}</div>
@@ -1520,15 +1520,10 @@ function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
      <label class="fl"><span>Prazo</span><input type="date" data-tr="fim" data-id="${x.id}" value="${esc(x.fim)}"></label>
      <button class="amais" data-act="tr-det" data-arg="${x.id}" title="${op?"Fechar detalhes":"Mais detalhes"}">${op?"Fechar ▴":"Detalhes ▾"}</button></div></div>
    ${op?`<div class="adet">
-    <div class="w2"><label>Descrição da atividade</label><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}"></div>
-    <div><label>Início previsto</label><input type="date" data-tr="ini" data-id="${x.id}" value="${esc(x.ini)}"></div>
-    <div><label>Validação do cliente</label><select data-tr="val" data-id="${x.id}">${VAL_TR.map(o=>`<option value="${o}" ${x.val===o?"selected":""}>${o||"—"}</option>`).join("")}</select></div>
+    ${!x.tk?`<div class="w2"><label>Descrição da atividade (incluída manualmente)</label><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}" placeholder="Descreva a atividade"></div>`:""}
     <div class="w2"><label>Observações / próximos passos</label><textarea data-tr="obs" data-id="${x.id}" rows="3">${esc(x.obs)}</textarea></div>
-    <div class="w2"><label>Critério de aceite</label><textarea data-tr="crit" data-id="${x.id}" rows="2">${esc(x.crit)}</textarea></div>
-    <div><label>Responsável / referência na unidade</label><input type="text" data-tr="ru" data-id="${x.id}" value="${esc(x.ru)}"></div>
-    <div><label>Link de documentos (vídeos, RAPs...)</label><input type="text" data-tr="link" data-id="${x.id}" value="${esc(x.link)}"></div>
+    <div><label>Link de documentos (vídeos, RAPs...)</label><input type="text" data-tr="link" data-id="${x.id}" value="${esc(x.link)}" placeholder="Cole aqui o link"></div>
     <div><label>Área de atuação</label><select data-tr="a" data-id="${x.id}">${AREAS.map(a=>`<option value="${a.id}" ${x.a===a.id?"selected":""}>${AREA_IC[a.id]} ${esc(a.l)}</option>`).join("")}</select></div>
-    <div class="adel"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div>
     <div class="ahist">${rHistAtiv(p,x.id)}</div></div>`:""}</div>`};
  let body="";grupos.forEach(g=>{const its=vis.filter(x=>x.g===g),todos=LA.filter(x=>x.g===g),ok=todos.filter(x=>x.st==="CONCLUÍDO").length,ap=todos.filter(x=>x.st!=="NÃO APLICAR").length;
   body+=`<div class="agrp"><div class="agh"><span>${esc(g)}</span><small>${ok} de ${ap} concluídas</small></div>${its.map(card).join("")}</div>`});
@@ -1916,8 +1911,8 @@ document.addEventListener("click",async ev=>{
   case"carga-ab":cargaAberta=cargaAberta===arg?null:arg;break;
   case"abrir-ativ":{const[pid,fid]=arg.split("|");S.cur=pid;projSel=true;tab="gest";gestSub="trilha";faseVista=fid;filtroTr="abertas";render();window.scrollTo({top:0});return}
   case"tr-det":trOpen.has(arg)?trOpen.delete(arg):trOpen.add(arg);break;
-  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",a:AREA_IDS.includes(filtroArea)?filtroArea:"ger",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);registrar(p,{tipo:"trilha",ref:it.id,f:faseVista,a:it.a,alvo:"Nova atividade",campo:"",rot:"Atividade incluída",de:"",para:faseNome(faseVista)});filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
-  case"tr-rm":{const x=(p.trilha[faseVista]||[]).find(y=>y.id===arg);if(x)registrar(p,{tipo:"trilha",ref:x.id,f:faseVista,a:x.a,alvo:(x.cod?x.cod+" ":"")+x.t,campo:"",rot:"Atividade excluída",de:x.st,para:""})}p.trilha[faseVista]=p.trilha[faseVista].filter(x=>x.id!==arg);trOpen.delete(arg);save();break;
+  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",a:AREA_IDS.includes(filtroArea)?filtroArea:"ger",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);trOpen.add(it.id);setTimeout(()=>{const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f){f.scrollIntoView({block:"center"});f.focus()}},60);registrar(p,{tipo:"trilha",ref:it.id,f:faseVista,a:it.a,alvo:"Nova atividade",campo:"",rot:"Atividade incluída",de:"",para:faseNome(faseVista)});filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
+  case"tr-rm-desativado":{const x=(p.trilha[faseVista]||[]).find(y=>y.id===arg);if(x)registrar(p,{tipo:"trilha",ref:x.id,f:faseVista,a:x.a,alvo:(x.cod?x.cod+" ":"")+x.t,campo:"",rot:"Atividade excluída",de:x.st,para:""})}p.trilha[faseVista]=p.trilha[faseVista].filter(x=>x.id!==arg);trOpen.delete(arg);save();break;
   case"open":tab="perg";sel=arg;render();const pn=$("painel");if(pn&&window.innerWidth<=900)pn.scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0});return;
   case"mark":{const i=+arg,e=p.etapas[i];e.ativa=!e.ativa;save();break}
   case"allet":p.etapas.forEach(e=>e.ativa=arg==="1");save();toast(arg==="1"?"Todas as etapas incluídas":"Todas as etapas desmarcadas");break;
@@ -1997,6 +1992,7 @@ document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
  if(d.papel&&SB){const id=d.papel,v=t.value;SB.from("perfis").update({papel:v}).eq("id",id).then(({error})=>{if(error){toast("Não foi possível alterar: "+msgErro(error));carregarEquipe().then(render)}else{const u=pessoaPorId(id);if(u)u.papel=v;toast("Papel atualizado");render()}});return}
  if(d.tr==="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;if(t.value!=="__livre"){logAtiv(p,x,faseVista,"rwId",x.rw||"",t.value?nomeU(pessoaPorId(t.value)):"");x.rwId=t.value;x.rw=t.value?nomeU(pessoaPorId(t.value)):""}save();render();return}
  if(d.tr&&faseVista&&(t.tagName==="SELECT"||t.type==="date")){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;logAtiv(p,x,faseVista,d.tr,x[d.tr],t.value);x[d.tr]=t.value;
+  if(d.tr==="st"){const hj=hojeISO();if(!x.fim||t.value==="CONCLUÍDO"){if(x.fim!==hj){logAtiv(p,x,faseVista,"fim",x.fim,hj);x.fim=hj}}}
   if(d.tr==="st"&&USER&&x.rwId!==USER.id){const ant=x.rw||"";x.rwId=USER.id;x.rw=quemSou();logAtiv(p,x,faseVista,"rwId",ant,x.rw);toast(`Status atualizado · responsável: ${x.rw}`,2500)}
   if(d.tr==="st"){const st=statusFase(p,faseVista),i=FASES.indexOf(faseVista);if(st.c==="g"&&p.info.fase===faseVista&&i>=0&&i<FASES.length-1){p.info.fase=FASES[i+1];toast(`${faseNome(faseVista)} concluída! Fase atual agora: ${faseNome(FASES[i+1])}`,4000)}}
   save();render();return}
