@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projetos de Implantação Klingo</title>
+<style>
+:root{--bg:#f5f7f8;--card:#fff;--ink:#1d2a33;--mut:#66757f;--line:#dfe5e9;--acc:#0f7c74;--acc2:#e3f3f1;--warn:#b45309;--warnbg:#fef3e2;--dec:#5b4bc4;--decbg:#eeebfb;--blue:#2b5a7a;--bluebg:#eef4f8;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Inter,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+header h1{font-size:16px;margin:0 10px 0 0;color:var(--acc)}
+.st{margin-left:auto;font-size:12px;color:var(--mut);white-space:nowrap}
+.st.err{color:var(--red)}
+select,input,textarea{font:inherit;color:inherit;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:#fff;max-width:100%}
+textarea{width:100%;resize:vertical;min-height:70px}
+input[type=text],input[type=password],input[type=date]{width:100%}
+button,.btn{font:inherit;border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;color:inherit;display:inline-flex;align-items:center;gap:6px}
+button:hover,.btn:hover{border-color:var(--acc)}
+button:disabled{opacity:.5;cursor:default}
+.pri{background:var(--acc)!important;color:#fff!important;border-color:var(--acc)!important}
+.danger{color:var(--red)}
+.sm{padding:3px 8px!important;font-size:12px}
+nav{display:flex;gap:2px;padding:0 16px;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto}
+nav button{border:none;border-bottom:3px solid transparent;border-radius:0;padding:11px 12px;color:var(--mut);font-weight:500;white-space:nowrap}
+nav button.on{color:var(--acc);border-bottom-color:var(--acc)}
+.badge{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:1px 7px;font-size:11px}
+main{padding:18px 20px;max-width:1400px;margin:0 auto}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.panel h2{margin:0 0 4px;font-size:18px}
+.panel h3{margin:0 0 6px;font-size:15px}
+.hint{color:var(--mut);font-size:12px;margin-top:6px}
+.form{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:14px}
+.form label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px;font-weight:600}
+.form .full{grid-column:1/-1}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer}
+.kpi:hover{border-color:var(--acc)}
+.kpi .n{font-size:24px;font-weight:700}
+.kpi .l{font-size:12px;color:var(--mut)}
+.next{background:var(--acc2);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+/* mapa */
+.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:16px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.hero h2{margin:0;font-size:21px}
+.hero .sub{color:var(--mut);font-size:13px;margin-top:3px}
+.hero .cd{text-align:right}
+.fatual{margin-left:auto;background:var(--acc2);border-radius:10px;padding:8px 12px}.fatual .l{font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}.fatual select{font-weight:600;border-color:var(--acc);color:var(--acc)}
+.hero .cd .n{font-size:26px;font-weight:700;color:var(--acc)}
+.hero .cd .l{font-size:12px;color:var(--mut)}
+.fases{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 16px}
+.fase{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.fase.vista{border:2px solid var(--ink);padding:11px 13px}
+.fase .fn{font-weight:700;font-size:14px}
+.st3{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:20px;padding:3px 10px;align-self:flex-start}
+.st3 .dot{width:9px;height:9px;border-radius:50%}
+.st3.r{background:#fde8e8;color:#b91c1c}.st3.r .dot{background:#dc2626}
+.st3.y{background:#fef6d8;color:#92400e}.st3.y .dot{background:#eab308}
+.st3.g{background:#e3f3f1;color:#0f7c74}.st3.g .dot{background:#16a34a}
+.pbar{height:7px;background:#eef1f3;border-radius:4px;overflow:hidden}.pbar i{display:block;height:100%}
+.pbar.r i{background:#dc2626}.pbar.y i{background:#eab308}.pbar.g i{background:#16a34a}
+.fase .cnt{font-size:12px;color:var(--mut)}
+.fase button{justify-content:center;margin-top:2px}
+@media(max-width:1000px){.fases{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.fases{grid-template-columns:1fr}}
+.st3.n{background:#eef1f3;color:#66757f}.st3.n .dot{background:#9aa5ad}.pbar.n i{background:#9aa5ad}
+.fase.atual{box-shadow:inset 0 3px 0 var(--acc)}
+.fa{font-size:10px;background:var(--acc);color:#fff;border-radius:8px;padding:1px 6px;vertical-align:middle;font-weight:600}
+table.tr{width:100%;border-collapse:collapse;min-width:1050px}
+table.tr th{text-align:left;font-size:12px;color:var(--mut);padding:7px 6px;border-bottom:2px solid var(--line);background:#fafbfc}
+table.tr td{padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.tr input,table.tr select,table.tr textarea{width:100%;font-size:13px;padding:5px 7px}
+table.tr .cod{font-size:12px;color:var(--mut);font-weight:600;padding-top:11px;white-space:nowrap}
+table.tr .crit{font-size:11px;color:var(--mut);margin:3px 2px 0}
+tr.trg td{background:var(--acc2);font-weight:700;color:var(--acc);font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+tr.late td{background:#fffaf0}
+tr.na td input[type=text]{text-decoration:line-through;color:var(--mut)}
+tr.det td{background:#fafbfc}
+.detg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.detg .w2{grid-column:span 2}.detg label{display:block;font-size:11px;color:var(--mut);font-weight:600;margin-bottom:3px}
+.ss{font-weight:600}.ss-ar{background:#f1f3f5}.ss-em{background:#fef6d8;color:#92400e}.ss-ok{background:#e3f3f1;color:#0f7c74}.ss-pc{background:#fde8e8;color:#b91c1c}.ss-na{background:#fff;color:#9aa5ad}
+.fases{grid-template-columns:repeat(5,1fr)!important}
+/* auditoria */
+table.au{width:100%;border-collapse:collapse;background:var(--card)}
+table.au th{text-align:left;font-size:12px;color:var(--mut);padding:7px;border-bottom:2px solid var(--line);background:#fafbfc}
+table.au td{padding:6px 7px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13px}
+table.au select,table.au textarea{width:100%;font-size:13px;padding:5px 7px}
+table.au textarea{min-height:34px}
+.va-SIM{background:#e3f3f1;color:#0f7c74;font-weight:600}.va-PARCIAL{background:#fef6d8;color:#92400e;font-weight:600}.va-NÃO{background:#fde8e8;color:#b91c1c;font-weight:600}.va-NSA{background:#f1f3f5;color:#66757f}
+.fatual .fv{font-weight:700;color:var(--acc);font-size:15px}
+.mgrid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}.kgrid .kpi{padding:12px 14px}.kgrid .kpi .n{font-size:22px}
+.ptitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.ptitle h3{margin:0;font-size:16px}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px}
+.dv .dl{font-size:11px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.03em}.dv .dd{font-size:14px;font-weight:600;margin-top:2px}.vazio{color:#c3cbd1;font-weight:400}
+h3.sect{font-size:15px;margin:6px 2px 10px}
+.fase.clk{cursor:pointer;transition:.15s}.fase.clk:hover{border-color:var(--acc);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+.subnav{display:flex;gap:6px;margin-bottom:14px}.subnav button{border-radius:20px;font-weight:600}.subnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.pill{border-radius:20px;font-size:13px;padding:6px 12px}.pill small{color:var(--mut)}.pill.on{border:2px solid var(--ink);font-weight:600;padding:5px 11px}
+.dot.d-r{background:#dc2626}.dot.d-y{background:#eab308}.dot.d-g{background:#16a34a}.dot.d-n{background:#9aa5ad}
+@media(max-width:1000px){.mgrid{grid-template-columns:1fr}.dgrid{grid-template-columns:1fr 1fr}}
+.seg{display:inline-flex;background:#e9edf0;border-radius:10px;padding:3px;margin-bottom:14px}
+.seg button{border:none;background:transparent;border-radius:8px;padding:7px 16px;font-weight:600;color:var(--mut)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.stepper{display:grid;grid-template-columns:repeat(9,1fr) 90px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 10px 12px;margin-bottom:14px;position:relative;overflow-x:auto;min-width:0}
+.stepper::before{content:"";position:absolute;left:5%;right:calc(90px + 5%);top:33px;height:3px;background:#e3e8eb;z-index:0}
+.step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;padding:0 2px;cursor:pointer;min-width:74px}
+.step:hover .sc{transform:scale(1.08)}
+.step .sc{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);transition:.15s}
+.step.s-r .sc{background:#dc2626}.step.s-y .sc{background:#eab308}.step.s-g .sc{background:#16a34a}.step.s-n .sc{background:#9aa5ad}
+.step.on .sc{box-shadow:0 0 0 3px var(--ink);transform:scale(1.12)}
+.step .sn{font-size:12px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2}
+.step.on .sn{text-decoration:underline;text-underline-offset:3px}
+.step .sp{font-size:11px;color:var(--mut)}
+.step .sa{font-size:10px;background:var(--acc);color:#fff;border-radius:8px;padding:0 6px;font-weight:600}
+.step.gp{border-left:1px dashed var(--line);margin-left:6px}
+@media(max-width:1000px){.stepper{grid-template-columns:repeat(10,minmax(74px,1fr))}.stepper::before{display:none}}
+.eq{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.eqd{background:var(--acc2);border-radius:20px;padding:6px 12px;font-weight:600}.eqd small,.eqm small{color:var(--mut);font-weight:400}
+.eqm{border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}.eqm.on{border-color:var(--acc);background:#f2faf9}
+table.cgt{width:100%;border-collapse:collapse}table.cgt th{text-align:left;font-size:12px;color:var(--mut);padding:9px 10px;border-bottom:2px solid var(--line);background:#fafbfc}
+table.cgt td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13px}
+tr.cg{cursor:pointer}tr.cg:hover td,tr.cg.open td{background:#f7faf9}
+.cbar{display:inline-block;width:calc(100% - 34px);height:8px;background:#eef1f3;border-radius:4px;overflow:hidden;vertical-align:middle;margin-right:6px}.cbar i{display:block;height:100%}.c-r{background:#dc2626}.c-y{background:#eab308}.c-g{background:#16a34a}
+table.cgl{width:100%;border-collapse:collapse;font-size:12px}table.cgl th{text-align:left;color:var(--mut);padding:5px 6px;border-bottom:1px solid var(--line)}table.cgl td{padding:5px 6px;border-bottom:1px solid #eef1f3}
+.fpanel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:-6px 0 16px}
+.fpanel h3 select{font-size:13px;font-weight:500;padding:5px 8px}
+.fpanel h3{margin:0;font-size:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ck{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid var(--line)}
+.ck:last-child{border-bottom:none}
+.ck input[type=checkbox]{width:18px;height:18px;accent-color:var(--acc);flex:0 0 auto}
+.ck input[type=text]{border:none;padding:4px;flex:1}
+.ck.done input[type=text]{text-decoration:line-through;color:var(--mut)}
+.ck .x{border:none;color:var(--mut);padding:2px 6px}
+.map{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:start}
+.col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;position:relative}
+.col h3{margin:2px 4px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);display:flex;align-items:center;gap:6px}
+.col h3 .num{background:var(--acc);color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+.col:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:14px;color:var(--acc);font-weight:700;font-size:16px}
+.node{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-bottom:8px;background:#fff;cursor:pointer;flex-direction:column;align-items:stretch;gap:2px}
+.node:hover{border-color:var(--acc);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.node .t{font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px}
+.node .s{font-size:11px;color:var(--mut)}
+.node.ok{border-left:4px solid var(--acc)}.node.pend{border-left:4px solid #d4dadf}.node.warn{border-left:4px solid var(--warn)}.node.off{opacity:.55}
+.node.soon{cursor:default;background:#fafbfc;border-style:dashed}
+.bar{height:5px;background:#e8edf0;border-radius:3px;margin-top:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 auto}
+@media(max-width:1100px){.map{grid-template-columns:1fr 1fr}.col::after{display:none}}
+@media(max-width:640px){.map{grid-template-columns:1fr}.hero .cd{text-align:left}.fatual{margin-left:0}}
+/* documentos */
+.drops{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 4px}
+.drop{display:flex;flex-direction:column;gap:6px;border:2px dashed var(--acc);background:var(--acc2);border-radius:14px;padding:18px;cursor:pointer;transition:.15s;min-height:150px}
+.drop:hover,.drop.over{background:#d3ede9;border-color:#0b5f59}
+.drop.ok{border-style:solid;background:#fff;cursor:default}
+.drop.busy{cursor:default}
+.dz-ic{font-size:28px;line-height:1}
+.dz-t{font-weight:700;font-size:15px}
+.dz-n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dz-act{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.ia-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.steps{margin:8px 0 0;padding-left:20px}.steps li{margin:6px 0}
+.msg{background:var(--acc2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:13px}
+.msg.err{background:#fde8e8;color:var(--red)}
+.box{border-radius:10px;padding:12px 16px;margin-top:12px}
+.box h3{font-size:14px;margin:0 0 6px}.box li{margin:4px 0}.box ul{margin:0;padding-left:20px}
+.box.tec{background:var(--bluebg)}.box.tec h3{color:var(--blue)}
+.box.sug{background:var(--decbg)}.box.sug h3{color:var(--dec)}
+.box.ader{background:var(--warnbg)}.box.ader h3{color:var(--warn)}
+/* perguntas */
+.split{display:grid;grid-template-columns:350px 1fr;gap:18px}
+.side{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;align-self:start}
+.it{display:flex;align-items:center;gap:6px;padding:7px 8px;border-radius:8px}
+.it.on{background:var(--acc2)}
+.it .nm{flex:1;font-weight:500;min-width:0}
+.it .pg{font-size:11px;color:var(--mut);display:block;font-weight:400}
+.it.off .nm{color:var(--mut);text-decoration:line-through}
+.it .mv{display:flex;flex-direction:column}
+.mv button{padding:0 4px;font-size:9px;border:none;background:transparent;color:var(--mut);line-height:1.3}
+.bt-mark{min-width:84px;justify-content:center}
+.bt-mark.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.q{padding:14px 0;border-top:1px solid var(--line)}
+.q .lb{font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.q .lb small{font-weight:400;color:var(--mut)}
+.q .lb .mic{margin-left:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border-radius:18px;padding:6px 12px;font-size:13px}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.chip.on.al{background:var(--warn);border-color:var(--warn)}
+.row2{display:grid;grid-template-columns:1fr 260px;gap:12px;margin:12px 0 6px}
+.foot{display:flex;justify-content:space-between;margin-top:18px;gap:8px}
+.mic{border-radius:50%;width:30px;height:30px;padding:0;justify-content:center;font-size:14px}
+.mic.on{background:#dc2626;color:#fff;border-color:#dc2626}
+.partial{font-size:12px;color:var(--mut);font-style:italic;min-height:16px;margin-top:4px}
+/* fluxo visual */
+.lanes{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.grid{display:grid;min-width:max-content}
+.lh{position:sticky;left:0;background:#fafbfc;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px;font-weight:600;font-size:13px;display:flex;align-items:center;z-index:1;width:150px}
+.ch{border-bottom:1px solid var(--line);padding:10px;font-size:12px;color:var(--mut);font-weight:600;text-align:center;background:#fafbfc}
+.cell{border-bottom:1px solid var(--line);border-left:1px dashed var(--line);padding:8px;min-height:60px;position:relative}
+.fc{background:#fff;border:1.5px solid var(--acc);border-radius:10px;padding:10px;width:220px;cursor:pointer}
+.fc:hover{box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.fc h4{margin:0 0 6px;font-size:13px}
+.fc ul{margin:0;padding-left:16px;font-size:12px;color:var(--mut)}
+.tag{display:inline-block;font-size:11px;border-radius:6px;padding:2px 6px;margin:4px 4px 0 0}
+.tag.d{background:var(--decbg);color:var(--dec)}.tag.a{background:var(--warnbg);color:var(--warn)}.tag.g{background:#fde8e8;color:var(--red)}
+.arrow{position:absolute;right:-9px;top:50%;color:var(--acc);z-index:2}
+.legend{display:flex;gap:14px;color:var(--mut);font-size:12px;margin-bottom:10px;flex-wrap:wrap}
+/* aderência */
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+table.ad{width:100%;border-collapse:collapse;background:var(--card)}
+table.ad th{text-align:left;font-size:12px;color:var(--mut);padding:8px;border-bottom:2px solid var(--line);background:#fafbfc}
+table.ad td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.ad input,table.ad select,table.ad textarea{width:100%;font-size:13px;padding:5px 7px}
+table.ad textarea{min-height:34px}
+.s-Aderente{background:#e3f3f1}.s-Parcial{background:#fff6dd}.s-Não\ aderente{background:#fde8e8}.s-Customização{background:var(--decbg)}
+.alist .grp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px}
+.alist h3{margin:0 0 8px;font-size:15px;cursor:pointer}
+.alist li{margin:5px 0}
+.exp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.exp textarea{min-height:220px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.dlrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;opacity:0;transition:.2s;pointer-events:none;max-width:90%;text-align:center;z-index:50}
+.toast.show{opacity:1}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+details>summary{cursor:pointer;font-weight:600}
+#print{display:none}
+#login{position:fixed;inset:0;background:linear-gradient(135deg,#e3f3f1,#f5f7f8);z-index:100;align-items:center;justify-content:center;padding:20px}
+.lcard{background:#fff;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:28px 30px;width:100%;max-width:400px}
+.lbrand{font-weight:700;color:var(--acc);font-size:14px;margin-bottom:8px}
+.lcard h2{margin:4px 0 14px;font-size:22px}
+.lcard label{display:block;font-size:12px;color:var(--mut);font-weight:600;margin:10px 0 4px}
+.lcard input{width:100%;padding:10px 12px;font-size:15px}
+.lbtn{width:100%;justify-content:center;margin-top:16px;padding:10px;font-size:15px;font-weight:600}
+.llinks{display:flex;justify-content:space-between;margin-top:14px;font-size:13px}.llinks a{color:var(--acc)}
+.ubox{font-size:12px;color:var(--mut);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#userbox{display:flex;gap:6px;align-items:center}
+@media(max-width:900px){
+ .drops,.ia-grid,.exp{grid-template-columns:1fr}
+ .split{grid-template-columns:1fr}
+ .row2{grid-template-columns:1fr}
+ main{padding:12px}
+ table.ad,table.ad tbody,table.ad tr,table.ad td{display:block;width:100%}
+ table.ad thead{display:none}
+ table.ad tr{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;padding:6px}
+}
+@media print{
+ body{background:#fff}
+ body>*:not(#print){display:none!important}
+ #print{display:block;font-size:11pt;color:#000}
+ #print h1{font-size:20pt;margin:0 0 6px}
+ #print h2{font-size:14pt;color:#0f7c74;margin:18px 0 6px;page-break-after:avoid}
+ #print h3{font-size:12pt;margin:12px 0 2px;page-break-after:avoid}
+ #print table{border-collapse:collapse;width:100%;font-size:10pt}
+ #print th,#print td{border:1px solid #bbb;padding:4px 6px;text-align:left;vertical-align:top}
+ #print th{background:#e3f3f1}
+ #print .k{color:#555}
+ #print .dec{color:#5b4bc4}#print .al{color:#b45309}
+}
+</style>
+</head>
+<body>
+<header>
+ <h1>Projetos de Implantação · Klingo</h1>
+ <select id="selProj" title="Projeto aberto"></select>
+ <button data-act="proj-new">+ Novo projeto</button>
+ <button data-act="proj-dup">Duplicar</button>
+ <button data-act="proj-del" class="danger" id="btnDel">Excluir</button>
+ <span class="st" id="st"></span>
+ <span id="userbox"></span>
+</header>
+<nav id="tabs"></nav>
+<main id="app"></main>
+<div id="print"></div>
+<div id="login" style="display:none"></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileJson" accept=".json,application/json" hidden>
+
+<script>
+"use strict";
+/* ============ CATÁLOGO ============ */
+const SETORES=["Agendamento / Call center","Recepção","Enfermagem","Profissional (médico, dentista...)","Paciente","Outro"];
+const TIPOS=["Clínica médica","Odontologia","Clínica multiprofissional","Diagnóstico por imagem","Hospital-dia","Hospital"];
+/* ============ TRILHA DE IMPLANTAÇÃO KLINGO (escopo: atendimento clínico) ============ */
+const ST_TR=["A REALIZAR","EM ANDAMENTO","CONCLUÍDO","PENDENTE CLIENTE","NÃO APLICAR"];
+const VAL_TR=["","Aceito","Ajustar","Recusado"];
+const C_CAD="Cadastrados e funcionando no sistema.";
+const C_TREIN="Documento com conteúdo ministrado/ementa, lista de presença e tarefas encaminhadas.";
+const C_SIM="Prints e relatórios das atividades feitas no sistema na simulação da rotina.";
+const C_LEV="Levantamento de fluxo e análise de aderência registrados.";
+const TRILHA=[
+ {id:"f0",t:"Fase 0 · Kick-off",fase:true,g:[["Abertura do projeto",[
+  ["1.0","Realizar alinhamento interno (equipe do projeto com o comercial)"],
+  ["1.1","Realizar reunião de kick-off","Reunião realizada com patrocinador e responsáveis do cliente; ata registrada."],
+  ["1.2","Formalização da abertura do projeto","Abertura do projeto formalizada com o cliente."],
+  ["1.3","Análise básica dos recursos liberados Klingo","Módulos contratados identificados e habilitados."],
+  ["1.5","Análise do projeto técnico","Escopo, unidades e integrações do projeto técnico confirmados."]]]]},
+ {id:"f1",t:"Fase 1 · Levantamento de fluxo x Aderência",fase:true,g:[["Levantamento",[
+  ["2.1","Preenchimento do questionário de levantamento de fluxo [tarefa do cliente]","Questionário respondido e devolvido pelo cliente."],
+  ["2.2","Reunião para levantamento de fluxo e análise de aderência (equipe TI)"],
+  ["2.3","Aspectos gerais da unidade",C_LEV],
+  ["2.4","Call Center (com gestor da área)",C_LEV],
+  ["2.5","Recepção (com a coordenação da área)",C_LEV],
+  ["2.8","Clínica / Consultório (com a coordenação da área)",C_LEV],
+  ["2.13","Relação de modelos de anamnese, laudos, formulários, atestados e relatórios utilizados (enviados pela unidade em Word/PDF)","Todos os modelos recebidos em Word/PDF."],
+  ["2.14","Validação do relatório de mapeamento de aderência","Relatório de mapeamento de aderência validado pelo cliente."]]]]},
+ {id:"f2a",t:"Fase 2 · Preparação de base",fase:true,g:[
+  ["Banco de dados do cliente",[
+   ["3.1","Solicitação do banco de dados ao cliente para envio ao Klingo – 1ª importação (dados do paciente)"],
+   ["3.2","Tabela de usuários (colaboradores)"],["3.3","Tabela de prestadores"],["3.4","Profissionais solicitantes"],
+   ["3.5","Tabela de valores particular","Valores conferidos por plano e modalidade."],
+   ["3.6","Tabelas de valores de convênios (cadastro pelo cliente)","Valores conferidos por plano e modalidade."]]],
+  ["Capacitação do cliente para cadastros",[["3.7","Treinamento de cadastros de tabelas de preços"],["3.8","Treinamento de cadastros de restrições"]]],
+  ["Migração",[
+   ["3.10","Recebimento do backup dos pacientes e evoluções e envio ao Klingo","Último backup do cliente enviado à equipe Klingo para importação."],
+   ["3.11","Base concluída (migrada)","Registros de pacientes migrados e conferidos; histórico clínico preservado e íntegro."]]]]},
+ {id:"f2b",t:"Fase 2 · Configurações da base",fase:true,g:[
+  ["Principal",[
+   ["4.3","Cadastro de unidades","Todas as unidades cadastradas com CNPJ e endereço."],
+   ["4.5","Cadastro das recepções","Recepção ativa, usuários vinculados, fluxo validado."],
+   ["","Locais de atendimento por unidade","Locais cadastrados e vinculados às agendas e prestadores."],
+   ["4.6","Definir uso de totem"],["4.7","Definir uso de painel de chamada"],
+   ["4.8","Configurações do totem","Totem configurado; check-in via CPF/QR Code funcionando; comprovante impresso/digital validado."],
+   ["4.9","Configurações do painel","Tela configurada; integração com recepção; chamadas exibidas corretamente."],
+   ["4.11","Especialidades","Todas as especialidades cadastradas e vinculadas aos prestadores/unidades."],
+   ["4.12","Prestadores","Login testado; especialidades, restrições, instruções e assinatura digital configuradas."]]],
+  ["Procedimentos",[
+   ["5","Procedimentos","Cadastrados com descrição, classificação, código TUSS e restrições."],
+   ["5.1","Pacote de sessões","Quantidade, periodicidade e valores validados."],
+   ["5.2","Combo de procedimentos","Combos criados e vinculados corretamente."],
+   ["5.3","Valores particular","Valores cadastrados e refletindo na recepção."],
+   ["5.4","Instruções particular","Regras cadastradas no sistema."],
+   ["5.7","Sinalizador de atendimento","Regras aplicadas e visíveis na agenda."],
+   ["5.8","Profissionais solicitantes","Cadastro e vinculação funcionando."],
+   ["5.12","Recursos"]]],
+  ["Call Center",[
+   ["6.1","Agenda","Agendas ativas para todos os prestadores: tipo (hora marcada / ordem de chegada), horários, tempo de atendimento, procedimentos, local e filtros de operadoras validados."],
+   ["6.2","Motivos de bloqueio de agenda","Cadastrados e aplicados."],
+   ["6.3","Feriados","Lista cadastrada, inclusive feriados municipais."],
+   ["6.4","Teto de atendimento","Regras aplicadas."],
+   ["","Agendas compartilhadas","Visualização e regras validadas."]]],
+  ["Recepção",[
+   ["7.1","Motivos de cancelamento de procedimento","Cadastrados com sucesso."],
+   ["27.3","Alterar profissional por especialidade"],["27.4","Atender procedimentos sem agenda"],
+   ["27.5","Atendimento com data futura na recepção"],["27.6","CPF não obrigatório"],
+   ["27.16","Retirar senha no totem (check-in sem agendamento)"],
+   ["30.1","Cadastro de pré-atendimento com vinculação da senha (totem)"]]],
+  ["Prontuário",[
+   ["9.1","Modelos de prontuário","Todos os modelos enviados pelo cliente configurados (consulta por especialidade e pré-atendimento)."],
+   ["9.2","Alérgenos",C_CAD],["9.3","Medicamentos (prescrição no consultório)",C_CAD],["9.4","Kits de medicamento",C_CAD],
+   ["9.6","Grupo de procedimentos",C_CAD],["9.7","Procedimentos (requisição no consultório)",C_CAD],["9.8","Kits de procedimentos",C_CAD],
+   ["9.9","Modelos de documentos (atestado, receita, requisição, relatório)",C_CAD],["9.10","Frases padrão",C_CAD],
+   ["","Instruções para pacientes","Cadastradas e disponibilizadas para o responsável validar."],
+   ["10.2","Fila de procedimentos",C_CAD],
+   ["10.3","Cabeçalhos específicos (consulta, atestado, receita, requisição, espelho de atendimento)",C_CAD]]],
+  ["Consultório",[
+   ["28.1","Altura da logo nas impressões"],["28.2","Caixa alta para nomes de medicamentos e exames"],
+   ["28.3","Habilitar recurso de pausar atendimento"],["28.4","Não permitir chamar paciente sem concluir guia"],
+   ["29","Tamanho de fonte padrão nas impressões"]]],
+  ["Acessos e cadastro do paciente",[
+   ["13.1","Usuários","Usuários com módulos, permissões, login e senha funcionando."],["13.2","Permissões",C_CAD],
+   ["13.4","Restrições de horário de acesso",C_CAD],["13.5","Autorizar máquina (acesso externo)",C_CAD],
+   ["13.7","Duplicidade de pacientes",C_CAD],["13.8","Campos obrigatórios do paciente",C_CAD],["13.9","Campos customizados",C_CAD],
+   ["13.10","Anexos requeridos"],["13.19","Cores para tempo de espera"]]],
+  ["Mensagens e integrações",[
+   ["15.1","Envio de mensagem"],["15.2","Envio programado de mensagem (confirmação / lembrete)"],
+   ["16.1","Enquetes (NPS)","Formulários configurados; envios testados; respostas registradas."],
+   ["37","Mensageria","Comunicação ativa entre o Klingo e o sistema de mensageria do cliente."],
+   ["37.1","Avaliar viabilidade de integrações clínicas (telemedicina, assinatura digital, IA)"]]]]},
+ {id:"f3",t:"Fase 3 · Validação de cadastros",fase:true,g:[["Validação",[
+  ["40.1","Realizar treinamento de validações de cadastros"],
+  ["40.2","1º Validar cadastros do Call Center (agenda, bloqueios, feriados, teto)"],
+  ["40.3","2º Validar cadastros da Recepção (depende da validação do Call Center)"],
+  ["40.6","3º Validar cadastros da área clínica / consultório (depende do Call Center e da Recepção)"],
+  ["","Realizar ajustes necessários identificados com o cliente junto à equipe técnica"],
+  ["40.10","Cadastros validados pelo cliente com a equipe técnica"],
+  ["","Homologar cadastros"],["","Homologar integrações"],
+  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado."]]]]},
+ {id:"f4",t:"Fase 4 · Treinamento",fase:true,g:[["Treinamentos operacionais",[
+  ["42.1","Solicitar base teste para os treinamentos operacionais (a partir da base homologada)"],
+  ["42.4","Treinamento do módulo Call Center",C_TREIN],["42.5","Treinamento do módulo Recepção",C_TREIN],
+  ["42.6","Treinamento do módulo Consultório",C_TREIN],["42.7","Treinamento do módulo Assistência",C_TREIN],
+  ["43.7","Treinamento do módulo Relatórios",C_TREIN],
+  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado."]]]]},
+ {id:"f5",t:"Fase 5 · Simulação",fase:true,g:[
+  ["Migração",[["44.1","Migração – cadastro de pacientes e histórico clínico (avaliação com envolvidos)"]]],
+  ["Operação Call Center",[
+   ["44.4","Marcação para atendimento na unidade (paciente TESTE)",C_SIM],["","Reagendar e cancelar marcação",C_SIM],
+   ["44.5","Orçamento convertido em agendamento",C_SIM],["44.6","Orçamento convertido em atendimento",C_SIM]]],
+  ["Operação Recepção",[
+   ["44.8","Totem: check-in sem agenda gerando 2 senhas por botão"],["44.9","Painel de chamada de paciente (vídeo e voz)"],
+   ["44.10","Chamar paciente e realizar o atendimento particular"],["44.20","Atendimento por convênio com cadastro completo e guia SP/SADT"],
+   ["44.13","Impressão dos termos"],["44.14","Impressão dos atestados"]]],
+  ["Operação Consultório",[
+   ["44.21","Chamar paciente pelo consultório e registrar a evolução","Evolução registrada e finalizada."],
+   ["","Prescrição e documentos clínicos","Prescrição funcionando; documentos impressos corretamente."],
+   ["44.22","Avaliar se os pedidos de exames estão ocorrendo corretamente"],
+   ["44.23","Avaliar se os resultados de exames estão chegando corretamente"]]],
+  ["Homologação para o Start",[
+   ["44.49","Confirmar homologação ao Start"],["44.50","Todas as impressões foram validadas?"],
+   ["44.51","Todos os modelos de documentos foram validados?"],
+   ["44.52","Todos os totens configurados com suas impressões para as respectivas unidades?"],
+   ["44.53","Todos os painéis ajustados para as respectivas unidades?"],["44.55","Realizar auditoria pré-Start"],
+   ["44.56","Cadastro de pacientes – registros migrados e conferidos (2ª importação)?","Registros migrados e conferidos."],
+   ["44.57","Histórico clínico preservado e íntegro?","Histórico clínico preservado e íntegro."],
+   ["44.58","Quantidade de licenças com que pretende iniciar o Start","Número de licenças que serão utilizadas em produção definido."],
+   ["44.59","Confirmação das pessoas-chave (predecessora ao Start)","Líderes de área, gestor de sistema e de projeto definidos."],
+   ["44.60","Validar documento de autorização de Start"],["44.61","Documento validado pelo líder técnico e cliente"]]]]},
+ {id:"f6",t:"Fase 6 · Start",fase:true,g:[["Operação assistida",[
+  ["45.1","Operação Call Center"],["45.2","Operação Recepção"],["45.3","Operação Consultório"],
+  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado."]]]]},
+ {id:"f7",t:"Fase 7 · Passagem para o suporte",fase:true,g:[["Inspeção técnica",[
+  ["46.1","Realizar acompanhamento pós-Start"],["46.2","Apoiar na organização das agendas técnicas junto aos técnicos"],
+  ["46.3","Checar entregas do projeto – liderança técnica (auditoria técnica)"],
+  ["46.4","Apresentar relatórios gerenciais – resultados da produção no primeiro mês"],
+  ["46.5","Elaborar relatório de inspeção técnica"],
+  ["","Enviar termo de encerramento do projeto para encaminhamento ao suporte Klingo"]]]]},
+ {id:"gp",t:"Gestão do projeto",fase:false,g:[["Gestão",[
+  ["47.1","Gerenciar todas as fases do projeto"],["47.2","Realizar acompanhamento dos indicadores"],
+  ["47.3","Acompanhar os documentos de projeto (auditoria gerencial)"],["47.4","Realizar reuniões de acompanhamento do projeto"],
+  ["47.5","Elaborar e enviar repasses gerais do status do projeto (unindo os repasses semanais dos técnicos)"],
+  ["47.6","Gerenciar as demandas de desenvolvimento (integrações e customizações)"],
+  ["47.9","Gerenciar a comunicação com o cliente (patrocinador e responsável técnico)"],
+  ["47.10","Diligenciar o processo de passagem para o suporte"],["47.11","Termo de encerramento validado pelo cliente"]]]]}
+];
+const CURTO={f0:["0","Kick-off"],f1:["1","Levantamento"],f2a:["2A","Preparação"],f2b:["2B","Configurações"],f3:["3","Validação"],f4:["4","Treinamento"],f5:["5","Simulação"],f6:["6","Start"],f7:["7","Suporte"],gp:["G","Gestão"]};
+const FASES=TRILHA.filter(f=>f.fase).map(f=>f.id);
+const faseNome=id=>(TRILHA.find(f=>f.id===id)||{t:id}).t;
+function trilhaPadrao(){const o={};TRILHA.forEach(f=>{o[f.id]=[];f.g.forEach(([g,its])=>its.forEach(([cod,t,crit])=>o[f.id].push({id:uid("t"),cod,g,t,crit:crit||"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""})))});return o}
+
+/* ============ CHECKLIST DE AUDITORIA (critérios de aceite · escopo clínico) ============ */
+const VAL_AUD=["","SIM","PARCIAL","NÃO","NÃO SE APLICA"];
+const PARECER=["","Aprovado","Aprovado com ressalvas","Reprovado – correções necessárias"];
+const AUDIT=[
+ ["Base de dados migrada",[["Cadastros de pacientes","Registros migrados e conferidos (último backup do cliente enviado à equipe Klingo para importação)."],["Evoluções","Histórico clínico preservado e íntegro."]]],
+ ["Integrações do projeto",[["Mensageria","Comunicação ativa entre o Klingo e o sistema de mensageria do cliente."],["Assinatura digital","Assinatura digital funcionando nos documentos clínicos."]]],
+ ["Módulos habilitados",[
+  ["Configurações","Parâmetros gerais concluídos; unidades, agendas, operadoras e perfis configurados e validados."],
+  ["Call Center","Lista de presença; testes de agendar, reagendar, cancelar; operação funcionando sem erros."],
+  ["Recepção","Lista de presença; testes concluídos; atendimento lançado; protocolos conferidos."],
+  ["Consultório","Lista de presença; testes concluídos; evolução registrada e finalizada; prescrição funcionando."],
+  ["Assistência","Lista de presença; testes concluídos; evolução assistencial registrada e finalizada."],
+  ["Relatórios","Relatórios essenciais gerados e validados; cliente apto a criar relatórios customizados."],
+  ["NPS","Formulários configurados; envios testados; respostas recebidas e registradas."],
+  ["Painel de chamada","Tela configurada; integração com recepção; chamadas exibidas corretamente."],
+  ["Totem para check-in","Totem configurado; check-in via CPF/QR Code funcionando; comprovante impresso/digital validado."]]],
+ ["Configurações · Principal",[
+  ["Logomarca","Imagem carregada com boa resolução e exibida corretamente no sistema e documentos."],
+  ["Especialidades","Todas as especialidades cadastradas e vinculadas aos prestadores/unidades."],
+  ["Endereço Google Maps","Validação automática com localização geográfica correta."],
+  ["Margens","Margens configuradas e aplicadas nos documentos gerados (receita, laudo, recibo)."]]],
+ ["Unidades",[
+  ["Unidades","Todas as unidades cadastradas com CNPJ e endereço."],
+  ["Recepções por unidade","Recepção ativa, usuários vinculados, fluxo validado."],
+  ["Locais de atendimento por unidade","Locais cadastrados e vinculados às agendas e prestadores."]]],
+ ["Prestadores",[
+  ["Login","Acesso de cada prestador testado e funcionando."],["Especialidades","Especialidade cadastrada e as devidas vinculações conferidas."],
+  ["Restrições","Restrições cadastradas (se houver)."],["Instruções","Diretrizes adicionadas e exibidas."],
+  ["Assinatura","Assinatura digital carregada/configurada e validada."],["Prazo de revisão","Configurado e aplicado no prontuário."],
+  ["Agendas","Agendas configuradas para cada médico."]]],
+ ["Procedimentos",[
+  ["Classificação (consulta, exames, terapias, imagens...)","Cadastrados corretamente com descrição e classificação."],
+  ["Restrições","Tipos definidos: consultas, exames, terapias, imagem etc."],["Código TUSS","Regras aplicadas conforme operação."],
+  ["Tabela de preço","Valores conferidos por plano e modalidade."],["Instruções","Instruções clínicas anexadas."],
+  ["Modelos de prontuário","Todos os que foram enviados pelo cliente estão devidamente configurados no sistema."],
+  ["Pacote de sessões","Quantidade, periodicidade e valores validados."],["Combo de procedimentos","Combos criados e vinculados corretamente."],
+  ["Sinalizador de atendimentos","Regras aplicadas e visíveis na agenda."],["Profissionais solicitantes","Cadastro e vinculação funcionando."]]],
+ ["Call Center · Agendas",[
+  ["Agendas em vigência para todos os prestadores","Todas as agendas ativas para os prestadores."],
+  ["Tipo da agenda (hora marcada / ordem de chegada)","Configuração validada."],["Hora de início e término","Horários validados."],
+  ["Tempo de atendimento (hora marcada)","Tempo validado."],["Quantidade de pacientes (ordem de chegada)","Validada para agendas de ordem de chegada."],
+  ["Extras e vagas por horário","Configurados e exibidos na linha do tempo."],["Dias da semana e frequência","Disponibilidade e recorrência validadas."],
+  ["Local de atendimento","Local de atendimento vinculado e funcionando."],["Teleatendimento","Habilitado e testado."],
+  ["Pode marcar em feriado","Configuração validada."],["Procedimentos por agenda","Procedimentos configurados por agenda."],
+  ["Tempo mínimo (procedimento, consulta subsequente, revisão)","Regras de tempo mínimo validadas."],
+  ["Filtro para operadoras (inclusive agenda online)","Filtros testados e funcionando (todas, apenas, exceto)."],
+  ["Motivos de bloqueio de agenda","Cadastrados e aplicados."],["Feriados (municipais)","Lista cadastrada."],
+  ["Teto de atendimento","Regras aplicadas."],["Agendas compartilhadas","Visualização e regras validadas."]]],
+ ["Recepção",[["Motivo de cancelamento de procedimento","Cadastrados com sucesso."],["Alçada de descontos","Cadastrados com sucesso."]]],
+ ["Prontuário",[
+  ["Formulários de consulta por especialidade",C_CAD],["Pré-atendimento (questionários)",C_CAD],["Alérgenos",C_CAD],
+  ["Medicamentos (prescrição no consultório)",C_CAD],["Kits de medicamentos",C_CAD],["Grupo de procedimentos",C_CAD],
+  ["Procedimentos (requisição no consultório)",C_CAD],["Kits de procedimentos",C_CAD],["Modelos de documentos",C_CAD],
+  ["Relatórios médicos","Relatório criado e disponibilizado para o usuário responsável validar."],
+  ["Instruções para pacientes","Cadastradas e disponibilizadas para o usuário responsável validar."],
+  ["Protocolos de procedimentos","Cadastrados e disponibilizados para o usuário responsável validar."],
+  ["Frases padrão","Cadastradas devidamente no sistema."],["Fila de procedimentos",C_CAD],["Fila de assistência",C_CAD]]],
+ ["Cabeçalhos específicos",[["Consulta / anamnese",C_CAD],["Atestado",C_CAD],["Receita / prescrição",C_CAD],["Requisição de exames",C_CAD],["Documento / relatório",C_CAD],["Espelho de atendimento",C_CAD]]],
+ ["Acessos e cadastro do paciente",[
+  ["Usuários (módulos / permissões / login / senha)",C_CAD],["Permissões gerais por módulos",C_CAD],["Restrição de horário de acesso",C_CAD],
+  ["Autorizar máquina (acesso externo)",C_CAD],["Duplicidade de pacientes",C_CAD],["Campos customizados",C_CAD],["Campos obrigatórios dos pacientes",C_CAD]]],
+ ["Treinamentos",[["Treinamento Call Center",C_TREIN],["Treinamento Recepção",C_TREIN],["Treinamento Consultório",C_TREIN]]],
+ ["Evidências de testes exaustivos",[["Operação Call Center",C_SIM],["Operação Recepção",C_SIM],["Operação Consultório",C_SIM]]],
+ ["Pré-Start",[
+  ["Quantidade de licenças para o Start","Número de licenças contratadas que serão utilizadas em produção definido."],
+  ["Confirmação das pessoas-chave","Líderes de área, gestor(a) de sistema e de projetos definidos como responsáveis pela operação."]]]
+];
+const audKey=(gi,ii)=>`a${gi}_${ii}`;
+const STATUS_AD=["Aderente","Parcial","Não aderente","Customização","A definir"];
+const DOCS={
+ tec:{t:"Projeto técnico",ic:"🛠️",d:"Estrutura do cliente, unidades, integrações, escopo e datas"},
+ fluxo:{t:"Mapeamento de fluxo",ic:"🔀",d:"Como o atendimento acontece hoje no cliente"},
+ ader:{t:"Levantamento de aderência",ic:"📋",d:"Processos do cliente e o quanto o sistema atende"}};
+// o: string ou {v, a: alerta, d: ponto de decisão}
+const ETAPAS=[
+ {id:"agend",t:"Agendamento",s:0,qs:[
+  {id:"canais",l:"Canais",q:"Por quais canais o paciente agenda?",tp:"m",o:["Telefone","WhatsApp","Site / app","Presencial","Autoagendamento online"]},
+  {id:"quem",l:"Quem agenda",q:"Quem faz o agendamento?",tp:"s",o:["Central de agendamento","Recepção","Equipe do próprio profissional","O paciente (autoagendamento)"]},
+  {id:"dados",l:"Dados coletados",q:"Quais dados são coletados já no agendamento?",tp:"m",o:["Nome e telefone","CPF","Convênio e carteirinha","Motivo / queixa","Encaminhamento / pedido médico"]},
+  {id:"agenda",l:"Organização da agenda",q:"Como a agenda é organizada?",tp:"m",o:["Por profissional","Por especialidade","Por sala / consultório","Por tipo de atendimento (consulta, retorno, procedimento)"]},
+  {id:"tipo",l:"Tipo de paciente",q:"Atende particular, convênio ou os dois?",tp:"s",o:["Só particular","Só convênio",{v:"Particular e convênio",d:"Particular ou convênio?"}]},
+  {id:"encaixe",l:"Encaixes",q:"Existe encaixe na agenda?",tp:"s",o:["Sim, com regra definida",{v:"Sim, sem regra",a:"Encaixes sem regra tendem a gerar atraso e conflito entre recepção e profissional"},"Não aceita encaixe"]}
+ ]},
+ {id:"conf",t:"Confirmação",s:0,qs:[
+  {id:"faz",l:"Confirmação",q:"Como a consulta é confirmada?",tp:"s",o:["Automática (WhatsApp / SMS)","Manual, por ligação",{v:"Não confirma",a:"Sem confirmação: risco alto de faltas e de buracos na agenda"}]},
+  {id:"antec",l:"Antecedência",q:"Com quanta antecedência?",tp:"s",o:["24h","48h","No mesmo dia"]},
+  {id:"falta",l:"Tratativa de falta",q:"O que acontece quando o paciente falta ou desmarca?",tp:"s",o:["Reagenda ativamente","Libera o horário para encaixe",{v:"Não há tratativa",a:"Faltas sem tratativa: ninguém recupera o paciente nem o horário"}]},
+  {id:"preparo",l:"Orientações",q:"Envia preparo / orientações antes?",tp:"s",o:["Sim, junto com a confirmação","Sim, em outro momento","Não envia"]}
+ ]},
+ {id:"recep",t:"Chegada e recepção",s:1,qs:[
+  {id:"novo",l:"Novo x retorno",q:"Paciente novo e retorno seguem o mesmo fluxo?",tp:"s",o:["Sim, fluxo igual",{v:"Não, paciente novo faz cadastro completo",d:"Paciente novo ou retorno?"}]},
+  {id:"docs",l:"Conferência",q:"O que é conferido na chegada?",tp:"m",o:["Documento com foto","Carteirinha do convênio","Encaminhamento / pedido médico","Termo de consentimento","Foto / biometria"]},
+  {id:"chamada",l:"Controle de fila",q:"Como a fila é controlada?",tp:"s",o:["Painel de senhas","Totem de autoatendimento","Chamada pelo nome",{v:"Ordem de chegada, sem controle",a:"Fila sem controle: difícil medir tempo de espera e priorizar"}]},
+  {id:"prior",l:"Prioridades",q:"Há regra de atendimento preferencial?",tp:"s",o:["Sim, fila preferencial definida",{v:"Não há regra",a:"Sem regra de prioridade (idosos, gestantes, PCD): risco legal e de reclamação"}]},
+  {id:"lib",l:"Liberação para o atendimento",q:"Como o paciente é liberado para o profissional?",tp:"s",o:["Recepção registra a chegada no sistema e ele entra na fila","Recepção avisa o profissional",{v:"Não há registro de chegada",a:"Sem registro de chegada: não dá para medir espera nem saber quem está aguardando"}]}
+ ]},
+ {id:"triag",t:"Pré-atendimento / triagem",s:2,qs:[
+  {id:"existe",l:"Triagem",q:"Existe triagem antes do atendimento?",tp:"s",o:["Sim, para todos",{v:"Só em algumas especialidades",d:"Especialidade exige triagem?"},"Não há triagem"]},
+  {id:"itens",l:"O que é coletado",q:"O que é coletado na triagem?",tp:"m",o:["Sinais vitais","Peso / altura","Classificação de risco","Anamnese inicial","Medicações em uso e alergias"]},
+  {id:"reg",l:"Registro",q:"Onde a triagem é registrada?",tp:"s",o:["Direto no sistema",{v:"Em papel, digitado depois",a:"Triagem em papel: retrabalho e risco de perda de informação"},{v:"Não registra",a:"Triagem sem registro: informação não chega ao profissional"}]}
+ ]},
+ {id:"atend",t:"Atendimento no consultório",s:3,qs:[
+  {id:"local",l:"Modalidade",q:"Como o atendimento acontece?",tp:"m",o:["Presencial em consultório","Sala de procedimentos","Telemedicina / teleconsulta","Domiciliar"]},
+  {id:"cham",l:"Chamada",q:"Como o profissional chama o paciente?",tp:"s",o:["Pelo sistema / painel","A recepção encaminha","Chamada verbal"]},
+  {id:"fila",l:"Fila do profissional",q:"Como o profissional vê quem está aguardando?",tp:"s",o:["Lista de espera no sistema","Avisado pela recepção",{v:"Não tem visão da fila",a:"Profissional sem visão da fila: atrasos e pacientes esquecidos na espera"}]},
+  {id:"pront",l:"Prontuário",q:"Como é o prontuário?",tp:"s",o:["Eletrônico com modelo próprio da especialidade","Eletrônico genérico (texto livre)",{v:"Em papel",a:"Prontuário em papel: sem histórico consultável e sem indicadores"}]},
+  {id:"registro",l:"Registro clínico",q:"O que é registrado na consulta?",tp:"m",o:["Anamnese / queixa","Exame físico","Hipótese diagnóstica / CID","Conduta / plano","Evolução","Odontograma","Anexos (imagens, laudos)"]},
+  {id:"prescr",l:"Prescrição",q:"Como é feita a prescrição?",tp:"s",o:["Prescrição eletrônica no sistema","Plataforma externa (ex.: Memed)",{v:"Manual / receituário em papel",a:"Prescrição manual: risco de ilegibilidade e sem histórico de medicamentos"}]},
+  {id:"saidas",l:"Documentos gerados",q:"O que o atendimento gera?",tp:"m",o:["Receita","Pedido de exames","Atestado / declaração","Encaminhamento","Plano de tratamento","Procedimento no ato"]},
+  {id:"assin",l:"Assinatura",q:"Como os documentos são assinados?",tp:"s",o:["Assinatura digital (certificado)","Impressos e assinados à mão"]},
+  {id:"fim",l:"Finalização",q:"Para onde o paciente vai ao sair do consultório?",tp:"s",o:["Volta à recepção","Segue para procedimento",{v:"Varia",d:"Volta à recepção ou segue para procedimento?"},{v:"Sai sem passar pela recepção",a:"Paciente sai sem passar pela recepção: retorno não agendado e orientações perdidas"}]}
+ ]},
+ {id:"proc",t:"Procedimentos clínicos",s:3,qs:[
+  {id:"quais",l:"Tipos",q:"Que procedimentos são feitos na clínica?",tp:"m",o:["Pequenos procedimentos em consultório","Procedimentos em sala própria","Aplicações / medicações","Procedimentos odontológicos","Curativos"]},
+  {id:"quando",l:"Quando",q:"Quando o procedimento é feito?",tp:"s",o:["No mesmo atendimento","Agendado para outra data",{v:"Varia",d:"Faz no ato ou agenda?"}]},
+  {id:"quem",l:"Quem executa",q:"Quem executa o procedimento?",tp:"m",o:["O próprio profissional","Enfermagem","Técnico / auxiliar"]},
+  {id:"regp",l:"Registro",q:"Como o procedimento é registrado?",tp:"m",o:["Descrição no prontuário","Termo de consentimento assinado","Checklist de segurança",{v:"Não é registrado",a:"Procedimento sem registro clínico: risco assistencial e legal"}]}
+ ]},
+ {id:"saida",t:"Saída, retorno e continuidade",s:1,qs:[
+  {id:"ret",l:"Retorno",q:"Como o retorno é agendado?",tp:"s",o:["Agendado na saída","Agendado pelo próprio profissional",{v:"Paciente liga depois",a:"Retorno não agendado na saída: perda de continuidade do cuidado"},"Não há retorno"]},
+  {id:"encam",l:"Encaminhamentos",q:"Como funcionam os encaminhamentos?",tp:"m",o:["Para outro profissional da própria clínica","Para serviço externo","Já agenda o encaminhamento interno na saída"]},
+  {id:"entrega",l:"Entrega de documentos",q:"Como o paciente recebe documentos e orientações?",tp:"m",o:["Impressos na saída","WhatsApp / e-mail","Portal / app do paciente"]},
+  {id:"pesq",l:"Satisfação",q:"Existe pesquisa de satisfação?",tp:"s",o:["Automática","Manual","Não faz"]}
+ ]}
+];
+const tpl=id=>ETAPAS.find(e=>e.id===id);
+const ov=o=>typeof o==="string"?{v:o}:o;
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const uid=p=>(p||"x")+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const $=id=>document.getElementById(id);
+function toast(m,ms){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),ms||2000)}
+
+/* ============ DADOS ============ */
+const KEY="ppi_store_v1",CFG="ppi_cfg_v1";
+function novoProjeto(nome){return{id:uid("p"),owner:(typeof USER!=="undefined"&&USER)?USER.id:"",membros:[],nome:nome||"Novo projeto",criado:Date.now(),upd:Date.now(),
+ info:{cliente:"",sede:"",unidades:"",tipo:"",esp:"",gestor:"",responsavel:"",lider:"",tecnicos:"",gerente:"",fase:"f0",kickoff:"",start:"",obs:""},
+ docs:{tec:null,fluxo:null,ader:null},iaTexto:"",
+ etapas:ETAPAS.map(e=>({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:true,r:{},passos:"",nota:""})),
+ aderencia:[],tecnico:[],sugestoes:[],trilha:trilhaPadrao(),audit:{},auditInfo:{parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""}}}
+function normaliza(p){const n=novoProjeto();for(const k in n)if(p[k]===undefined)p[k]=n[k];p.info=Object.assign(n.info,p.info||{});p.docs=Object.assign({tec:null,fluxo:null,ader:null},p.docs||{});
+ delete p.fases;if(!p.trilha)p.trilha=trilhaPadrao();{const pad=trilhaPadrao();TRILHA.forEach(f=>{if(!Array.isArray(p.trilha[f.id]))p.trilha[f.id]=pad[f.id]})}
+ if(!p.audit)p.audit={};p.auditInfo=Object.assign({parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""},p.auditInfo||{});
+ {const mapa={"Levantamento":"f1","Parametrização":"f2b","Treinamento":"f4","Start":"f6","Pós-Start":"f7"};if(!FASES.includes(p.info.fase))p.info.fase=mapa[p.info.fase]||"f0"}
+ ETAPAS.forEach(e=>{if(!p.etapas.some(x=>x.id===e.id))p.etapas.push({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:false,r:{},passos:"",nota:""})});return p}
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!Array.isArray(S.projetos)||!S.projetos.length){const p=novoProjeto("Meu primeiro projeto");S={cur:p.id,projetos:[p]}}
+S.projetos.forEach(normaliza);
+let cfg={key:"",model:"claude-sonnet-5-5"};try{Object.assign(cfg,JSON.parse(localStorage.getItem(CFG))||{})}catch(e){}
+const P=()=>S.projetos.find(p=>p.id===S.cur)||S.projetos[0];
+let saveT=null,stState="ok";
+const chaveLocal=()=>USER?KEY+"_u_"+USER.id:KEY;
+function persist(){clearTimeout(saveT);saveT=null;
+ const dados=USER?Object.assign({},S,{pend:[...sync.dirty],del:[...sync.del]}):S;
+ try{localStorage.setItem(chaveLocal(),JSON.stringify(dados));stState="ok"}
+ catch(e){try{const lite=JSON.parse(JSON.stringify(dados));lite.projetos.forEach(p=>Object.values(p.docs).forEach(d=>{if(d)d.texto=""}));localStorage.setItem(chaveLocal(),JSON.stringify(lite));stState=USER?"ok":"cheio"}catch(e2){stState=USER?"ok":"erro"}}
+ setSt()}
+function marcar(id){if(!USER)return;sync.dirty.add(id);clearTimeout(sync.timer);sync.timer=setTimeout(enviarNuvem,1200);setSt()}
+function save(){P().upd=Date.now();marcar(P().id);clearTimeout(saveT);saveT=setTimeout(persist,300)}
+function setSt(){const el=$("st");if(!el)return;let m;
+ if(USER)m=sync.err?["⚠ Sem conexão: salvo neste computador; sincroniza quando a internet voltar","err"]:(sync.dirty.size||sync.del.size||sync.busy)?["☁ Salvando na nuvem…",""]:["☁ Salvo na nuvem",""];
+ else m={ok:["💾 Salvo neste computador",""],cheio:["⚠ Armazenamento cheio: textos dos documentos não foram guardados. Faça backup.","err"],erro:["⚠ Não foi possível salvar. Exporte o backup em Exportar.","err"]}[stState];
+ el.textContent=m[0];el.className="st "+m[1]}
+window.addEventListener("beforeunload",()=>{if(saveT)persist()});
+
+/* ============ ANÁLISE ============ */
+function opcoesSel(et){const t=tpl(et.id);if(!t)return[];const out=[];t.qs.forEach(q=>{const v=et.r[q.id];const arr=Array.isArray(v)?v:(v?[v]:[]);q.o.map(ov).forEach(o=>{if(arr.includes(o.v))out.push({q,o})})});return out}
+function resumo(et){const t=tpl(et.id);const out=[];if(t)t.qs.forEach(q=>{const v=et.r[q.id];if(v&&(!Array.isArray(v)||v.length))out.push({l:q.l,v:Array.isArray(v)?v.join(", "):v})});return out}
+const decisoes=et=>opcoesSel(et).filter(x=>x.o.d).map(x=>x.o.d);
+const alertas=et=>opcoesSel(et).filter(x=>x.o.a).map(x=>x.o.a);
+function pendentes(et){const t=tpl(et.id);if(!t)return[];return t.qs.filter(q=>{const v=et.r[q.id];return !v||(Array.isArray(v)&&!v.length)})}
+const passos=et=>(et.passos||"").split("\n").map(s=>s.trim()).filter(Boolean);
+const ativas=(p=P())=>p.etapas.filter(e=>e.ativa);
+const gaps=(p=P())=>p.aderencia.filter(a=>a.status&&a.status!=="Aderente");
+const nomeEtapa=(p,id)=>{const e=p.etapas.find(x=>x.id===id);return e?e.tit:"Geral"};
+function totais(p=P()){const at=ativas(p);let tot=0,ok=0,al=0;at.forEach(e=>{const t=tpl(e.id);if(t){tot+=t.qs.length;ok+=t.qs.length-pendentes(e).length}al+=alertas(e).length});
+ return{tot,ok,al,gaps:gaps(p).length,docs:Object.values(p.docs).filter(Boolean).length}}
+
+/* ============ LEITURA DE ARQUIVOS ============ */
+const dec=s=>String(s||"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#x([0-9a-f]+);/gi,(m,h)=>String.fromCodePoint(parseInt(h,16))).replace(/&#(\d+);/g,(m,d)=>String.fromCodePoint(+d)).replace(/&amp;/g,"&");
+const attr=(tag,n)=>{const m=tag.match(new RegExp("\\s"+n.replace(":","\\:")+'="([^"]*)"'));return m?m[1]:null};
+async function inflateRaw(u8){const s=new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"));return new Uint8Array(await new Response(s).arrayBuffer())}
+async function unzip(buf){
+ const u=new Uint8Array(buf),dv=new DataView(u.buffer,u.byteOffset,u.byteLength);let e=-1;
+ for(let i=u.length-22;i>=Math.max(0,u.length-65557);i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break}}
+ if(e<0)throw new Error("zip");
+ const n=dv.getUint16(e+10,true);let off=dv.getUint32(e+16,true);const ent={},td=new TextDecoder();
+ for(let k=0;k<n;k++){if(dv.getUint32(off,true)!==0x02014b50)break;
+  const meth=dv.getUint16(off+10,true),csz=dv.getUint32(off+20,true),nl=dv.getUint16(off+28,true),xl=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true),lho=dv.getUint32(off+42,true);
+  const name=td.decode(u.subarray(off+46,off+46+nl));const lnl=dv.getUint16(lho+26,true),lxl=dv.getUint16(lho+28,true),st=lho+30+lnl+lxl;
+  ent[name]={meth,data:u.subarray(st,st+csz)};off+=46+nl+xl+cl}
+ return{names:Object.keys(ent),async text(name){const f=ent[name];if(!f)return null;const d=f.meth===0?f.data:await inflateRaw(f.data);return td.decode(d)}};
+}
+function docxXmlText(x){
+ x=x.replace(/<w:instrText[\s\S]*?<\/w:instrText>/g,"").replace(/<w:delText[\s\S]*?<\/w:delText>/g,"");
+ x=x.replace(/<w:tc[ >][\s\S]*?<\/w:tc>/g,m=>m.replace(/<\/w:p>/g," ")+" | ");
+ x=x.replace(/<w:tab\/>/g,"\t").replace(/<w:br\/>/g,"\n").replace(/<\/w:p>/g,"\n").replace(/<\/w:tr>/g,"\n");
+ return dec(x.replace(/<[^>]+>/g,"")).replace(/ \| \n/g,"\n");
+}
+async function lerDocx(buf){const z=await unzip(buf);const x=await z.text("word/document.xml");if(!x)throw new Error("vazio");return docxXmlText(x)}
+async function lerXlsx(buf){
+ const z=await unzip(buf);const ss=[];const sx=await z.text("xl/sharedStrings.xml");
+ if(sx)for(const m of sx.matchAll(/<si>([\s\S]*?)<\/si>/g))ss.push(dec([...m[1].matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>/g)].map(x=>x[1]).join("")));
+ const wb=await z.text("xl/workbook.xml")||"",rels=await z.text("xl/_rels/workbook.xml.rels")||"";const rmap={};
+ for(const m of rels.matchAll(/<Relationship\b[^>]*>/g)){const id=attr(m[0],"Id"),t=attr(m[0],"Target");if(id)rmap[id]=t}
+ const sheets=[...wb.matchAll(/<sheet\b[^>]*>/g)].map(m=>({name:dec(attr(m[0],"name")||""),rid:attr(m[0],"r:id"),st:attr(m[0],"state")}));
+ const out=[];
+ for(const sh of sheets){if(sh.st==="hidden"||sh.st==="veryHidden")continue;let t=(rmap[sh.rid]||"").replace(/^\/?xl\//,"").replace(/^\//,"");const x=await z.text("xl/"+t);if(!x)continue;
+  const rows=[];
+  for(const r of x.matchAll(/<row\b[^>]*>([\s\S]*?)<\/row>/g)){const cells=[];
+   for(const c of r[1].matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)){const tp=attr(" "+c[1]+" ","t"),body=c[2]||"";let v="";
+    if(tp==="inlineStr")v=dec([...body.matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>/g)].map(y=>y[1]).join(""));
+    else{const mv=body.match(/<v>([\s\S]*?)<\/v>/);if(mv){v=mv[1];v=tp==="s"?(ss[+v]||""):tp==="b"?(v==="1"?"Sim":"Não"):dec(v)}}
+    v=String(v).replace(/\s+/g," ").trim();if(v)cells.push(v)}
+   if(cells.length)rows.push(cells.join(" | "))}
+  if(rows.length)out.push("### Aba: "+sh.name+"\n"+rows.join("\n"))}
+ return out.join("\n\n");
+}
+async function lerPptx(buf){const z=await unzip(buf);const sl=z.names.filter(n=>/^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a,b)=>parseInt(a.match(/\d+/)[0])-parseInt(b.match(/\d+/)[0]));const out=[];
+ for(const [i,n] of sl.entries()){const x=await z.text(n);const t=dec(x.replace(/<\/a:p>/g,"\n").replace(/<a:tab\/>/g,"\t").replace(/<[^>]+>/g,"")).trim();if(t)out.push(`### Slide ${i+1}\n${t}`)}return out.join("\n\n")}
+const scripts={};
+function loadScript(src){if(!scripts[src])scripts[src]=new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>{delete scripts[src];rej(new Error("net"))};document.head.appendChild(s)});return scripts[src]}
+async function lerPdf(buf){
+ const B="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";await loadScript(B+"pdf.min.js");await loadScript(B+"pdf.worker.min.js");
+ const lib=window.pdfjsLib;lib.GlobalWorkerOptions.workerSrc=B+"pdf.worker.min.js";
+ const pdf=await lib.getDocument({data:new Uint8Array(buf)}).promise;let t="";
+ for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);const c=await pg.getTextContent();t+=c.items.map(x=>x.str+(x.hasEOL?"\n":" ")).join("")+"\n\n"}return t}
+async function lerXlsAntigo(buf){await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");const wb=XLSX.read(new Uint8Array(buf),{type:"array"});
+ return wb.SheetNames.map(n=>{const c=XLSX.utils.sheet_to_csv(wb.Sheets[n],{FS:" | ",blankrows:false}).split("\n").filter(l=>l.replace(/[\s|]/g,"")).join("\n");return c?`### Aba: ${n}\n${c}`:""}).filter(Boolean).join("\n\n")}
+async function extrairTexto(file){
+ const ext=(file.name.split(".").pop()||"").toLowerCase();
+ if(["txt","csv","tsv","md","json"].includes(ext))return await file.text();
+ const buf=await file.arrayBuffer();
+ if(["xlsx","xlsm"].includes(ext))return lerXlsx(buf);
+ if(ext==="docx"||ext==="docm")return lerDocx(buf);
+ if(ext==="pptx")return lerPptx(buf);
+ if(ext==="pdf")return lerPdf(buf);
+ if(ext==="xls"||ext==="ods")return lerXlsAntigo(buf);
+ throw new Error("formato");
+}
+let lendo=null;
+async function importarDoc(file,kind){
+ if(!file||!DOCS[kind])return;const p=P();lendo=kind;iaMsg=null;render();
+ try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");
+  const cort=t.length>70000;if(cort)t=t.slice(0,70000);
+  p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};save();
+  toast(`${DOCS[kind].t} importado`);
+ }catch(e){const m=e&&e.message;
+  iaMsg={err:true,t:m==="formato"?"Formato não suportado. Use Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, CSV ou TXT.":m==="vazio"?"Não encontrei texto nesse arquivo. Se for PDF escaneado (imagem), não dá para ler.":m==="net"?"Para ler PDF e Excel antigo (.xls) o app precisa de internet no momento da importação. Conecte-se e tente de novo, ou salve o arquivo como .xlsx / .docx.":"Não consegui ler esse arquivo. Tente salvar em outro formato (.docx ou .xlsx)."}}
+ lendo=null;render();
+}
+
+/* ============ IA ============ */
+let iaMsg=null,iaUndo=null,iaBusy=false;
+function montarPedido(p=P()){
+ const catalogo=ETAPAS.map(e=>({etapa_id:e.id,etapa:e.t,perguntas:e.qs.map(q=>({pergunta_id:q.id,pergunta:q.q,escolha:q.tp==="m"?"varias":"uma",opcoes:q.o.map(o=>ov(o).v)}))}));
+ const doc=k=>p.docs[k]&&p.docs[k].texto?`\n=== ${DOCS[k].t.toUpperCase()} ("${p.docs[k].nome}") ===\n${p.docs[k].texto}\n`:"";
+ return `Você ajuda um implantador do sistema de gestão de saúde Klingo a montar o projeto de implantação de um cliente. Nesta versão o foco é o FLUXO CLÍNICO de atendimento (agenda, confirmação, recepção, triagem, consultório, procedimentos, saída e retorno). Ignore assuntos financeiros, faturamento, caixa, glosas e laboratório.
+
+DOCUMENTOS DO CLIENTE:
+${doc("tec")}${doc("fluxo")}${doc("ader")}
+${p.iaTexto?`\n=== OBSERVAÇÕES DO IMPLANTADOR ===\n${p.iaTexto}\n`:""}
+=== O QUE JÁ ESTÁ PREENCHIDO NO APP ===
+${txtProjeto(p)}
+
+=== CATÁLOGO DE PERGUNTAS (use exatamente estes ids e os textos exatos das opções) ===
+${JSON.stringify(catalogo)}
+
+TAREFA:
+1. Percorra TODAS as etapas e perguntas. Marque uma opção sempre que os documentos indicarem a resposta, mesmo com outras palavras (correspondência pelo sentido). Só deixe sem resposta o que realmente não aparece. Na resposta use o texto exato da opção: para "uma", um texto; para "varias", uma lista.
+2. "passos": por etapa, frases curtas com o que os documentos dizem e não cabe nas opções (no máximo 6 por etapa). Nada relevante deve ser descartado.
+3. "etapas_nao_aplicaveis": etapa_id que claramente não existem neste cliente.
+4. "aderencia": itens do levantamento de aderência ligados ao atendimento clínico (ignore financeiro, faturamento e laboratório). Cada item: processo (frase curta), etapa_id (um dos ids acima ou "geral"), status (um de ${JSON.stringify(STATUS_AD)}) e obs (curta). No máximo 80 itens.
+5. "infos_tecnicas": do projeto técnico, até 12 frases curtas sobre o que importa para o fluxo clínico e a implantação: unidades, especialidades, volume, integrações (PACS, WhatsApp, prescrição, assinatura digital), equipamentos (painel de senhas, totem, biometria), escopo e datas.
+6. "sugestoes": 3 a 6 melhorias práticas para o fluxo clínico deste cliente, usando os recursos do Klingo. Para o início da operação no sistema use a palavra "Start", nunca "Go-Live".
+7. "projeto": dados do cliente se aparecerem. tipo deve ser um de ${JSON.stringify(TIPOS)} ou "". data_start no formato AAAA-MM-DD ou "".
+
+Responda SOMENTE com um JSON válido, sem texto antes ou depois, neste formato:
+{"projeto":{"cliente":"","unidades":"","tipo":"","especialidades":"","data_start":""},"respostas":{"etapa_id":{"pergunta_id":"opção ou [opções]"}},"passos":{"etapa_id":["passo"]},"etapas_nao_aplicaveis":[],"aderencia":[{"processo":"","etapa_id":"","status":"","obs":""}],"infos_tecnicas":[""],"sugestoes":[""]}`;
+}
+function lerJsonIA(txt){let t=String(txt||"").trim().replace(/^```(?:json)?/i,"").replace(/```$/,"");const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("json");return JSON.parse(t.slice(a,b+1))}
+function aplicarIA(p,out){
+ const n={r:0,p:0,d:0,a:0};const pj=out.projeto||{},I=p.info;
+ if(pj.cliente&&!I.cliente)I.cliente=String(pj.cliente);
+ if(pj.unidades&&!I.unidades)I.unidades=String(pj.unidades);
+ if(pj.tipo&&TIPOS.includes(pj.tipo)&&!I.tipo)I.tipo=pj.tipo;
+ if(pj.especialidades&&!I.esp)I.esp=String(pj.especialidades);
+ if(pj.data_start&&/^\d{4}-\d{2}-\d{2}$/.test(pj.data_start)&&!I.start)I.start=pj.data_start;
+ if(I.cliente&&/^(Novo projeto|Meu primeiro projeto)$/.test(p.nome))p.nome=I.cliente;
+ const R=out.respostas||{};
+ Object.keys(R).forEach(eid=>{const t=tpl(eid),e=p.etapas.find(x=>x.id===eid);if(!t||!e)return;
+  Object.keys(R[eid]||{}).forEach(qid=>{const q=t.qs.find(x=>x.id===qid);if(!q)return;const ops=q.o.map(o=>ov(o).v);let v=R[eid][qid];
+   if(q.tp==="m"){const arr=(Array.isArray(v)?v:[v]).filter(x=>ops.includes(x));if(arr.length){e.r[qid]=[...new Set([...(e.r[qid]||[]),...arr])];n.r++}}
+   else{if(Array.isArray(v))v=v[0];if(ops.includes(v)){e.r[qid]=v;n.r++}}})});
+ const PS=out.passos||{};
+ Object.keys(PS).forEach(eid=>{const e=p.etapas.find(x=>x.id===eid);if(!e||!Array.isArray(PS[eid]))return;const ex=passos(e);const nv=PS[eid].map(s=>String(s).trim()).filter(s=>s&&!ex.includes(s));if(nv.length){e.passos=[...ex,...nv].join("\n");n.p+=nv.length}});
+ (out.etapas_nao_aplicaveis||[]).forEach(eid=>{const e=p.etapas.find(x=>x.id===eid);if(e&&e.ativa){e.ativa=false;n.d++}});
+ if(Array.isArray(out.aderencia))out.aderencia.forEach(a=>{if(!a||!a.processo)return;const proc=String(a.processo).trim();const st=STATUS_AD.includes(a.status)?a.status:"A definir";
+  const et=p.etapas.some(x=>x.id===a.etapa_id)?a.etapa_id:"geral";const ex=p.aderencia.find(x=>x.processo.toLowerCase()===proc.toLowerCase());
+  if(ex){ex.status=st;if(a.obs)ex.obs=String(a.obs);if(ex.etapa==="geral")ex.etapa=et}else{p.aderencia.push({id:uid("a"),processo:proc,etapa:et,status:st,obs:String(a.obs||"")});n.a++}});
+ if(Array.isArray(out.infos_tecnicas)&&out.infos_tecnicas.filter(Boolean).length)p.tecnico=out.infos_tecnicas.map(String).filter(Boolean).slice(0,20);
+ if(Array.isArray(out.sugestoes)&&out.sugestoes.filter(Boolean).length)p.sugestoes=out.sugestoes.map(String).filter(Boolean).slice(0,8);
+ return n;
+}
+function aplicarTexto(txt){
+ const p=P();let out;try{out=lerJsonIA(txt)}catch(e){iaMsg={err:true,t:"Não reconheci a resposta. Copie a resposta inteira do Claude (o bloco que começa com { e termina com })."};render();return}
+ iaUndo={pid:p.id,snap:JSON.stringify(p)};const n=aplicarIA(p,out);save();
+ iaMsg={t:`Pronto: ${n.r} resposta(s) marcada(s), ${n.p} passo(s) específico(s), ${n.a} item(ns) de aderência${n.d?`, ${n.d} etapa(s) desligada(s)`:""}. Revise nas abas Fluxo e Aderência.`};
+ const ta=$("respIA");if(ta)ta.value="";render();
+}
+async function rodarAPI(){
+ if(!cfg.key||iaBusy)return;iaBusy=true;iaMsg=null;render();
+ try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+   body:JSON.stringify({model:cfg.model||"claude-sonnet-5-5",max_tokens:16000,messages:[{role:"user",content:montarPedido()}]})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error((j.error&&j.error.message)||("Erro "+r.status));
+  const txt=(j.content||[]).filter(c=>c.type==="text").map(c=>c.text).join("");iaBusy=false;aplicarTexto(txt);return;
+ }catch(e){iaMsg={err:true,t:"A chamada à API falhou: "+(e.message||e)+". Confira a chave, o modelo e a internet."}}
+ iaBusy=false;render();
+}
+
+/* ============ DITADO (navegador) ============ */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recKey=null;
+function micBtn(key){if(!SR)return"";return `<button class="mic ${rec&&recKey===key?"on":""}" data-act="mic" data-arg="${key}" title="Ditar (precisa de internet)">🎤</button>`}
+function alvoMic(key){const p=P();if(key==="ia")return{o:p,f:"iaTexto"};if(key==="obs")return{o:p.info,f:"obs"};const e=p.etapas.find(x=>x.id===sel);return e?{o:e,f:key}:null}
+function toggleMic(key){
+ if(rec){const same=recKey===key;try{rec.stop()}catch(e){}rec=null;recKey=null;render();if(same)return}
+ const alvo=alvoMic(key);if(!alvo)return;
+ try{rec=new SR();rec.lang="pt-BR";rec.continuous=true;rec.interimResults=true}catch(e){toast("Ditado indisponível neste navegador");return}
+ recKey=key;
+ rec.onresult=ev=>{let parcial="";for(let i=ev.resultIndex;i<ev.results.length;i++){const r=ev.results[i];if(r.isFinal){const t=r[0].transcript.trim();const cur=alvo.o[alvo.f]||"";alvo.o[alvo.f]=cur+(cur&&!/\s$/.test(cur)?" ":"")+t;const el=document.querySelector(`[data-mickey="${key}"]`);if(el)el.value=alvo.o[alvo.f];save()}else parcial+=r[0].transcript}
+  const pe=$("partial");if(pe)pe.textContent=parcial?"🎤 "+parcial:""};
+ rec.onerror=ev=>{toast(ev.error==="not-allowed"?"Microfone não autorizado":"Ditado interrompido ("+ev.error+")")};
+ rec.onend=()=>{rec=null;recKey=null;document.querySelectorAll(".mic.on").forEach(b=>b.classList.remove("on"));const pe=$("partial");if(pe)pe.textContent=""};
+ try{rec.start();render()}catch(e){rec=null;recKey=null;toast("Não consegui iniciar o ditado")}
+}
+
+/* ============ RELATÓRIO / EXPORTAÇÕES ============ */
+const fmtData=d=>d&&/^\d{4}-\d{2}-\d{2}$/.test(d)?d.split("-").reverse().join("/"):(d||"");
+function relatorio(p=P()){const I=p.info;
+ return{titulo:p.nome,meta:[["Cliente",I.cliente],["Sede",I.sede],["Filiais / unidades",I.unidades],["Tipo de estabelecimento",I.tipo],["Especialidades",I.esp],["Gestor do sistema",I.gestor],["Técnico alocado",I.responsavel],["Líder técnico",I.lider],["Técnicos envolvidos",I.tecnicos],["Gerente do projeto",I.gerente],["Fase atual",faseNome(I.fase)],["Kickoff",fmtData(I.kickoff)],["Previsão do Start",fmtData(I.start)],["Observações",I.obs]].filter(x=>x[1]),
+  tec:p.tecnico||[],
+  et:ativas(p).map((e,i)=>({n:i+1,id:e.id,tit:e.tit,setor:e.setor,linhas:resumo(e),passos:passos(e),dec:decisoes(e),al:alertas(e),nota:e.nota,pend:pendentes(e).map(q=>q.q)})),
+  ader:p.aderencia.map(a=>({...a,etapaNome:nomeEtapa(p,a.etapa)})),sug:p.sugestoes||[],
+  trilha:TRILHA.map(f=>({id:f.id,t:f.t,st:statusFase(p,f.id),itens:p.trilha[f.id]||[]})),pend:pendenciasTrilha(p),
+  aud:AUDIT.map(([g,its],gi)=>({g,itens:its.map(([item,crit],ii)=>({item,crit,...(p.audit[audKey(gi,ii)]||{v:"",obs:""})}))})),audInfo:p.auditInfo,audRes:resumoAud(p)}}
+function txtProjeto(p=P()){const r=relatorio(p);let t=`PROJETO DE IMPLANTAÇÃO KLINGO: ${r.titulo}\n`;r.meta.forEach(([k,v])=>t+=`${k}: ${v}\n`);
+ if(r.tec.length){t+=`\nINFORMAÇÕES DO PROJETO TÉCNICO\n`;r.tec.forEach(s=>t+=`   - ${s}\n`)}
+ t+=`\nFLUXO DE ATENDIMENTO\n`;
+ r.et.forEach(e=>{t+=`\n${e.n}. ${e.tit.toUpperCase()} (responsável: ${e.setor})\n`;e.linhas.forEach(x=>t+=`   - ${x.l}: ${x.v}\n`);e.passos.forEach(x=>t+=`   - ${x}\n`);e.dec.forEach(x=>t+=`   ◆ Decisão: ${x}\n`);e.al.forEach(x=>t+=`   ⚠ Atenção: ${x}\n`);if(e.nota)t+=`   Obs.: ${e.nota}\n`});
+ if(r.ader.length){t+=`\nLEVANTAMENTO DE ADERÊNCIA\n`;r.ader.forEach(a=>t+=`   - [${a.status||"A definir"}] ${a.processo} (${a.etapaNome})${a.obs?" — "+a.obs:""}\n`)}
+ t+=`\nTRILHA DE IMPLANTAÇÃO\n`;r.trilha.forEach(f=>t+=`   - ${f.t}: ${f.st.l}${f.st.c!=="n"?" ("+f.st.pc+"%, "+f.st.ok+"/"+f.st.tot+")":""}\n`);
+ if(r.pend.length){t+=`\nPENDÊNCIAS DA TRILHA\n`;r.pend.forEach(({f,x})=>t+=`   - [${x.st==="PENDENTE CLIENTE"?"Pendente cliente":"Atrasada"}] ${x.cod?x.cod+" ":""}${x.t} (${faseNome(f)}${x.fim?", fim previsto "+fmtData(x.fim):""})\n`)}
+ if(r.sug.length){t+=`\nSUGESTÕES DE MELHORIA\n`;r.sug.forEach(s=>t+=`   - ${s}\n`)}
+ return t}
+function mermaid(p=P()){const et=ativas(p);const id=s=>"n"+s.replace(/[^a-zA-Z0-9]/g,"");const q=s=>String(s).replace(/"/g,"'");
+ let m="flowchart LR\n";[...new Set(et.map(e=>e.setor))].forEach((s,si)=>{m+=`  subgraph S${si}["${q(s)}"]\n`;et.filter(e=>e.setor===s).forEach(e=>{m+=`    ${id(e.id)}["${q(e.tit)}"]\n`;decisoes(e).forEach((d,k)=>m+=`    ${id(e.id)}D${k}{"${q(d)}"}\n`)});m+="  end\n"});
+ et.forEach((e,i)=>{let last=id(e.id);decisoes(e).forEach((d,k)=>{m+=`  ${last} --> ${id(e.id)}D${k}\n`;last=id(e.id)+"D"+k});if(et[i+1])m+=`  ${last} --> ${id(et[i+1].id)}\n`});return m}
+function baixar(blob,nome){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nome;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
+const nomeArq=(sfx,ext)=>((P().nome||"projeto").replace(/[\\/:*?"<>|]+/g,"").trim().slice(0,80)||"projeto")+" - "+sfx+"."+ext;
+// ZIP sem compressão (para o .docx)
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+function zip(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+ files.forEach(f=>{const nm=enc.encode(f.name),d=enc.encode(f.data),crc=crc32(d);
+  const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(12,0x21,true);h.setUint32(14,crc,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,nm.length,true);parts.push(new Uint8Array(h.buffer),nm,d);
+  const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(14,0x21,true);c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,d.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);cen.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+d.length});
+ const cs=cen.reduce((n,a)=>n+a.length,0);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cen,new Uint8Array(e.buffer)],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"})}
+function buildDocx(rel){
+ const x=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+ const run=(t,o={})=>`<w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>${o.b?"<w:b/>":""}${o.i?"<w:i/>":""}${o.c?`<w:color w:val="${o.c}"/>`:""}<w:sz w:val="${o.sz||21}"/></w:rPr><w:t xml:space="preserve">${x(t)}</w:t></w:r>`;
+ const p=(runs,o={})=>`<w:p><w:pPr>${o.keep?"<w:keepNext/>":""}<w:spacing w:before="${o.before||0}" w:after="${o.after??80}"/>${o.ind?`<w:ind w:left="${o.ind}" w:hanging="${o.hang||0}"/>`:""}</w:pPr>${runs}</w:p>`;
+ const bul=(runs,c)=>p(run("•  ",{c:c||"0F7C74",b:true})+runs,{ind:360,hang:220,after:40});
+ const h2=(t,c)=>p(run(t,{b:true,sz:28,c:c||"0F7C74"}),{before:320,after:80,keep:true});
+ const bd=`<w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:color="C9D3D9"/>`).join("")}</w:tblBorders>`;
+ const cell=(t,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${o.w}" w:type="dxa"/>${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}</w:tcPr>${p(run(t,{b:o.b,sz:19,c:o.c}),{after:20,before:20})}</w:tc>`;
+ const tabela=(ws,head,rows)=>`<w:tbl><w:tblPr><w:tblW w:w="9638" w:type="dxa"/>${bd}<w:tblCellMar><w:left w:w="90" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${ws.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid><w:tr><w:trPr><w:tblHeader/></w:trPr>${head.map((t,i)=>cell(t,{w:ws[i],b:true,fill:"E3F3F1"})).join("")}</w:tr>${rows.map(r=>`<w:tr>${r.map((c,i)=>cell(c.t??c,{w:ws[i],b:c.b,c:c.c,fill:c.fill})).join("")}</w:tr>`).join("")}</w:tbl>`;
+ const FILL={"Aderente":"E3F3F1","Parcial":"FFF6DD","Não aderente":"FDE8E8","Customização":"EEEBFB"};
+ let b=p(run("PROJETO DE IMPLANTAÇÃO KLINGO",{b:true,sz:18,c:"0F7C74"}),{after:20})+p(run(rel.titulo,{b:true,sz:36}),{after:160});
+ rel.meta.forEach(([k,v])=>b+=p(run(k+": ",{b:true})+run(v),{after:40}));
+ if(rel.tec.length){b+=h2("Informações do projeto técnico","2B5A7A");rel.tec.forEach(s=>b+=bul(run(s),"2B5A7A"))}
+ b+=h2("Fluxo de atendimento — visão geral");
+ b+=tabela([600,3000,2900,3138],["Nº","Etapa","Setor responsável","Pontos de decisão"],rel.et.map(e=>[String(e.n),{t:e.tit,b:true},e.setor,{t:e.dec.join("; ")||"—",c:e.dec.length?"5B4BC4":"888888"}]));
+ b+=h2("Etapas em detalhe");
+ rel.et.forEach(e=>{b+=p(run(e.n+". "+e.tit,{b:true,sz:25}),{before:220,after:20,keep:true})+p(run("Responsável: "+e.setor,{i:true,c:"66757F",sz:19}),{after:80,keep:true});
+  e.linhas.forEach(l=>b+=bul(run(l.l+": ",{b:true})+run(l.v)));e.passos.forEach(s=>b+=bul(run(s)));
+  e.dec.forEach(d=>b+=bul(run("Decisão: ",{b:true,c:"5B4BC4"})+run(d),"5B4BC4"));e.al.forEach(a=>b+=bul(run("Atenção: ",{b:true,c:"B45309"})+run(a),"B45309"));
+  if(e.nota)b+=p(run("Obs.: ",{b:true})+run(e.nota),{ind:360,after:40});if(!e.linhas.length&&!e.passos.length)b+=p(run("Etapa ainda não levantada.",{i:true,c:"888888"}),{ind:360})});
+ if(rel.ader.length){b+=h2("Levantamento de aderência");b+=tabela([3700,2000,1500,2438],["Processo","Etapa","Status","Observação"],rel.ader.map(a=>[a.processo,a.etapaNome,{t:a.status||"A definir",b:true,fill:FILL[a.status]},a.obs||""]))}
+ const al=rel.et.filter(e=>e.al.length||e.pend.length);
+ if(al.length){b+=h2("Pontos de atenção e pendências","B45309");al.forEach(e=>{b+=p(run(e.tit,{b:true}),{before:100,after:30,keep:true});e.al.forEach(a=>b+=bul(run(a),"B45309"));e.pend.forEach(q=>b+=bul(run("A levantar: "+q,{c:"66757F"}),"999999"))})}
+ {const COR={g:"E3F3F1",y:"FEF6D8",r:"FDE8E8",n:"F1F3F5"},SC={"CONCLUÍDO":"E3F3F1","EM ANDAMENTO":"FEF6D8","PENDENTE CLIENTE":"FDE8E8"};
+  b+=h2("Trilha de implantação — situação das fases");
+  b+=tabela([4200,1500,1500,2438],["Fase","Concluídas","Andamento","Situação"],rel.trilha.map(f=>[{t:f.t,b:true},`${f.st.ok} de ${f.st.tot}`,f.st.c==="n"?"—":f.st.pc+"%",{t:f.st.l,b:true,fill:COR[f.st.c]}]));
+  if(rel.pend.length){b+=p(run("Pendências",{b:true,sz:23,c:"B45309"}),{before:200,after:60,keep:true});rel.pend.forEach(({f,x})=>b+=bul(run((x.st==="PENDENTE CLIENTE"?"Pendente cliente: ":"Atrasada: "),{b:true})+run(`${x.cod?x.cod+" ":""}${x.t} (${faseNome(f)}${x.fim?", fim previsto "+fmtData(x.fim):""})`),"B45309"))}
+  b+=h2("Trilha de implantação — atividades");
+  rel.trilha.forEach(f=>{b+=p(run(f.t,{b:true,sz:23}),{before:200,after:60,keep:true});
+   b+=tabela([700,4300,1700,1300,1638],["Cód.","Atividade","Status","Fim previsto","Validação"],f.itens.map(x=>[x.cod||"+",x.t,{t:x.st,b:true,fill:SC[x.st]},fmtData(x.fim)||"—",x.val||"—"]))});
+  b+=h2("Checklist de auditoria — critérios de aceite");
+  const AI=rel.audInfo;[["Líder técnico / auditor(a)",AI.auditor],["Data da reunião de validação",fmtData(AI.data)],["Responsável pelo projeto (cliente)",AI.respCliente],["Participantes · cliente",AI.partCli],["Participantes · Wisetech",AI.partWt],["Parecer final",AI.parecer],["Observações",AI.obs]].filter(x=>x[1]).forEach(([k,v])=>b+=p(run(k+": ",{b:true})+run(v),{after:40}));
+  b+=p(run(`Validado: ${rel.audRes.pc}% (${rel.audRes.sim} de ${rel.audRes.tot} itens aplicáveis) · Parciais: ${rel.audRes.par} · Não: ${rel.audRes.nao} · Sem avaliação: ${rel.audRes.vazio}`,{i:true,c:"66757F"}),{after:100});
+  const VF={"SIM":"E3F3F1","PARCIAL":"FEF6D8","NÃO":"FDE8E8","NÃO SE APLICA":"F1F3F5"};let nn=0;
+  rel.aud.forEach(g=>{b+=p(run(g.g,{b:true,sz:22,c:"0F7C74"}),{before:160,after:40,keep:true});b+=tabela([500,2600,3600,1300,1638],["Nº","Item","Critério de aceite","Validado?","Observações"],g.itens.map(x=>[String(++nn),{t:x.item,b:true},x.crit,{t:x.v||"—",b:true,fill:VF[x.v]},x.obs||""]))})}
+ if(rel.sug.length){b+=h2("Sugestões de melhoria","5B4BC4");rel.sug.forEach(s=>b+=bul(run(s),"5B4BC4"))}
+ const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${b}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+ return zip([{name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`},
+  {name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`},
+  {name:"word/document.xml",data:doc}])}
+function imprimir(){const r=relatorio();let h=`<div class="k">PROJETO DE IMPLANTAÇÃO KLINGO</div><h1>${esc(r.titulo)}</h1>`;
+ r.meta.forEach(([k,v])=>h+=`<div><b>${esc(k)}:</b> ${esc(v)}</div>`);
+ if(r.tec.length)h+=`<h2>Informações do projeto técnico</h2><ul>${r.tec.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`;
+ h+=`<h2>Fluxo de atendimento — visão geral</h2><table><tr><th>Nº</th><th>Etapa</th><th>Setor</th><th>Pontos de decisão</th></tr>${r.et.map(e=>`<tr><td>${e.n}</td><td><b>${esc(e.tit)}</b></td><td>${esc(e.setor)}</td><td class="dec">${esc(e.dec.join("; ")||"—")}</td></tr>`).join("")}</table>`;
+ h+=`<h2>Etapas em detalhe</h2>`;r.et.forEach(e=>{h+=`<h3>${e.n}. ${esc(e.tit)}</h3><div class="k"><i>Responsável: ${esc(e.setor)}</i></div><ul>${e.linhas.map(l=>`<li><b>${esc(l.l)}:</b> ${esc(l.v)}</li>`).join("")}${e.passos.map(s=>`<li>${esc(s)}</li>`).join("")}${e.dec.map(d=>`<li class="dec"><b>Decisão:</b> ${esc(d)}</li>`).join("")}${e.al.map(a=>`<li class="al"><b>Atenção:</b> ${esc(a)}</li>`).join("")}</ul>${e.nota?`<div><b>Obs.:</b> ${esc(e.nota)}</div>`:""}`});
+ if(r.ader.length)h+=`<h2>Levantamento de aderência</h2><table><tr><th>Processo</th><th>Etapa</th><th>Status</th><th>Observação</th></tr>${r.ader.map(a=>`<tr><td>${esc(a.processo)}</td><td>${esc(a.etapaNome)}</td><td><b>${esc(a.status||"A definir")}</b></td><td>${esc(a.obs)}</td></tr>`).join("")}</table>`;
+ const al=r.et.filter(e=>e.al.length||e.pend.length);if(al.length){h+=`<h2>Pontos de atenção e pendências</h2>`;al.forEach(e=>h+=`<h3>${esc(e.tit)}</h3><ul>${e.al.map(a=>`<li class="al">${esc(a)}</li>`).join("")}${e.pend.map(q=>`<li class="k">A levantar: ${esc(q)}</li>`).join("")}</ul>`)}
+ h+=`<h2>Trilha de implantação</h2><table><tr><th>Fase</th><th>Concluídas</th><th>Andamento</th><th>Situação</th></tr>${r.trilha.map(f=>`<tr><td><b>${esc(f.t)}</b></td><td>${f.st.ok} de ${f.st.tot}</td><td>${f.st.c==="n"?"—":f.st.pc+"%"}</td><td><b>${esc(f.st.l)}</b></td></tr>`).join("")}</table>`;
+ if(r.pend.length)h+=`<h3>Pendências</h3><ul>${r.pend.map(({f,x})=>`<li class="al"><b>${x.st==="PENDENTE CLIENTE"?"Pendente cliente":"Atrasada"}:</b> ${esc((x.cod?x.cod+" ":"")+x.t)} (${esc(faseNome(f))}${x.fim?", fim previsto "+fmtData(x.fim):""})</li>`).join("")}</ul>`;
+ r.trilha.forEach(f=>h+=`<h3>${esc(f.t)}</h3><table><tr><th>Cód.</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th>Validação</th></tr>${f.itens.map(x=>`<tr><td>${esc(x.cod||"+")}</td><td>${esc(x.t)}</td><td><b>${esc(x.st)}</b></td><td>${fmtData(x.fim)||"—"}</td><td>${esc(x.val||"—")}</td></tr>`).join("")}</table>`);
+ {let nn=0;h+=`<h2>Checklist de auditoria — critérios de aceite</h2><div class="k">Validado: ${r.audRes.pc}% (${r.audRes.sim} de ${r.audRes.tot}) · Parecer: ${esc(r.audInfo.parecer||"—")}</div>`;r.aud.forEach(g=>h+=`<h3>${esc(g.g)}</h3><table><tr><th>Nº</th><th>Item</th><th>Critério de aceite</th><th>Validado?</th><th>Obs.</th></tr>${g.itens.map(x=>`<tr><td>${++nn}</td><td><b>${esc(x.item)}</b></td><td>${esc(x.crit)}</td><td><b>${esc(x.v||"—")}</b></td><td>${esc(x.obs||"")}</td></tr>`).join("")}</table>`)}
+ if(r.sug.length)h+=`<h2>Sugestões de melhoria</h2><ul>${r.sug.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`;
+ $("print").innerHTML=h;setTimeout(()=>window.print(),50)}
+
+/* ============ TELAS ============ */
+let tab="mapa",gestSub="trilha",faseVista=null,filtroTr="todas",trOpen=new Set(),sel=null,delArm=false,filtroAd="todos";
+function render(){
+ const p=P();
+ $("selProj").innerHTML=S.projetos.slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}</option>`).join("");
+ $("btnDel").textContent=delArm?"Confirmar exclusão":"Excluir";
+ $("userbox").innerHTML=USER?`<span class="ubox" title="${esc(USER.email||"")}">👤 ${esc(nomeU(MEU)||(USER.email||"").split("@")[0])}${ehGestor()?" · gestor":""}</span><button class="sm" data-act="sair">Sair</button>`:"";
+ const T=totais();const at=T.al+T.gaps;
+ $("tabs").innerHTML=[["mapa","🗺 Mapa do projeto"],["gest","✏️ Gestão do projeto"],["docs","Documentos e IA"],["perg","Fluxo: perguntas"],["visual","Fluxo: visual"],["ader","Aderência"+(T.gaps?` <span class="badge">${T.gaps}</span>`:"")],["aud","Auditoria"],...(ehGestor()?[["carga","👥 Carga da equipe"]]:[]),["aten","Pontos de atenção"+((at+pendenciasTrilha(p).length)?` <span class="badge">${at+pendenciasTrilha(p).length}</span>`:"")],["exp","Exportar"]]
+  .map(([k,l])=>`<button data-act="tab" data-arg="${k}" class="${tab===k?"on":""}">${l}</button>`).join("");
+ if(tab==="carga"&&!ehGestor())tab="mapa";
+ if(!sel||!p.etapas.some(e=>e.id===sel))sel=(ativas(p)[0]||p.etapas[0]||{}).id;
+ $("app").innerHTML={mapa:rMapa,gest:rGest,docs:rDocs,perg:rPerg,visual:rVisual,ader:rAder,aud:rAud,carga:rCarga,aten:rAten,exp:rExp}[tab]();
+ setSt();
+}
+function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=pendenciasTrilha(p);
+ let cd;if(I.start){const d=Math.ceil((new Date(I.start+"T00:00:00")-new Date(new Date().toDateString()))/864e5);cd=`<div class="cd"><div class="n">${d>0?d:d===0?"Hoje":"✓"}</div><div class="l">${d>0?"dias para o Start ("+fmtData(I.start)+")":d===0?"é o dia do Start":"Start em "+fmtData(I.start)}</div></div>`}
+ else cd=`<div class="cd"><div class="n" style="color:var(--mut)">—</div><div class="l">Start não definido</div></div>`;
+ const node=(o)=>`<button class="node ${o.cls||""}" ${o.act?`data-act="${o.act}" data-arg="${o.arg||""}"`:""}><span class="t">${o.ic?o.ic+" ":""}${esc(o.t)}</span>${o.s?`<span class="s">${o.s}</span>`:""}${o.pct!=null?`<span class="bar"><i style="width:${o.pct}%"></i></span>`:""}</button>`;
+ const col=(n,t,body)=>`<div class="col"><h3><span class="num">${n}</span>${t}</h3>${body}</div>`;
+ const dadosOk=["cliente","tipo","esp","start"].filter(k=>I[k]).length;
+ let trT=0,trOk=0;TRILHA.forEach(f=>{const st=statusFase(p,f.id);trT+=st.tot;trOk+=st.ok});const trPc=trT?Math.round(trOk/trT*100):0;
+ let prox="";if(!T.docs)prox=`<div class="next">👉 <span>Próximo passo: importar o projeto técnico, o mapeamento de fluxo e o levantamento de aderência.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos</button></div>`;
+ else if(!T.ok)prox=`<div class="next">👉 <span>Próximo passo: usar a IA para preencher o fluxo a partir dos documentos.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos e IA</button></div>`;
+ const dado=(l,v)=>`<div class="dv"><div class="dl">${l}</div><div class="dd">${v?esc(v):'<span class="vazio">—</span>'}</div></div>`;
+ const c1=Object.keys(DOCS).map(k=>{const d=p.docs[k];return node({ic:DOCS[k].ic,t:DOCS[k].t,s:d?"✓ "+esc(d.nome):"Não importado",cls:d?"ok":"pend",act:"tab",arg:"docs"})}).join("")
+  +node({ic:"✨",t:"Preencher com IA",s:T.docs?"Usar os documentos para preencher o projeto":"Importe os documentos primeiro",cls:T.ok?"ok":"pend",act:"tab",arg:"docs"});
+ const c2=node({ic:"🏥",t:"Dados do projeto",s:`${dadosOk} de 4 campos principais`,pct:dadosOk/4*100,cls:dadosOk===4?"ok":"pend",act:"editar",arg:"dados"})
+  +node({ic:"🧭",t:"Trilha de implantação",s:`${trOk} de ${trT} atividades · ${trPc}%`,pct:trPc,cls:trPc===100?"ok":"pend",act:"editar",arg:"trilha"})
+  +node({ic:"💲",t:"Tabela de preço",s:"Em breve",cls:"soon"});
+ const c3=p.etapas.map(e=>{const t=tpl(e.id),tot=t?t.qs.length:0,ok=tot-pendentes(e).length,al=alertas(e).length;
+   return node({t:e.tit,s:!e.ativa?"Fora do fluxo":t?`${ok}/${tot} respondidas${al?` · <span style="color:var(--warn)">⚠ ${al}</span>`:""}`:"Etapa livre",pct:e.ativa&&tot?ok/tot*100:null,cls:!e.ativa?"off":al?"warn":tot&&ok===tot?"ok":"pend",act:"open",arg:e.id})}).join("")
+  +node({ic:"🔀",t:"Ver fluxo visual",s:`${at.length} etapas no fluxo`,act:"tab",arg:"visual"});
+ const cont=s=>p.aderencia.filter(a=>a.status===s).length;
+ const c4=node({ic:"📋",t:"Aderência",s:p.aderencia.length?`${cont("Aderente")} aderentes · ${T.gaps} gaps`:"Sem itens ainda",pct:p.aderencia.length?cont("Aderente")/p.aderencia.length*100:null,cls:!p.aderencia.length?"pend":T.gaps?"warn":"ok",act:"tab",arg:"ader"})
+  +node({ic:"⏳",t:"Pendências da trilha",s:PT.length?`${PT.filter(y=>y.x.st==="PENDENTE CLIENTE").length} pendente cliente · ${PT.filter(y=>atrasada(y.x)).length} atrasadas`:"Nenhuma pendência",cls:PT.length?"warn":"ok",act:"tab",arg:"aten"})
+  +node({ic:"✅",t:"Auditoria",s:A.tot?`${A.sim} de ${A.tot} validados · ${A.pc}%`:"Checklist de critérios de aceite",pct:A.pc,cls:A.pc===100?"ok":"pend",act:"tab",arg:"aud"})
+  +node({ic:"⚠️",t:"Pontos de atenção",s:`${T.al} no fluxo · ${T.gaps} gaps · ${T.tot-T.ok} perguntas pendentes`,cls:T.al+T.gaps?"warn":"ok",act:"tab",arg:"aten"})
+  +node({ic:"💡",t:"Sugestões de melhoria",s:p.sugestoes.length?p.sugestoes.length+" sugestões":"Geradas pela IA",cls:p.sugestoes.length?"ok":"pend",act:"tab",arg:"aten"});
+ const c5=node({ic:"📄",t:"Documento Word",s:"Projeto completo em .docx",act:"dl-docx"})
+  +node({ic:"🖨",t:"Imprimir / PDF",s:"Pela impressão do navegador",act:"print"})
+  +node({ic:"🔗",t:"Fluxograma e texto",s:"Mermaid e texto para copiar",act:"tab",arg:"exp"})
+  +node({ic:"💾",t:"Backup do projeto",s:"Salvar em arquivo .json",act:"dl-json"});
+ return `<div class="hero"><div><h2>${esc(p.nome)}</h2><div class="sub">${[I.cliente,I.tipo,I.esp].filter(Boolean).map(esc).join(" · ")||"Dados do projeto ainda não preenchidos"}</div></div>
+ <div class="fatual"><div class="l">Fase atual</div><div class="fv">${esc(faseNome(I.fase))}</div></div>${cd}</div>
+ ${prox}
+ <div class="mgrid">
+  <div class="panel" style="margin:0"><div class="ptitle"><h3>Dados do projeto</h3><button class="sm" data-act="editar" data-arg="dados">✏️ Editar</button></div>
+   <div class="dgrid">${dado("Cliente",I.cliente)}${dado("Sede",I.sede)}${dado("Filiais / unidades",I.unidades)}${dado("Tipo de estabelecimento",I.tipo)}${dado("Especialidades",I.esp)}${dado("Gestor do sistema",I.gestor)}${dado("Técnico alocado",I.responsavel)}${dado("Líder técnico",I.lider)}${dado("Técnicos envolvidos",I.tecnicos)}${dado("Gerente do projeto",I.gerente)}${dado("Kickoff",fmtData(I.kickoff))}${dado("Previsão do Start",fmtData(I.start))}</div>
+   ${I.obs?`<div class="dv" style="margin-top:10px"><div class="dl">Observações</div><div class="dd" style="font-weight:400;white-space:pre-wrap">${esc(I.obs)}</div></div>`:""}
+   ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}</div>
+  <div class="kgrid">
+   <div class="kpi" data-act="editar" data-arg="trilha"><div class="n">${trPc}%</div><div class="l">da trilha concluída (${trOk} de ${trT})</div></div>
+   <div class="kpi" data-act="tab" data-arg="perg"><div class="n">${T.tot?Math.round(T.ok/T.tot*100):0}%</div><div class="l">do fluxo levantado</div></div>
+   <div class="kpi" data-act="tab" data-arg="docs"><div class="n">${T.docs}/3</div><div class="l">documentos importados</div></div>
+   <div class="kpi" data-act="tab" data-arg="ader"><div class="n" style="${T.gaps?"color:var(--warn)":""}">${T.gaps}</div><div class="l">gaps de aderência</div></div>
+   <div class="kpi" data-act="tab" data-arg="aten"><div class="n" style="${PT.length?"color:var(--red)":""}">${PT.length}</div><div class="l">pendências da trilha</div></div>
+   <div class="kpi" data-act="tab" data-arg="aud"><div class="n">${A.pc}%</div><div class="l">auditoria validada</div></div>
+  </div></div>
+ <h3 class="sect">Trilha de implantação <span class="hint" style="margin:0;font-weight:400">· clique numa fase para registrar o andamento</span></h3>
+ <div class="fases">${TRILHA.map(f=>{const st=statusFase(p,f.id);
+  return `<div class="fase clk ${I.fase===f.id?"atual":""}" data-act="ver-fase" data-arg="${f.id}"><div class="fn">${esc(f.t)}${I.fase===f.id?` <span class="fa">atual</span>`:""}</div>
+   <span class="st3 ${st.c}"><span class="dot"></span>${st.l}${st.c!=="n"?" · "+st.pc+"%":""}</span>
+   <div class="pbar ${st.c}"><i style="width:${st.pc}%"></i></div><div class="cnt">${st.ok} de ${st.tot} concluídas${st.pend?` · <span style="color:#b91c1c">${st.pend} pend. cliente</span>`:""}${st.atr?` · <span style="color:#b45309">${st.atr} atrasada${st.atr>1?"s":""}</span>`:""}</div></div>`}).join("")}</div>
+ <h3 class="sect">Mapa do projeto</h3>
+ <div class="map">${col(1,"Entrada",c1)}${col(2,"Projeto",c2)}${col(3,"Fluxo clínico",c3)}${col(4,"Análise",c4)}${col(5,"Entregas",c5)}</div>`}
+function rGest(){const p=P();const f=FASES.includes(faseVista)||faseVista==="gp"?faseVista:p.info.fase;faseVista=f;
+ const sub=`<div class="seg"><button class="${gestSub==="dados"?"on":""}" data-act="editar" data-arg="dados">Dados do projeto</button><button class="${gestSub==="trilha"?"on":""}" data-act="editar" data-arg="trilha">Trilha de implantação</button></div>`;
+ if(gestSub==="dados")return sub+rDados();
+ const steps=TRILHA.map(x=>{const st=statusFase(p,x.id),[num,nome]=CURTO[x.id]||["",x.t];
+  return `<button class="step s-${st.c} ${f===x.id?"on":""} ${x.id==="gp"?"gp":""}" data-act="fase" data-arg="${x.id}" title="${esc(x.t)} · ${st.l}${st.c!=="n"?" "+st.pc+"%":""}">
+   <span class="sc">${st.c==="g"?"✓":num}</span><span class="sn">${nome}</span><span class="sp">${st.c==="n"?"—":st.pc+"%"}</span>${p.info.fase===x.id?`<span class="sa">atual</span>`:""}</button>`}).join("");
+ return sub+`<div class="stepper">${steps}</div>`+rFase(p,f)}
+const hojeISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const atrasada=x=>x.fim&&x.fim<hojeISO()&&x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR";
+function statusFase(p,f){const L=(p.trilha[f]||[]).filter(x=>x.st!=="NÃO APLICAR"),ok=L.filter(x=>x.st==="CONCLUÍDO").length,tot=L.length,pc=tot?Math.round(ok/tot*100):0;
+ const pend=L.filter(x=>x.st==="PENDENTE CLIENTE").length,atr=L.filter(atrasada).length;
+ const c=!tot?"n":ok===tot?"g":pc>=20?"y":"r";return{ok,tot,pc,c,pend,atr,l:{n:"Não se aplica",g:"Concluída",y:"Em andamento",r:"Pendente"}[c]}}
+function pendenciasTrilha(p=P()){const out=[];TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.st==="PENDENTE CLIENTE"||atrasada(x))out.push({f:f.id,x})}));return out}
+const stSlug=s=>({"A REALIZAR":"ar","EM ANDAMENTO":"em","CONCLUÍDO":"ok","PENDENTE CLIENTE":"pc","NÃO APLICAR":"na"}[s]||"ar");
+const nomeU=u=>u?(u.nome||(u.email||"").split("@")[0]):"";
+const pessoaPorId=id=>EQUIPE.find(u=>u.id===id);
+const normT=s=>String(s||"").trim().toLowerCase();
+function respDe(x){if(x.rwId){const u=pessoaPorId(x.rwId);if(u)return u}if(x.rw){const n=normT(x.rw);return EQUIPE.find(u=>normT(u.nome)===n||normT(u.email)===n||normT((u.email||"").split("@")[0])===n)||null}return null}
+function selResp(x){
+ if(!EQUIPE.length)return `<input type="text" data-tr="rw" data-id="${x.id}" value="${esc(x.rw)}" placeholder="Nome">`;
+ const u=respDe(x),livre=!u&&x.rw;
+ return `<select data-tr="rwId" data-id="${x.id}"><option value="">—</option>${livre?`<option value="__livre" selected>${esc(x.rw)} (texto)</option>`:""}${EQUIPE.map(m=>`<option value="${m.id}" ${u&&u.id===m.id?"selected":""}>${esc(nomeU(m))}</option>`).join("")}</select>`}
+function rFase(p,f){const L=p.trilha[f]||[],st=statusFase(p,f),ehFase=FASES.includes(f);
+ const vis=L.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":atrasada(x)));
+ const grupos=[...new Set(vis.map(x=>x.g))];
+ let rows="";grupos.forEach(g=>{rows+=`<tr class="trg"><td colspan="8">${esc(g)}</td></tr>`;
+  vis.filter(x=>x.g===g).forEach(x=>{const op=trOpen.has(x.id),tem=x.obs||x.rw||x.ru||x.link;
+   rows+=`<tr class="${atrasada(x)?"late":""} ${x.st==="NÃO APLICAR"?"na":""}"><td class="cod">${esc(x.cod||"+")}</td>
+   <td><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}">${x.crit&&!op?`<div class="crit">✓ ${esc(x.crit)}</div>`:""}</td>
+   <td><select data-tr="st" data-id="${x.id}" class="ss ss-${stSlug(x.st)}">${ST_TR.map(o=>`<option ${x.st===o?"selected":""}>${o}</option>`).join("")}</select></td>
+   <td><input type="date" data-tr="ini" data-id="${x.id}" value="${esc(x.ini)}"></td><td><input type="date" data-tr="fim" data-id="${x.id}" value="${esc(x.fim)}"></td>
+   <td>${selResp(x)}</td>
+   <td><select data-tr="val" data-id="${x.id}">${VAL_TR.map(o=>`<option value="${o}" ${x.val===o?"selected":""}>${o||"—"}</option>`).join("")}</select></td>
+   <td><button class="sm" data-act="tr-det" data-arg="${x.id}" title="Detalhes">${op?"▴":"▾"}${tem&&!op?" •":""}</button></td></tr>`;
+   if(op)rows+=`<tr class="det"><td></td><td colspan="7"><div class="detg">
+    <div class="w2"><label>Critério de aceite</label><textarea data-tr="crit" data-id="${x.id}" rows="2">${esc(x.crit)}</textarea></div>
+    <div class="w2"><label>Observações / próximos passos</label><textarea data-tr="obs" data-id="${x.id}" rows="2">${esc(x.obs)}</textarea></div>
+    <div><label>Responsável / referência na unidade</label><input type="text" data-tr="ru" data-id="${x.id}" value="${esc(x.ru)}"></div>
+    <div><label>Link de documentos (vídeos, RAPs...)</label><input type="text" data-tr="link" data-id="${x.id}" value="${esc(x.link)}"></div>
+    <div style="align-self:end"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div></div></td></tr>`})});
+ return `<div class="fpanel"><h3>Andamento · ${esc(faseNome(f))} <span class="hint" style="margin:0">${st.ok} de ${st.tot} concluídas${L.length-st.tot?` · ${L.length-st.tot} não aplicáveis`:""}</span>
+  ${ehFase?(p.info.fase===f?`<span class="tag d" style="margin:0">Fase atual</span>`:`<button class="sm pri" data-act="fase-atual" data-arg="${f}">Definir como fase atual</button>`):""}
+  <span style="margin-left:auto;display:flex;gap:6px;align-items:center"><select data-act-change="filtroTr">${[["todas","Todas as atividades"],["abertas","Só em aberto"],["pendente","Pendente cliente"],["atrasadas","Atrasadas"]].map(([v,l])=>`<option value="${v}" ${filtroTr===v?"selected":""}>${l}</option>`).join("")}</select>
+</span></h3>
+  <div class="pbar ${st.c}" style="margin:10px 0 10px"><i style="width:${st.pc}%"></i></div>
+  ${vis.length?`<div style="overflow-x:auto"><table class="tr"><thead><tr><th style="width:56px">Cód.</th><th>Atividade</th><th style="width:160px">Status</th><th style="width:140px">Início previsto</th><th style="width:140px">Fim previsto</th><th style="width:170px">Responsável Wisetech</th><th style="width:120px">Validação cliente</th><th style="width:44px"></th></tr></thead><tbody>${rows}</tbody></table></div>`:`<p class="hint">Nenhuma atividade neste filtro.</p>`}
+  <div class="dlrow"><button class="sm" data-act="tr-add">+ Incluir atividade</button></div></div>`}
+function rEquipeProjeto(p){if(!USER||!EQUIPE.length)return"";const dono=pessoaPorId(p.owner)||(p.owner===USER.id?MEU:null);
+ const outros=EQUIPE.filter(u=>u.id!==p.owner);
+ return `<div class="panel"><h2>Equipe do projeto</h2><p class="hint" style="font-size:13px">Quem pode ver e editar este projeto. Gestores têm acesso a todos os projetos.</p>
+ <div class="eq"><span class="eqd">👑 ${esc(nomeU(dono)||"Você")} <small>responsável</small></span>${outros.map(u=>`<label class="eqm ${(p.membros||[]).includes(u.id)?"on":""}"><input type="checkbox" data-membro="${u.id}" ${(p.membros||[]).includes(u.id)?"checked":""}> ${esc(nomeU(u))}${u.papel==="gestor"?" <small>gestor</small>":""}</label>`).join("")}</div></div>`}
+function rDados(){const p=P(),I=p.info;
+ const sel_=(k,ops)=>`<select data-bind="info.${k}" style="width:100%"><option value=""></option>${ops.map(o=>`<option ${I[k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
+ const txt=(k,ph)=>`<input type="text" data-bind="info.${k}" value="${esc(I[k])}" placeholder="${esc(ph||"")}">`;
+ return `${rEquipeProjeto(p)} <div class="panel"><h2>Dados do projeto</h2>
+ <div class="form">
+  <div class="full"><label>Nome do projeto</label><input type="text" data-bind="nome" value="${esc(p.nome)}"></div>
+  <div><label>Cliente</label>${txt("cliente")}</div><div><label>Sede</label>${txt("sede")}</div><div><label>Filiais / unidades</label>${txt("unidades","Ex.: Matriz e Filial Centro")}</div>
+  <div><label>Tipo de estabelecimento</label>${sel_("tipo",TIPOS)}</div><div><label>Especialidades</label>${txt("esp","Ex.: cardiologia, ortopedia")}</div>
+  <div><label>Gestor do sistema (cliente)</label>${txt("gestor")}</div>
+  <div><label>Técnico alocado</label>${txt("responsavel")}</div><div><label>Líder técnico</label>${txt("lider")}</div>
+  <div><label>Técnicos envolvidos</label>${txt("tecnicos")}</div><div><label>Gerente do projeto</label>${txt("gerente")}</div>
+  <div><label>Fase atual</label><select data-bind="info.fase" style="width:100%">${FASES.map(f=>`<option value="${f}" ${I.fase===f?"selected":""}>${esc(faseNome(f))}</option>`).join("")}</select></div><div><label>Kickoff</label><input type="date" data-bind="info.kickoff" value="${esc(I.kickoff)}"></div>
+  <div><label>Previsão do Start</label><input type="date" data-bind="info.start" value="${esc(I.start)}"></div>
+  <div class="full"><label style="display:flex;align-items:center;gap:8px">Observações gerais ${micBtn("obs")}</label><textarea data-bind="info.obs" data-mickey="obs">${esc(I.obs)}</textarea><div class="partial" id="partial"></div></div>
+ </div></div>
+ ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
+function rDocs(){const p=P();
+ const zona=k=>{const d=p.docs[k],K=DOCS[k];
+  if(d)return `<div class="drop ok"><div class="dz-ic">📄</div><div style="font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase">${K.t}</div><div class="dz-n" title="${esc(d.nome)}">${esc(d.nome)}</div><div class="hint" style="margin:0">Importado em ${esc(d.data||"")} · ${(d.texto||"").length.toLocaleString("pt-BR")} caracteres${d.cort?" (arquivo grande: usei o início)":""}${d.texto?"":" · texto não guardado"}</div>
+   <div class="dz-act"><label class="btn sm">Trocar<input type="file" data-doc="${k}" hidden></label><button class="sm" data-act="rm-doc" data-arg="${k}">Remover</button></div></div>`;
+  return `<label class="drop ${lendo?"busy":""}" data-drop="${k}">${lendo===k?`<div class="dz-ic"><span class="spin" style="width:24px;height:24px;color:var(--acc)"></span></div><div class="dz-t">Lendo o arquivo…</div>`:`<div class="dz-ic">${K.ic}</div><div class="dz-t">${K.t}</div><div class="hint" style="margin:0">${K.d}</div><div class="hint" style="margin-top:auto">Clique ou arraste o arquivo aqui<br>Word, Excel, PowerPoint, PDF, CSV ou TXT</div>`}
+   <input type="file" data-doc="${k}" hidden ${lendo?"disabled":""}></label>`};
+ const algum=Object.values(p.docs).some(Boolean);
+ return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">São as informações iniciais do projeto. Importe os três; a IA usa todos juntos para preencher o fluxo e a aderência.</p>
+ <div class="drops">${zona("tec")}${zona("fluxo")}${zona("ader")}</div></div>
+ ${iaMsg?`<div class="msg ${iaMsg.err?"err":""}">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
+ <div class="panel"><h2>2. Preencher o projeto com IA</h2><p class="hint" style="font-size:13px">A IA lê os documentos e marca as respostas do fluxo, os passos específicos, a lista de aderência e as informações técnicas. Você revisa tudo depois.</p>
+ <details ${p.iaTexto?"open":""} style="margin:12px 0"><summary>Acrescentar observações suas (opcional)</summary><div style="display:flex;justify-content:flex-end;margin:6px 0">${micBtn("ia")}</div><textarea data-bind="iaTexto" data-mickey="ia" placeholder="O que o cliente contou e não está nos documentos...">${esc(p.iaTexto)}</textarea><div class="partial" id="partial"></div></details>
+ <div class="ia-grid">
+  <div class="box" style="border:1px solid var(--line);margin:0"><h3>Opção A · Usando o Claude (sem custo extra)</h3>
+   <ol class="steps"><li><button class="pri sm" data-act="copy-prompt" ${algum||p.iaTexto?"":"disabled"}>📋 Copiar pedido para o Claude</button></li>
+   <li>Abra uma conversa nova no Claude (<a href="https://claude.ai/new" target="_blank">claude.ai/new</a>) e cole o pedido.</li>
+   <li>Copie a resposta inteira do Claude, cole abaixo e clique em Aplicar.</li></ol>
+   <textarea id="respIA" placeholder="Cole aqui a resposta do Claude" style="min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
+   <div class="dlrow"><button class="pri" data-act="apply-resp">Aplicar resposta</button></div></div>
+  <div class="box" style="border:1px solid var(--line);margin:0"><h3>Opção B · Automático com chave de API (opcional)</h3>
+   <p class="hint" style="margin-top:0">Preenche com um clique, sem copiar e colar. Precisa de uma chave da API da Anthropic (paga por uso, à parte da assinatura do Claude). A chave fica guardada só neste computador.</p>
+   <label class="hint" style="display:block">Chave de API</label><input type="password" data-cfg="key" value="${esc(cfg.key)}" placeholder="sk-ant-...">
+   <label class="hint" style="display:block">Modelo</label><input type="text" data-cfg="model" value="${esc(cfg.model)}">
+   <div class="dlrow"><button class="pri" data-act="api-run" ${cfg.key&&!iaBusy&&(algum||p.iaTexto)?"":"disabled"}>${iaBusy?'<span class="spin"></span> Processando…':"⚡ Preencher automaticamente"}</button></div></div>
+ </div></div>
+ ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}
+ ${p.sugestoes.length?`<div class="box sug"><h3>Sugestões de melhoria</h3><ul>${p.sugestoes.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
+function rPerg(){const p=P();
+ let h="";p.etapas.forEach((e,i)=>{const t=tpl(e.id);const tot=t?t.qs.length:0,ok=tot-pendentes(e).length;
+  h+=`<div class="it ${sel===e.id?"on":""} ${e.ativa?"":"off"}"><span class="mv"><button data-act="up" data-arg="${i}" title="Subir">▲</button><button data-act="dn" data-arg="${i}" title="Descer">▼</button></span>
+  <span class="nm">${esc(e.tit)}<span class="pg">${t?ok+" de "+tot+" respondidas":"etapa livre"}</span></span>
+  <button class="sm" data-act="open" data-arg="${e.id}">Abrir</button>
+  <button class="sm bt-mark ${e.ativa?"on":""}" data-act="mark" data-arg="${i}">${e.ativa?"✓ Incluído":"Incluir"}</button></div>`});
+ h+=`<div style="padding:8px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:6px"><button class="sm" data-act="allet" data-arg="1" style="flex:1;justify-content:center">Marcar todas</button><button class="sm" data-act="allet" data-arg="0" style="flex:1;justify-content:center">Desmarcar todas</button></div><button class="sm" data-act="add-etapa" style="justify-content:center">+ Etapa personalizada</button></div>`;
+ const i=p.etapas.findIndex(e=>e.id===sel),e=p.etapas[i];let q="";
+ if(e){const t=tpl(e.id);const setores=SETORES.includes(e.setor)?SETORES:[...SETORES,e.setor];
+  q=`<h2>${esc(e.tit)}</h2>${e.ativa?"":`<div class="msg" style="background:var(--warnbg)">Esta etapa não está incluída no fluxo. <button class="sm" data-act="mark" data-arg="${i}">Incluir</button></div>`}
+  <div class="row2"><div><div class="hint">Nome da etapa</div><input type="text" data-et="tit" value="${esc(e.tit)}"></div><div><div class="hint">Setor responsável</div><select data-et="setor" style="width:100%">${setores.map(s=>`<option ${s===e.setor?"selected":""}>${esc(s)}</option>`).join("")}</select></div></div>`;
+  if(t)t.qs.forEach(qq=>{const v=e.r[qq.id];q+=`<div class="q"><div class="lb">${esc(qq.q)}<small>${qq.tp==="m"?"várias opções":"uma opção"}</small></div><div class="chips">`+qq.o.map(ov).map(o=>{const on=qq.tp==="m"?(v||[]).includes(o.v):v===o.v;return `<button class="chip ${on?"on":""} ${o.a?"al":""}" data-act="chip" data-q="${qq.id}" data-v="${esc(o.v)}" data-tp="${qq.tp}">${esc(o.v)}${o.d?" ◆":""}</button>`}).join("")+`</div></div>`});
+  q+=`<div class="q"><div class="lb">Passos específicos deste cliente <small>um por linha</small>${micBtn("passos")}</div><textarea data-et="passos" data-mickey="passos">${esc(e.passos)}</textarea></div>
+  <div class="q"><div class="lb">Observações${micBtn("nota")}</div><textarea data-et="nota" data-mickey="nota">${esc(e.nota)}</textarea><div class="partial" id="partial"></div></div>
+  ${!t?`<button class="sm danger" data-act="rm-etapa" data-arg="${i}">Remover etapa</button>`:""}`;
+  const ids=p.etapas.filter(x=>x.ativa||x.id===sel).map(x=>x.id),k=ids.indexOf(sel);
+  q+=`<div class="foot">${k>0?`<button data-act="open" data-arg="${ids[k-1]}">← Anterior</button>`:"<span></span>"}${k<ids.length-1?`<button class="pri" data-act="open" data-arg="${ids[k+1]}">Próxima →</button>`:`<button class="pri" data-act="tab" data-arg="visual">Ver fluxo →</button>`}</div>`}
+ return `<div class="split"><div class="side">${h}</div><div class="panel" id="painel">${q}</div></div>`}
+function rVisual(){const p=P(),et=ativas(p);if(!et.length)return `<div class="panel">Nenhuma etapa incluída no fluxo.</div>`;
+ const setores=[...SETORES.filter(s=>et.some(e=>e.setor===s)),...[...new Set(et.map(e=>e.setor))].filter(s=>!SETORES.includes(s))];
+ const gp=id=>p.aderencia.filter(a=>a.etapa===id&&a.status&&a.status!=="Aderente").length;
+ let h=`<div class="legend"><span>Colunas = etapas, linhas = setores. Clique num cartão para editar.</span><span class="tag d">◆ decisão</span><span class="tag a">⚠ atenção</span><span class="tag g">gap de aderência</span></div><div class="lanes"><div class="grid" style="grid-template-columns:150px repeat(${et.length},244px)"><div class="lh">Setor \\ Etapa</div>`;
+ et.forEach((e,i)=>h+=`<div class="ch">${i+1}</div>`);
+ setores.forEach(s=>{h+=`<div class="lh">${esc(s)}</div>`;et.forEach((e,i)=>{h+=`<div class="cell">`;if(e.setor===s){const r=resumo(e),ps=passos(e),d=decisoes(e),a=alertas(e),g=gp(e.id);
+  h+=`<div class="fc" data-act="open" data-arg="${e.id}"><h4>${i+1}. ${esc(e.tit)}</h4><ul>${r.map(x=>`<li><b>${esc(x.l)}:</b> ${esc(x.v)}</li>`).join("")}${ps.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${!r.length&&!ps.length?`<div class="hint">Ainda sem respostas</div>`:""}${d.map(x=>`<span class="tag d">◆ ${esc(x)}</span>`).join("")}${a.length?`<span class="tag a">⚠ ${a.length}</span>`:""}${g?`<span class="tag g">${g} gap${g>1?"s":""}</span>`:""}</div>${i<et.length-1?`<span class="arrow">→</span>`:""}`}h+=`</div>`})});
+ return h+`</div></div>`}
+function rAder(){const p=P();const ets=[["geral","Geral"],...p.etapas.map(e=>[e.id,e.tit])];
+ const lista=p.aderencia.filter(a=>filtroAd==="todos"||(filtroAd==="gaps"?a.status!=="Aderente":a.status===filtroAd));
+ const cont=STATUS_AD.map(s=>`${s}: <b>${p.aderencia.filter(a=>a.status===s).length}</b>`).join(" · ");
+ return `<div class="panel"><h2>Levantamento de aderência</h2><p class="hint" style="font-size:13px">Processos do cliente e o quanto o sistema atende. A IA preenche a partir do levantamento; aqui você ajusta, inclui e acompanha os gaps.</p>
+ <div class="tbar"><select data-act-change="filtro">${[["todos","Todos os itens"],["gaps","Só gaps (não aderentes)"],...STATUS_AD.map(s=>[s,s])].map(([v,l])=>`<option value="${v}" ${filtroAd===v?"selected":""}>${l}</option>`).join("")}</select>
+ <button class="pri" data-act="ad-add">+ Incluir item</button><span class="hint" style="margin:0">${cont}</span></div>
+ ${lista.length?`<table class="ad"><thead><tr><th style="width:34%">Processo</th><th style="width:18%">Etapa</th><th style="width:15%">Status</th><th>Observação</th><th style="width:36px"></th></tr></thead><tbody>
+ ${lista.map(a=>`<tr><td><textarea data-ad="processo" data-id="${a.id}" rows="1">${esc(a.processo)}</textarea></td>
+  <td><select data-ad="etapa" data-id="${a.id}">${ets.map(([v,l])=>`<option value="${v}" ${a.etapa===v?"selected":""}>${esc(l)}</option>`).join("")}</select></td>
+  <td><select data-ad="status" data-id="${a.id}" class="s-${esc(a.status)}">${STATUS_AD.map(s=>`<option ${a.status===s?"selected":""}>${s}</option>`).join("")}</select></td>
+  <td><textarea data-ad="obs" data-id="${a.id}" rows="1">${esc(a.obs)}</textarea></td><td><button class="sm danger" data-act="ad-rm" data-arg="${a.id}" title="Excluir">✕</button></td></tr>`).join("")}</tbody></table>`:`<p class="hint">Nenhum item${filtroAd!=="todos"?" neste filtro":""}. Importe o levantamento de aderência e use a IA, ou inclua manualmente.</p>`}</div>`}
+function resumoAud(p=P()){let tot=0,sim=0,par=0,nao=0,nsa=0,vazio=0;AUDIT.forEach(([g,its],gi)=>its.forEach((it,ii)=>{const v=(p.audit[audKey(gi,ii)]||{}).v||"";if(v==="NÃO SE APLICA"){nsa++;return}tot++;if(v==="SIM")sim++;else if(v==="PARCIAL")par++;else if(v==="NÃO")nao++;else vazio++}));return{tot,sim,par,nao,nsa,vazio,pc:tot?Math.round(sim/tot*100):0}}
+function rAud(){const p=P(),A=p.auditInfo,R=resumoAud(p);let n=0;
+ const vcls=v=>v==="SIM"?"va-SIM":v==="PARCIAL"?"va-PARCIAL":v==="NÃO"?"va-NÃO":v==="NÃO SE APLICA"?"va-NSA":"";
+ let rows="";AUDIT.forEach(([g,its],gi)=>{rows+=`<tr class="trg"><td colspan="5">${esc(g)}</td></tr>`;its.forEach(([item,crit],ii)=>{n++;const k=audKey(gi,ii),a=p.audit[k]||{};
+  rows+=`<tr><td style="color:var(--mut);font-weight:600">${n}</td><td><b>${esc(item)}</b></td><td style="color:var(--mut)">${esc(crit)}</td>
+  <td><select data-aud="v" data-k="${k}" class="${vcls(a.v)}">${VAL_AUD.map(o=>`<option value="${o}" ${(a.v||"")===o?"selected":""}>${o||"—"}</option>`).join("")}</select></td>
+  <td><textarea data-aud="obs" data-k="${k}" rows="1">${esc(a.obs)}</textarea></td></tr>`})});
+ return `<div class="cards">
+ <div class="kpi"><div class="n" style="color:#0f7c74">${R.pc}%</div><div class="l">validado (${R.sim} de ${R.tot} itens aplicáveis)</div></div>
+ <div class="kpi"><div class="n" style="color:#92400e">${R.par}</div><div class="l">parciais</div></div>
+ <div class="kpi"><div class="n" style="color:#b91c1c">${R.nao}</div><div class="l">não validados</div></div>
+ <div class="kpi"><div class="n" style="color:#66757f">${R.vazio}</div><div class="l">sem avaliação</div></div></div>
+ <div class="panel"><h2>Checklist de auditoria · Implantação Klingo</h2><p class="hint" style="font-size:13px">Critério de aceite: condição objetiva e mensurável que determina se um item, atividade ou entrega está conforme o padrão esperado e pode ser considerado aprovado. Escopo: atendimento clínico.</p>
+ <div class="form">
+  <div><label>Líder técnico / auditor(a)</label><input type="text" data-audi="auditor" value="${esc(A.auditor)}" placeholder="${esc(p.info.lider||"")}"></div>
+  <div><label>Data da reunião de validação</label><input type="date" data-audi="data" value="${esc(A.data)}"></div>
+  <div><label>Responsável pelo projeto (cliente)</label><input type="text" data-audi="respCliente" value="${esc(A.respCliente)}"></div>
+  <div><label>Parecer final da auditoria</label><select data-audi="parecer" style="width:100%">${PARECER.map(o=>`<option value="${o}" ${A.parecer===o?"selected":""}>${o||"—"}</option>`).join("")}</select></div>
+  <div class="full"><label>Participantes da reunião de validação · cliente</label><input type="text" data-audi="partCli" value="${esc(A.partCli)}"></div>
+  <div class="full"><label>Participantes da reunião de validação · Wisetech</label><input type="text" data-audi="partWt" value="${esc(A.partWt)}"></div>
+  <div class="full"><label>Observações do parecer</label><textarea data-audi="obs">${esc(A.obs)}</textarea></div></div></div>
+ <div class="panel" style="padding:0;overflow-x:auto"><table class="au"><thead><tr><th style="width:44px">Nº</th><th style="width:24%">Item de verificação</th><th>Critério de aceite</th><th style="width:150px">Validado?</th><th style="width:24%">Observações</th></tr></thead><tbody>${rows}</tbody></table></div>`}
+function addDias(n){const d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function cargaEquipe(){const hoje=hojeISO(),em7=addDias(7),em30=addDias(30);
+ const reg=u=>({u,proj:[],ab:[],em:0,atr:0,pc:0,v7:0,starts:[]});
+ const P_=EQUIPE.map(reg),sem=reg({id:"",nome:"Sem responsável"});
+ S.projetos.forEach(p=>{const membrosP=[p.owner,...(p.membros||[])];
+  P_.forEach(x=>{if(membrosP.includes(x.u.id)){x.proj.push(p);if(p.info.start&&p.info.start>=hoje&&p.info.start<=em30)x.starts.push(p)}});
+  TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{if(a.st==="CONCLUÍDO"||a.st==="NÃO APLICAR")return;const u=respDe(a);const alvo=u?P_.find(x=>x.u.id===u.id):sem;if(!alvo)return;
+   alvo.ab.push({p,f:f.id,a});if(a.st==="EM ANDAMENTO")alvo.em++;if(a.st==="PENDENTE CLIENTE")alvo.pc++;if(atrasada(a))alvo.atr++;else if(a.fim&&a.fim>=hoje&&a.fim<=em7)alvo.v7++}))});
+ return{pessoas:P_,sem}}
+function rCarga(){if(!ehGestor())return"";const C=cargaEquipe(),hoje=hojeISO();
+ const maxAb=Math.max(1,...C.pessoas.map(x=>x.ab.length));
+ const linha=(x,i)=>{const ab=cargaAberta===(x.u.id||"__sem");const nivel=x.atr?"r":x.ab.length>maxAb*0.66?"y":"g";
+  let h=`<tr class="cg ${ab?"open":""}" data-act="carga-ab" data-arg="${x.u.id||"__sem"}"><td><b>${esc(nomeU(x.u)||x.u.nome)}</b>${x.u.papel?`<div class="hint" style="margin:0">${x.u.papel==="gestor"?"Gestor":"Técnico"}</div>`:""}</td>
+   <td>${x.u.id?x.proj.length:"—"}</td><td><div class="cbar"><i class="c-${nivel}" style="width:${x.ab.length/maxAb*100}%"></i></div><b>${x.ab.length}</b></td><td>${x.em}</td>
+   <td style="${x.atr?"color:#b91c1c;font-weight:700":""}">${x.atr}</td><td style="${x.pc?"color:#b45309;font-weight:600":""}">${x.pc}</td><td>${x.v7}</td>
+   <td>${x.starts.length?x.starts.map(p=>`${esc(p.nome)} (${fmtData(p.info.start)})`).join("<br>"):"—"}</td><td>${ab?"▴":"▾"}</td></tr>`;
+  if(ab){const L=x.ab.slice().sort((a,b)=>(atrasada(b.a)-atrasada(a.a))||String(a.a.fim||"9").localeCompare(String(b.a.fim||"9")));
+   h+=`<tr class="det"><td colspan="9">${x.u.id&&x.proj.length?`<div class="hint" style="margin:0 0 6px"><b>Projetos:</b> ${x.proj.map(p=>`${esc(p.nome)} <span class="tag d" style="margin:0 6px 0 2px">${esc((CURTO[p.info.fase]||["",""])[1])}</span>`).join(" ")}</div>`:""}
+   ${L.length?`<table class="cgl"><tr><th>Projeto</th><th>Fase</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th></th></tr>${L.slice(0,80).map(({p,f,a})=>`<tr class="${atrasada(a)?"late":""}"><td>${esc(p.nome)}</td><td>${esc((CURTO[f]||["",f])[1])}</td><td>${esc((a.cod?a.cod+" · ":"")+a.t)}</td><td><span class="ss ss-${stSlug(a.st)}" style="padding:2px 6px;border-radius:6px;font-size:11px">${esc(a.st)}</span></td><td>${a.fim?fmtData(a.fim)+(atrasada(a)?" ⚠":""):"—"}</td><td><button class="sm" data-act="abrir-ativ" data-arg="${p.id}|${f}">Abrir</button></td></tr>`).join("")}</table>${L.length>80?`<p class="hint">Mostrando 80 de ${L.length}.</p>`:""}`:`<p class="hint">Nenhuma atividade em aberto.</p>`}</td></tr>`}
+  return h};
+ const tot=C.pessoas.reduce((a,x)=>({ab:a.ab+x.ab.length,atr:a.atr+x.atr,pc:a.pc+x.pc}),{ab:0,atr:0,pc:0});
+ return `<div class="cards">
+  <div class="kpi"><div class="n">${S.projetos.length}</div><div class="l">projetos visíveis</div></div>
+  <div class="kpi"><div class="n">${tot.ab}</div><div class="l">atividades em aberto com responsável</div></div>
+  <div class="kpi"><div class="n" style="color:#b91c1c">${tot.atr}</div><div class="l">atrasadas</div></div>
+  <div class="kpi"><div class="n" style="color:#66757f">${C.sem.ab.length}</div><div class="l">atividades em aberto sem responsável</div></div></div>
+ <div class="panel" style="padding:0;overflow-x:auto"><table class="cgt"><thead><tr><th>Pessoa</th><th>Projetos</th><th style="width:22%">Em aberto</th><th>Em andamento</th><th>Atrasadas</th><th>Pend. cliente</th><th>Vencem em 7 dias</th><th>Starts nos próximos 30 dias</th><th></th></tr></thead>
+ <tbody>${C.pessoas.map(linha).join("")}${C.sem.ab.length?linha(C.sem):""}</tbody></table></div>
+ <p class="hint">A carga considera as atividades da trilha que não estão concluídas nem marcadas como "não aplicar", pelo responsável Wisetech de cada uma. Clique numa pessoa para ver as atividades.</p>
+ <div class="panel"><h2>Equipe</h2><p class="hint" style="font-size:13px">Todos que criaram conta no app. Gestores veem e editam todos os projetos.</p>
+ <table class="cgl"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`}
+function rAten(){const p=P();let h=`<div class="alist">`,algo=false;
+ const pt=pendenciasTrilha(p);
+ if(pt.length){algo=true;h+=`<div class="grp"><h3>Pendências da trilha de implantação</h3><ul>${pt.map(({f,x})=>`<li><a href="#" data-act="ver-fase" data-arg="${f}" style="color:inherit"><b style="color:${x.st==="PENDENTE CLIENTE"?"#b91c1c":"#b45309"}">${x.st==="PENDENTE CLIENTE"?"Pendente cliente":"Atrasada"}</b> · ${esc(x.cod?x.cod+" ":"")}${esc(x.t)} <span class="hint">(${esc(faseNome(f))}${x.fim?" · fim previsto "+fmtData(x.fim):""}${x.ru?" · "+esc(x.ru):""})</span></a></li>`).join("")}</ul></div>`}
+ ativas(p).forEach(e=>{const a=alertas(e),pe=pendentes(e),g=p.aderencia.filter(x=>x.etapa===e.id&&x.status!=="Aderente");if(!a.length&&!pe.length&&!g.length)return;algo=true;
+  h+=`<div class="grp"><h3 data-act="open" data-arg="${e.id}">${esc(e.tit)} <span class="hint">(${esc(e.setor)})</span></h3><ul>${a.map(x=>`<li style="color:var(--warn)">⚠ ${esc(x)}</li>`).join("")}${g.map(x=>`<li style="color:var(--red)">Gap de aderência · <b>${esc(x.status)}</b>: ${esc(x.processo)}${x.obs?` <span class="hint">(${esc(x.obs)})</span>`:""}</li>`).join("")}${pe.map(q=>`<li class="hint">Sem resposta: ${esc(q.q)}</li>`).join("")}</ul></div>`});
+ const gg=p.aderencia.filter(x=>x.etapa==="geral"&&x.status!=="Aderente");
+ if(gg.length){algo=true;h+=`<div class="grp"><h3>Gaps gerais de aderência</h3><ul>${gg.map(x=>`<li style="color:var(--red)"><b>${esc(x.status)}</b>: ${esc(x.processo)}${x.obs?` <span class="hint">(${esc(x.obs)})</span>`:""}</li>`).join("")}</ul></div>`}
+ if(!algo)h+=`<div class="grp" style="color:var(--acc)">Tudo respondido e nenhum ponto de atenção.</div>`;
+ if(p.sugestoes.length)h+=`<div class="box sug"><h3>Sugestões de melhoria</h3><ul>${p.sugestoes.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`;
+ return h+`</div>`}
+function rExp(){return `<div class="panel"><h2>Documento do projeto</h2><p class="hint" style="font-size:13px">Dados do projeto, informações técnicas, fluxo clínico, aderência, trilha de implantação com pendências, checklist de auditoria, pontos de atenção e sugestões.</p>
+ <div class="dlrow"><button class="pri" data-act="dl-docx">⬇ Baixar Word (.docx)</button><button class="pri" data-act="print">🖨 Imprimir / salvar PDF</button></div>
+ <p class="hint">Para PDF: na janela de impressão, escolha "Salvar como PDF".</p></div>
+ <div class="exp"><div class="panel"><h3 style="display:flex;justify-content:space-between">Texto do projeto <button class="sm" data-act="copy" data-arg="t1">Copiar</button></h3><textarea id="t1" readonly>${esc(txtProjeto())}</textarea></div>
+ <div class="panel"><h3 style="display:flex;justify-content:space-between">Fluxograma (Mermaid) <button class="sm" data-act="copy" data-arg="t2">Copiar</button></h3><p class="hint">Cole em <a href="https://mermaid.live" target="_blank">mermaid.live</a> e exporte em PNG ou SVG.</p><textarea id="t2" readonly>${esc(mermaid())}</textarea></div></div>
+ <div class="panel"><h2>☁ Acesso de qualquer lugar</h2>${USER?`<p>Conectado como <b>${esc(USER.email||"")}</b>${MEU?` · ${MEU.papel==="gestor"?"Gestor":"Técnico"}`:""}. Os projetos ficam salvos na sua conta e aparecem em qualquer computador ou celular em que você entrar.</p>
+  <div class="form"><div><label>Meu nome na equipe</label><input type="text" id="meuNome" value="${esc((MEU&&MEU.nome)||"")}"></div><div style="align-self:end"><button data-act="nome-meu">Salvar nome</button></div></div>`:
+  NUVEM_EMB.url?"":`<p class="hint" style="font-size:13px">Conecte o app a um projeto do Supabase para ter login e salvar os projetos na nuvem. Endereço e chave ficam em Project Settings › API.</p>
+  <div class="form"><div><label>Project URL</label><input type="text" id="nvUrl" value="${esc(nuvemCfg.url||"")}" placeholder="https://xxxx.supabase.co"></div><div><label>Chave pública (anon / publishable)</label><input type="text" id="nvKey" value="${esc(nuvemCfg.key||"")}"></div></div>
+  <div class="dlrow"><button class="pri" data-act="nuvem-salvar">Conectar</button>${nuvemCfg.url?`<button data-act="nuvem-remover">Desconectar</button>`:""}</div>`}</div>
+ <div class="panel"><h2>Backup</h2><p class="hint" style="font-size:13px">${USER?"Cópia de segurança em arquivo, além da nuvem.":"Os projetos ficam guardados neste navegador, neste computador. Faça backup de vez em quando, e sempre antes de limpar o navegador ou trocar de computador."}</p>
+ <div class="dlrow"><button data-act="dl-json">⬇ Backup deste projeto</button><button data-act="dl-all">⬇ Backup de todos os projetos</button><button data-act="imp-json">⬆ Importar backup</button></div></div>`}
+
+/* ============ AÇÕES ============ */
+async function copiar(texto){try{await navigator.clipboard.writeText(texto);return true}catch(e){const ta=document.createElement("textarea");ta.value=texto;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy")}catch(e2){}ta.remove();return ok}}
+document.addEventListener("click",async ev=>{
+ const b=ev.target.closest("[data-act]");
+ if(!b){if(delArm){delArm=false;render()}return}
+ const act=b.dataset.act,arg=b.dataset.arg;
+ if(act.startsWith("login-")||act.startsWith("mig-")||act.startsWith("nome-")||act==="sair"||act==="nuvem-salvar"||act==="nuvem-remover"){ev.preventDefault();
+  if(act==="login-go")acaoLogin();else if(act==="login-modo"){loginMsg=null;telaLogin(arg)}else if(act==="login-retry")iniciarNuvem();else if(act==="sair")sair();
+  else if(act==="mig-sim"){const L=mostrarMigracao.lista||[];L.forEach(x=>{normaliza(x);x.owner=USER.id;x.membros=[];if(!S.projetos.some(y=>y.id===x.id)){S.projetos.push(x);marcar(x.id)}});
+   const vazio=S.projetos.find(x=>x.nome==="Meu primeiro projeto"&&!temConteudoProj(x));if(vazio&&S.projetos.length>1){S.projetos=S.projetos.filter(x=>x!==vazio);sync.dirty.delete(vazio.id);sync.del.add(vazio.id)}
+   S.cur=L.length?L[0].id:S.cur;localStorage.setItem("ppi_migrado_"+USER.id,"1");esconderLogin();persist();render();enviarNuvem();toast(L.length+" projeto(s) enviado(s) para a nuvem");if(MEU&&!MEU.nome)pedirNome()}
+  else if(act==="mig-nao"){localStorage.setItem("ppi_migrado_"+USER.id,"1");esconderLogin();if(MEU&&!MEU.nome)pedirNome()}
+  else if(act==="nome-salvar"){salvarNome(($("lgNome")||{}).value).then(()=>{esconderLogin();render()})}
+  else if(act==="nome-meu"){salvarNome(($("meuNome")||{}).value).then(render)}
+  else if(act==="nuvem-salvar"){const u=($("nvUrl")||{}).value||"",k=($("nvKey")||{}).value||"";if(!u.trim()||!k.trim()){toast("Preencha o endereço e a chave");return}localStorage.setItem("ppi_nuvem",JSON.stringify({url:u.trim(),key:k.trim()}));location.reload()}
+  else if(act==="nuvem-remover"){localStorage.removeItem("ppi_nuvem");location.reload()}
+  return}
+ const p=P();if(act!=="proj-del"&&delArm){delArm=false}
+ switch(act){
+  case"tab":tab=arg;break;
+  case"fase":faseVista=arg;tab="gest";gestSub="trilha";filtroTr="todas";break;
+  case"editar":tab="gest";gestSub=arg;if(arg==="trilha"&&!faseVista)faseVista=p.info.fase;break;
+  case"fase-atual":p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
+  case"ver-fase":tab="gest";gestSub="trilha";faseVista=arg;filtroTr="todas";render();window.scrollTo({top:0});return;
+  case"carga-ab":cargaAberta=cargaAberta===arg?null:arg;break;
+  case"abrir-ativ":{const[pid,fid]=arg.split("|");S.cur=pid;tab="gest";gestSub="trilha";faseVista=fid;filtroTr="abertas";render();window.scrollTo({top:0});return}
+  case"tr-det":trOpen.has(arg)?trOpen.delete(arg):trOpen.add(arg);break;
+  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
+  case"tr-rm":p.trilha[faseVista]=p.trilha[faseVista].filter(x=>x.id!==arg);trOpen.delete(arg);save();break;
+  case"open":tab="perg";sel=arg;render();const pn=$("painel");if(pn&&window.innerWidth<=900)pn.scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0});return;
+  case"mark":{const i=+arg,e=p.etapas[i];e.ativa=!e.ativa;save();break}
+  case"allet":p.etapas.forEach(e=>e.ativa=arg==="1");save();toast(arg==="1"?"Todas as etapas incluídas":"Todas as etapas desmarcadas");break;
+  case"up":{const i=+arg;if(i>0){[p.etapas[i-1],p.etapas[i]]=[p.etapas[i],p.etapas[i-1]];save()}break}
+  case"dn":{const i=+arg;if(i<p.etapas.length-1){[p.etapas[i+1],p.etapas[i]]=[p.etapas[i],p.etapas[i+1]];save()}break}
+  case"add-etapa":{const id=uid("c");p.etapas.push({id,tit:"Nova etapa",setor:SETORES[1],ativa:true,r:{},passos:"",nota:""});sel=id;save();break}
+  case"rm-etapa":p.etapas.splice(+arg,1);sel=null;save();break;
+  case"chip":{const e=p.etapas.find(x=>x.id===sel),q=b.dataset.q,v=b.dataset.v;if(b.dataset.tp==="m"){const a=e.r[q]||[];e.r[q]=a.includes(v)?a.filter(x=>x!==v):[...a,v]}else e.r[q]=e.r[q]===v?"":v;save();break}
+  case"mic":toggleMic(arg);return;
+  case"rm-doc":p.docs[arg]=null;save();break;
+  case"copy-prompt":{const ok=await copiar(montarPedido());toast(ok?"Pedido copiado. Cole numa conversa nova no Claude.":"Não consegui copiar automaticamente",3500);return}
+  case"apply-resp":aplicarTexto(($("respIA")||{}).value);return;
+  case"api-run":rodarAPI();return;
+  case"undo":if(iaUndo){const i=S.projetos.findIndex(x=>x.id===iaUndo.pid);if(i>=0){S.projetos[i]=normaliza(JSON.parse(iaUndo.snap));marcar(S.projetos[i].id)}iaUndo=null;iaMsg={t:"Preenchimento desfeito."};save()}break;
+  case"ad-add":{p.aderencia.unshift({id:uid("a"),processo:"",etapa:"geral",status:"A definir",obs:""});filtroAd="todos";save();render();const f=document.querySelector('[data-ad="processo"]');if(f)f.focus();return}
+  case"ad-rm":p.aderencia=p.aderencia.filter(a=>a.id!==arg);save();break;
+  case"copy":{const ok=await copiar($(arg).value);toast(ok?"Copiado":"Selecione e use Ctrl+C");return}
+  case"dl-docx":baixar(buildDocx(relatorio()),nomeArq("projeto de implantação","docx"));return;
+  case"print":imprimir();return;
+  case"dl-json":baixar(new Blob([JSON.stringify({tipo:"ppi-projeto",v:1,projeto:p},null,1)],{type:"application/json"}),nomeArq("backup","json"));return;
+  case"dl-all":baixar(new Blob([JSON.stringify({tipo:"ppi-todos",v:1,projetos:S.projetos},null,1)],{type:"application/json"}),"Projetos de implantação - backup completo.json");return;
+  case"imp-json":$("fileJson").click();return;
+  case"proj-new":{const n=novoProjeto();S.projetos.push(n);S.cur=n.id;tab="mapa";sel=null;iaMsg=null;iaUndo=null;save();break}
+  case"proj-dup":{const c=JSON.parse(JSON.stringify(p));c.id=uid("p");if(USER){c.owner=USER.id;c.membros=[]}c.nome+=" (cópia)";c.criado=Date.now();S.projetos.push(c);S.cur=c.id;save();toast("Projeto duplicado");break}
+  case"proj-del":if(!delArm){delArm=true;break}delArm=false;S.projetos=S.projetos.filter(x=>x.id!==p.id);if(USER){sync.dirty.delete(p.id);sync.del.add(p.id);clearTimeout(sync.timer);sync.timer=setTimeout(enviarNuvem,500)}if(!S.projetos.length){S.projetos.push(novoProjeto());marcar(S.projetos[0].id)}S.cur=S.projetos[0].id;tab="mapa";sel=null;persist();toast("Projeto excluído");break;
+ }
+ render();
+});
+document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
+ if(d.bind){const ks=d.bind.split(".");let o=p;for(let i=0;i<ks.length-1;i++)o=o[ks[i]];o[ks[ks.length-1]]=t.value;if(d.bind==="nome"){const op=document.querySelector(`#selProj option[value="${p.id}"]`);if(op)op.textContent=t.value}save()}
+ else if(d.et&&d.et!=="setor"){const e=p.etapas.find(x=>x.id===sel);e[d.et]=t.value;save();if(d.et==="tit"){const h=document.querySelector("#painel h2");if(h)h.textContent=t.value}}
+ else if(d.tr&&d.tr!=="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(x){x[d.tr]=t.value;save()}}
+ else if(d.aud){const k=d.k;p.audit[k]=Object.assign({v:"",obs:""},p.audit[k]||{});p.audit[k][d.aud]=t.value;save()}
+ else if(d.audi){p.auditInfo[d.audi]=t.value;save()}
+ else if(d.ad&&t.tagName==="TEXTAREA"){const a=p.aderencia.find(x=>x.id===d.id);if(a){a[d.ad]=t.value;save()}}
+ else if(d.cfg){cfg[d.cfg]=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify(cfg))}catch(e){}const bt=document.querySelector('[data-act="api-run"]');if(bt&&!iaBusy)bt.disabled=!cfg.key}
+});
+document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
+ if(t.id==="selProj"){S.cur=t.value;sel=null;iaMsg=null;delArm=false;tab="mapa";persist();render();return}
+ if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
+ if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
+ if(d.bind&&t.tagName==="SELECT"||d.bind&&t.type==="date"){render();return}
+ if(d.et==="setor"){p.etapas.find(x=>x.id===sel).setor=t.value;save();render();return}
+ if(d.ad&&t.tagName==="SELECT"){const a=p.aderencia.find(x=>x.id===d.id);if(a){a[d.ad]=t.value;save();render()}return}
+ if(d.actChange==="filtro"){filtroAd=t.value;render()}
+ if(d.actChange==="filtroTr"){filtroTr=t.value;render();return}
+ if(d.membro){const m=new Set(p.membros||[]);t.checked?m.add(d.membro):m.delete(d.membro);p.membros=[...m];save();render();return}
+ if(d.papel&&SB){const id=d.papel,v=t.value;SB.from("perfis").update({papel:v}).eq("id",id).then(({error})=>{if(error){toast("Não foi possível alterar: "+msgErro(error));carregarEquipe().then(render)}else{const u=pessoaPorId(id);if(u)u.papel=v;toast("Papel atualizado");render()}});return}
+ if(d.tr==="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;if(t.value!=="__livre"){x.rwId=t.value;x.rw=t.value?nomeU(pessoaPorId(t.value)):""}save();render();return}
+ if(d.tr&&faseVista&&(t.tagName==="SELECT"||t.type==="date")){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;x[d.tr]=t.value;
+  if(d.tr==="st"){const st=statusFase(p,faseVista),i=FASES.indexOf(faseVista);if(st.c==="g"&&p.info.fase===faseVista&&i>=0&&i<FASES.length-1){p.info.fase=FASES[i+1];toast(`${faseNome(faseVista)} concluída! Fase atual agora: ${faseNome(FASES[i+1])}`,4000)}}
+  save();render();return}
+ if(d.aud==="v"){render();return}
+ if(d.audi&&t.tagName==="SELECT"){render();return}
+});
+async function importarBackup(f){try{const o=JSON.parse(await f.text());let lista=o.tipo==="ppi-todos"?o.projetos:o.tipo==="ppi-projeto"?[o.projeto]:(o.etapas?[o]:null);if(!lista)throw 0;
+ lista.forEach(p=>{normaliza(p);if(USER){p.owner=USER.id;p.membros=[]}if(S.projetos.some(x=>x.id===p.id))p.id=uid("p");S.projetos.push(p);marcar(p.id)});S.cur=lista[lista.length-1].id;persist();tab="mapa";render();toast(`${lista.length} projeto(s) importado(s)`)}
+ catch(e){toast("Arquivo de backup inválido")}}
+["dragover","dragenter"].forEach(t=>document.addEventListener(t,ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(z){ev.preventDefault();z.classList.add("over")}}));
+document.addEventListener("dragleave",ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(z)z.classList.remove("over")});
+document.addEventListener("drop",ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(!z)return;ev.preventDefault();z.classList.remove("over");const f=ev.dataTransfer&&ev.dataTransfer.files&&ev.dataTransfer.files[0];if(f&&!lendo)importarDoc(f,z.dataset.drop)});
+window.addEventListener("dragover",ev=>ev.preventDefault());window.addEventListener("drop",ev=>ev.preventDefault());
+
+/* ============ NUVEM (Supabase): login e projetos por usuário ============ */
+const NUVEM_EMB={url:"https://ryhrelfvpvzrwdqozags.supabase.co",key:"sb_publishable_U1Q78hxpcgnewY72ZJW0Zw_VCiGep4X"}; // endereço e chave pública do Supabase, preenchidos na publicação
+let nuvemCfg={};try{nuvemCfg=JSON.parse(localStorage.getItem("ppi_nuvem"))||{}}catch(e){}
+const nuvemURL=()=>(NUVEM_EMB.url||nuvemCfg.url||"").trim(),nuvemKEY=()=>(NUVEM_EMB.key||nuvemCfg.key||"").trim();
+const nuvemAtiva=()=>!!(nuvemURL()&&nuvemKEY());
+var SB=null,USER=null;let loginModo="entrar",loginMsg=null,loginBusy=false;
+const sync={dirty:new Set(),del:new Set(),busy:false,err:false,timer:null,retry:null};
+let EQUIPE=[],MEU=null,cargaAberta=null;
+async function carregarEquipe(){if(!SB||!USER)return;try{const{data,error}=await SB.from("perfis").select("id,email,nome,papel");if(error)throw error;EQUIPE=(data||[]).sort((a,b)=>nomeU(a).localeCompare(nomeU(b)));MEU=EQUIPE.find(u=>u.id===USER.id)||null;
+ if(!MEU){await SB.from("perfis").insert({id:USER.id,email:USER.email});const r=await SB.from("perfis").select("id,email,nome,papel");EQUIPE=r.data||[];MEU=EQUIPE.find(u=>u.id===USER.id)||null}}catch(e){}}
+const ehGestor=()=>!!(MEU&&MEU.papel==="gestor");
+function pedirNome(){const L=$("login");L.style.display="flex";L.innerHTML=`<div class="lcard"><div class="lbrand">Bem-vindo!</div><h2>Como você quer ser chamado?</h2><p class="hint">Esse nome aparece para a equipe nos projetos e nas atividades.</p><label>Nome</label><input type="text" id="lgNome" value="${esc((USER.email||"").split("@")[0])}"><button class="pri lbtn" data-act="nome-salvar">Salvar</button></div>`;$("lgNome").focus()}
+async function salvarNome(n){n=String(n||"").trim();if(!n)return;try{const{error}=await SB.from("perfis").update({nome:n}).eq("id",USER.id);if(error)throw error;if(MEU)MEU.nome=n;const u=pessoaPorId(USER.id);if(u)u.nome=n;toast("Nome salvo")}catch(e){toast("Não foi possível salvar o nome")}}
+function telaLogin(modo,msg){loginModo=modo||loginModo;if(msg!==undefined)loginMsg=msg;const L=$("login");L.style.display="flex";
+ const card=(corpo)=>`<div class="lcard"><div class="lbrand">Projetos de Implantação · Klingo</div>${loginMsg?`<div class="msg ${loginMsg.err?"err":""}" style="margin:10px 0">${esc(loginMsg.t)}</div>`:""}${corpo}</div>`;
+ const btn=(t)=>`<button class="pri lbtn" data-act="login-go" ${loginBusy?"disabled":""}>${loginBusy?'<span class="spin"></span>':""} ${t}</button>`;
+ const H={
+  carregando:card(`<p class="hint" style="text-align:center;margin:20px 0"><span class="spin" style="color:var(--acc)"></span> Conectando…</p>`),
+  semnet:card(`<p>Não foi possível conectar ao serviço de login. Verifique a internet.</p><button class="pri lbtn" data-act="login-retry">Tentar de novo</button>`),
+  entrar:card(`<h2>Entrar</h2><label>E-mail</label><input type="email" id="lgEmail" autocomplete="username"><label>Senha</label><input type="password" id="lgSenha" autocomplete="current-password">${btn("Entrar")}
+   <div class="llinks"><a href="#" data-act="login-modo" data-arg="criar">Criar conta</a><a href="#" data-act="login-modo" data-arg="esqueci">Esqueci a senha</a></div>`),
+  criar:card(`<h2>Criar conta</h2><label>E-mail</label><input type="email" id="lgEmail" autocomplete="username"><label>Senha (mínimo 6 caracteres)</label><input type="password" id="lgSenha" autocomplete="new-password"><label>Confirmar senha</label><input type="password" id="lgSenha2" autocomplete="new-password">${btn("Criar conta")}
+   <div class="llinks"><a href="#" data-act="login-modo" data-arg="entrar">Já tenho conta</a></div>`),
+  esqueci:card(`<h2>Recuperar senha</h2><p class="hint">Enviaremos um link para você criar uma nova senha.</p><label>E-mail</label><input type="email" id="lgEmail">${btn("Enviar link")}
+   <div class="llinks"><a href="#" data-act="login-modo" data-arg="entrar">Voltar</a></div>`),
+  novasenha:card(`<h2>Nova senha</h2><label>Nova senha (mínimo 6 caracteres)</label><input type="password" id="lgSenha" autocomplete="new-password">${btn("Salvar nova senha")}`)};
+ L.innerHTML=H[loginModo]||H.entrar;const f=L.querySelector("input");if(f)f.focus()}
+function esconderLogin(){$("login").style.display="none";loginMsg=null}
+const msgErro=e=>{const m=String((e&&e.message)||e||"");if(/Invalid login/i.test(m))return"E-mail ou senha incorretos.";if(/Email not confirmed/i.test(m))return"Confirme seu e-mail pelo link que enviamos antes de entrar.";if(/already registered/i.test(m))return"Este e-mail já tem conta. Use \"Já tenho conta\".";if(/Password should be/i.test(m))return"A senha precisa ter pelo menos 6 caracteres.";if(/fetch|network/i.test(m))return"Sem conexão com a internet.";return m||"Não foi possível concluir."};
+async function acaoLogin(){if(loginBusy)return;const em=($("lgEmail")||{}).value,se=($("lgSenha")||{}).value,se2=($("lgSenha2")||{}).value;
+ const m=loginModo;loginBusy=true;loginMsg=null;telaLogin();if($("lgEmail"))$("lgEmail").value=em||"";
+ try{
+  if(m==="entrar"){const{data,error}=await SB.auth.signInWithPassword({email:em,password:se});if(error)throw error;loginBusy=false;await entrou(data.user);return}
+  if(m==="criar"){if(se!==se2)throw new Error("As senhas não conferem.");const{data,error}=await SB.auth.signUp({email:em,password:se,options:{emailRedirectTo:location.href.split("#")[0]}});if(error)throw error;
+   loginBusy=false;if(data.session){await entrou(data.user);return}telaLogin("entrar",{t:"Conta criada! Abra o e-mail que enviamos e clique no link de confirmação. Depois é só entrar aqui."});return}
+  if(m==="esqueci"){const{error}=await SB.auth.resetPasswordForEmail(em,{redirectTo:location.href.split("#")[0]});if(error)throw error;loginBusy=false;telaLogin("entrar",{t:"Se o e-mail tiver conta, você vai receber um link para criar uma nova senha."});return}
+  if(m==="novasenha"){const{data,error}=await SB.auth.updateUser({password:se});if(error)throw error;loginBusy=false;toast("Senha alterada");await entrou(data.user);return}
+ }catch(e){loginBusy=false;telaLogin(m,{err:true,t:msgErro(e)});if($("lgEmail"))$("lgEmail").value=em||""}}
+async function iniciarNuvem(){
+ if(!nuvemAtiva()){render();return}
+ telaLogin("carregando");
+ try{await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js")}catch(e){telaLogin("semnet");return}
+ SB=window.supabase.createClient(nuvemURL(),nuvemKEY());
+ SB.auth.onAuthStateChange((ev,ses)=>{if(ev==="PASSWORD_RECOVERY")telaLogin("novasenha",null)});
+ if(/type=recovery/.test(location.hash))return;
+ try{const{data}=await SB.auth.getSession();if(data&&data.session)await entrou(data.session.user);else telaLogin("entrar")}catch(e){telaLogin("semnet")}}
+async function entrou(user){
+ USER=user;let cache=null;try{cache=JSON.parse(localStorage.getItem(chaveLocal()))}catch(e){}
+ sync.dirty=new Set((cache&&cache.pend)||[]);sync.del=new Set((cache&&cache.del)||[]);
+ let remotos=[];
+ try{const{data,error}=await SB.from("projetos").select("id,owner,membros,dados,atualizado");if(error)throw error;remotos=(data||[]).map(r=>{const d=normaliza(r.dados);d.owner=r.owner;d.membros=r.membros||[];return d});sync.err=false;await carregarEquipe()}
+ catch(e){sync.err=true;remotos=null}
+ let lista;
+ if(remotos===null)lista=(cache&&cache.projetos)||[];
+ else{lista=remotos.filter(r=>!sync.del.has(r.id));((cache&&cache.projetos)||[]).forEach(l=>{if(sync.dirty.has(l.id)){const i=lista.findIndex(r=>r.id===l.id);if(i>=0)lista[i]=l;else lista.push(l)}})}
+ lista.forEach(normaliza);
+ const cur=cache&&cache.cur;
+ S={cur:lista.some(x=>x.id===cur)?cur:(lista[0]||{}).id,projetos:lista};
+ esconderLogin();
+ // projetos que estavam só neste computador (antes do login)
+ let legado=null;try{legado=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ const locais=legado&&Array.isArray(legado.projetos)?legado.projetos.filter(x=>temConteudoProj(x)&&!lista.some(y=>y.id===x.id)):[];
+ lista.forEach(x=>{if(!x.owner)x.owner=USER.id;if(!x.membros)x.membros=[]});
+ if(!lista.length){const n=novoProjeto("Meu primeiro projeto");S.projetos.push(n);S.cur=n.id;if(!locais.length)marcar(n.id)}
+ tab="mapa";sel=null;persist();render();if(sync.dirty.size||sync.del.size)enviarNuvem();
+ if(locais.length&&!localStorage.getItem("ppi_migrado_"+USER.id))mostrarMigracao(locais);else if(MEU&&!MEU.nome)pedirNome()}
+function temConteudoProj(p){try{normaliza(p);return !!(p.info.cliente||Object.values(p.docs).some(Boolean)||p.aderencia.length||p.etapas.some(e=>Object.keys(e.r).length)||TRILHA.some(f=>(p.trilha[f.id]||[]).some(x=>x.st!=="A REALIZAR")))}catch(e){return false}}
+function mostrarMigracao(locais){const L=$("login");L.style.display="flex";
+ L.innerHTML=`<div class="lcard"><div class="lbrand">Projetos deste computador</div><h2>Levar para a sua conta?</h2><p>Encontrei ${locais.length} projeto(s) salvo(s) neste computador antes do login:</p><ul>${locais.map(x=>`<li><b>${esc(x.nome)}</b></li>`).join("")}</ul>
+ <button class="pri lbtn" data-act="mig-sim">Enviar para a nuvem</button><button class="lbtn" data-act="mig-nao" style="margin-top:6px">Agora não</button></div>`;
+ mostrarMigracao.lista=locais}
+async function enviarNuvem(){
+ if(!USER||!SB||sync.busy)return;clearTimeout(sync.timer);clearTimeout(sync.retry);sync.busy=true;setSt();let falhou=false;
+ for(const id of [...sync.del]){try{const{error}=await SB.from("projetos").delete().eq("id",id);if(error)throw error;sync.del.delete(id)}catch(e){falhou=true}}
+ for(const id of [...sync.dirty]){const p=S.projetos.find(x=>x.id===id);if(!p){sync.dirty.delete(id);continue}
+  const upd=p.upd;try{const{error}=await SB.from("projetos").upsert({id:p.id,owner:p.owner||USER.id,membros:p.membros||[],nome:p.nome,dados:p,atualizado:new Date().toISOString()});if(error)throw error;if(p.upd===upd)sync.dirty.delete(id)}catch(e){falhou=true}}
+ sync.busy=false;sync.err=falhou;persist();
+ if(falhou)sync.retry=setTimeout(enviarNuvem,20000);else if(sync.dirty.size)sync.timer=setTimeout(enviarNuvem,1200);setSt()}
+async function atualizarDaNuvem(){if(!USER||!SB||sync.busy||sync.dirty.size||sync.del.size)return;
+ try{const{data,error}=await SB.from("projetos").select("id,owner,membros,dados");if(error)throw error;let mudou=false;await carregarEquipe();
+  (data||[]).forEach(r=>{const d=normaliza(r.dados);d.owner=r.owner;d.membros=r.membros||[];const i=S.projetos.findIndex(x=>x.id===d.id);if(i<0){S.projetos.push(d);mudou=true}else if((d.upd||0)>(S.projetos[i].upd||0)){S.projetos[i]=d;mudou=true}});
+  const ids=new Set((data||[]).map(r=>r.id));const antes=S.projetos.length;S.projetos=S.projetos.filter(x=>ids.has(x.id));if(S.projetos.length!==antes)mudou=true;
+  if(!S.projetos.length){const n=novoProjeto();S.projetos.push(n);marcar(n.id)}if(!S.projetos.some(x=>x.id===S.cur))S.cur=S.projetos[0].id;
+  if(mudou){persist();const a=document.activeElement;if(!(a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")))render()}}catch(e){}}
+window.addEventListener("online",()=>{sync.err=false;enviarNuvem()});
+window.addEventListener("focus",()=>atualizarDaNuvem());
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")atualizarDaNuvem()});
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&$("login").style.display==="flex"&&ev.target.closest&&ev.target.closest("#login")){ev.preventDefault();acaoLogin()}});
+async function sair(){try{if(sync.dirty.size||sync.del.size)await enviarNuvem()}catch(e){}if(sync.dirty.size&&!confirmSair){confirmSair=true;toast("Há alterações ainda não enviadas. Clique em Sair de novo para sair mesmo assim.",4000);return}
+ confirmSair=false;try{await SB.auth.signOut()}catch(e){}USER=null;EQUIPE=[];MEU=null;if(tab==="carga")tab="mapa";sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
+let confirmSair=false;
+iniciarNuvem();
+</script>
+</body>
+</html>
