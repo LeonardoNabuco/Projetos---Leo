@@ -184,6 +184,9 @@ table.hmt{table-layout:fixed}table.hmt th:first-child,table.hmt td:first-child{w
 .mdb button+button{border-left:1px solid var(--line)}.m-s .mdb button.on{background:#16a34a;color:#fff}.m-n .mdb button.on{background:#dc2626;color:#fff}.m-i .mdb button.on{background:#e2e8f0;color:var(--ink)}
 .mapt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:18px 0 10px;cursor:pointer;flex-wrap:wrap}
 .mapt b{font-size:15px}.mapt .mtc{width:24px;height:24px;border-radius:6px;background:var(--acc2);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800}.mapt.on{border-color:var(--acc)}
+.dzap{font-size:12px;color:#047857;background:#ecfdf5;border-radius:8px;padding:5px 8px;overflow-wrap:anywhere}
+.drop.addd{align-items:center;justify-content:center;text-align:center;border-style:dashed;background:#f8fafc;border-color:#94a3b8}.drop.addd:hover{border-color:var(--acc);background:var(--acc2)}
+.addic{width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;font-weight:700}
 .vazio2{text-align:center;padding:24px;color:var(--ink);border:1px dashed var(--line);border-radius:10px;margin-bottom:12px}
 @media(max-width:700px){.adet .w2{grid-column:auto}.actl{width:100%}.fl{flex:1 1 140px}.fl select.ss,.fl select[data-tr="rwId"],.fl input[data-tr="rw"],.fl input[type=date]{width:100%}.amais{flex:1 1 100%}}
 .eq{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -428,7 +431,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.17.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.18.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -528,10 +531,62 @@ function lerModulosTecnico(texto){const out={};if(!texto)return out;
  return out}
 
 function lerModulosDoc(p,sobrescrever){const d=p.docs.tec;if(!d||!d.texto)return null;const r=lerModulosTecnico(d.texto),ids=Object.keys(r).filter(id=>modDe(id));if(!ids.length)return{achados:0,mud:0,nao:0,na:0,volta:0};
- let mud=0;ids.forEach(id=>{if(p.modulos[id]===r[id])return;if(p.modulos[id]!==undefined&&!sobrescrever)return;p.modulos[id]=r[id];mud++});
+ let mud=0;ids.forEach(id=>{if(p.modulos[id]===r[id])return;if(p.modulos[id]!==undefined&&!sobrescrever)return;p.modulos[id]=r[id];if(!p.modFonte)p.modFonte={};p.modFonte[id]="doc";mud++});
  const a=aplicarModulos(p);const nao=ids.filter(id=>r[id]===false).length;
  if(mud)registrar(p,{tipo:"escopo",alvo:"Módulos contratados",campo:"modulos",rot:"Lidos do projeto técnico",de:"",para:`${ids.length} módulo(s): ${ids.length-nao} sim, ${nao} não${a.na?` · ${a.na} atividade(s) → não aplicar`:""}`});
  return{achados:ids.length,mud,nao,na:a.na,volta:a.volta}}
+/* ===== Aproveitamento automático dos documentos (sem IA) =====
+   Cada documento importado é lido; só entra no sistema o que tiver correspondência:
+   campos vazios dos dados do projeto, módulos contratados e observações em atividades específicas da trilha.
+   Nada que já esteja preenchido é sobrescrito; o que não condiz é ignorado. Linhas vindas de documento começam com "📄 ". */
+const OBS_DOC="📄 ";
+const ligaduras=t=>String(t||"").replace(/(\w) (fi|fl|ff|ffi) (\w)/g,"$1$2$3").replace(/(^|[\s(])(fi|fl) (?=[a-zà-ú])/g,"$1$2");
+const limpaDoc=t=>ligaduras(t).replace(/\r/g,"").replace(/Hash valida[çc][ãa]o:[^\n]*?MP\s*2\.200-2\/0?1\s*/gi,"\n").replace(/Facilitando sua vida com tecnologia\.?\s*\d*/gi,"\n");
+function extrairDados(texto){const t=limpaDoc(texto),r={},cap=(re)=>{const m=t.match(re);return m?m[1].replace(/\s+/g," ").replace(/[\s.​]+$/,"").trim():""};
+ r.cliente=cap(/Nome da (?:Empresa|Institui[çc][ãa]o|Cl[íi]nica):?\s*([^\n]{3,80})/i)||cap(/Raz[ãa]o social:?\s*([^\n]{3,80})/i);
+ const area=cap(/[ÁA]rea de atua[çc][ãa]o:?\s*([^\n]{3,100})/i);
+ if(area)r.tipo=/imagem|radiolog|ultrass|tomograf|resson/i.test(area)?"Diagnóstico por imagem":/odonto|dent/i.test(area)?"Odontologia":/hospital[- ]dia/i.test(area)?"Hospital-dia":/hospital/i.test(area)?"Hospital":/multiprofiss|multidisc/i.test(area)?"Clínica multiprofissional":/cl[íi]nica (m[ée]dica|geral)|consult[óo]rio/i.test(area)?"Clínica médica":"";
+ const loc=t.match(/localizad[ao] (?:em|na cidade de) ([A-ZÀ-Ú][\wÀ-ú' ]{2,40}?)(?:,\s*([A-ZÀ-Ú][\wÀ-ú ]{1,25}?))?[,.\s]/);if(loc)r.sede=loc[1].trim()+(loc[2]?" - "+loc[2].trim():"");
+ const qu=cap(/Qtd\.? de unidades:?\s*(\d{1,3})/i);if(qu)r.unidades=(+qu)+(+qu===1?" unidade":" unidades");
+ r.esp=cap(/Especialidades:?\s*([^\n]{3,120}?)(?:\s{2,}|\n|$)/i);
+ r.gerente=cap(/Gerente de projetos?[^\n]*\n\s*Nome:?\s*([^\n]{3,60})/i);
+ r.gestor=cap(/Gestor do sistema(?: no cliente)?:\s*([^\n]{3,60})/i);
+ const obs={};
+ const conv=t.match(/Conv[êe]nios:\s*([\s\S]{3,600}?)(?:\.\s*\n|\n\s*\n|$)/i);if(conv){const l=conv[1].replace(/\s+/g," ").trim();if(l.split(",").length>=2)obs.conv=l.replace(/\.$/,"")}
+ const sis=cap(/(?:Nome do )?sistema atual:?\s*([^\n]{2,40}?)(?:\s{2,}|\n|$)/i);if(sis)obs.sistema=sis;
+ const lic=cap(/Licen[çc]as Klingo:?\s*(\d{1,4})/i)||cap(/Qtd\.? de Licen[çc]as:?\s*(\d{1,4})/i);if(lic)obs.lic=String(+lic);
+ const integ=cap(/Integra[çc][ãa]o com outros sistemas:?\s*([^\n]{2,80}?)(?:\s{2,}|\n|$)/i);if(integ)obs.integ=integ;
+ const prof=cap(/Qtd\.? de profissionais:?\s*(\d{1,4})/i),cons=cap(/Qtd\.? de consult[óo]rios:?\s*(\d{1,4})/i),salas=cap(/Qtd\.? de salas de exames?:?\s*(\d{1,4})/i);
+ if(prof)obs.prof=+prof;if(cons||salas)obs.locais=[cons?(+cons)+" consultório(s)":"",salas?(+salas)+" sala(s) de exame":""].filter(Boolean).join(" e ");
+ const prazo=cap(/Prazo de execu[çc][ãa]o:?\s*(\d{1,4}\s*dias)/i);if(prazo)obs.prazo=prazo;
+ Object.keys(r).forEach(k=>{if(!r[k])delete r[k]});return{info:r,obs}}
+const ROT_EXTR={cliente:"Cliente",tipo:"Tipo de estabelecimento",sede:"Sede",unidades:"Filiais / unidades",esp:"Especialidades",gerente:"Gerente do projeto",gestor:"Gestor do sistema"};
+function obsEm(p,teste,texto){let n=0;TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(!teste(x))return;const linha=OBS_DOC+texto;if(String(x.obs||"").includes(linha))return;x.obs=(x.obs?x.obs+"\n":"")+linha;n++}));return n}
+function aproveitarDoc(p,texto,nome){const res=[];if(!texto)return res;
+ const e=extrairDados(texto);if(!p.infoDoc)p.infoDoc={};
+ Object.entries(e.info).forEach(([k,v])=>{if(!p.info[k]||!String(p.info[k]).trim()){p.info[k]=v;p.infoDoc[k]=v;res.push(ROT_EXTR[k]);registrar(p,{tipo:"dados",campo:k,rot:ROT_EXTR[k],alvo:"Dados do projeto · lido de "+nome,de:"",para:v})}});
+ if(p.info.cliente&&/^(Novo projeto|Meu primeiro projeto)$/.test(p.nome))p.nome=p.info.cliente;
+ const o=e.obs;let nObs=0;const cod=c=>x=>x.cod===c,txt=re=>x=>re.test(x.t);
+ if(o.conv){nObs+=obsEm(p,x=>x.cod==="3.6"||x.cod==="8.2","Convênios citados no documento: "+o.conv)}
+ if(o.sistema){nObs+=obsEm(p,x=>x.cod==="3.10"||x.cod==="3.1","Sistema atual do cliente (migração): "+o.sistema)}
+ if(o.lic){nObs+=obsEm(p,cod("44.58"),"Licenças previstas no projeto técnico: "+o.lic)}
+ if(o.integ){nObs+=obsEm(p,x=>x.cod==="37.1","Integrações citadas: "+o.integ)}
+ if(o.prof){nObs+=obsEm(p,cod("4.12"),o.prof+" profissional(is) informados pelo cliente")}
+ if(o.locais){nObs+=obsEm(p,txt(/^Locais de atendimento por unidade$/),"Estrutura informada: "+o.locais)}
+ if(o.prazo){nObs+=obsEm(p,cod("47.1"),"Prazo de execução previsto no projeto técnico: "+o.prazo)}
+ if(nObs)res.push(nObs+" observação(ões) na trilha");
+ const mods=lerModulosTecnico(texto),ids=Object.keys(mods).filter(id=>modDe(id));let mud=0;if(!p.modFonte)p.modFonte={};
+ ids.forEach(id=>{if(p.modulos[id]!==undefined)return;p.modulos[id]=mods[id];p.modFonte[id]="doc";mud++});
+ if(mud){const a=aplicarModulos(p,"doc");const nao=ids.filter(id=>mods[id]===false&&p.modFonte[id]==="doc").length;res.push(`${mud} módulo(s) (${nao} não contratado${nao===1?"":"s"}${a.na?`, ${a.na} atividades ocultadas`:""})`);
+  registrar(p,{tipo:"escopo",alvo:"Módulos contratados",campo:"modulos",rot:"Lidos de "+nome,de:"",para:`${mud} módulo(s) · ${nao} não contratado(s)`})}
+ return res}
+/* desfaz tudo o que veio dos documentos (mantém o que foi feito à mão) */
+function resetarDocs(p){let n=0;
+ Object.keys(p.modFonte||{}).forEach(id=>{if(p.modFonte[id]==="doc"){const m=modDe(id);if(m&&m.area&&p.modulos[id]===false&&!p.escopo.includes(m.area))p.escopo=AREA_IDS.filter(a=>a===m.area||p.escopo.includes(a));delete p.modulos[id];delete p.modFonte[id];n++}});
+ aplicarModulos(p);
+ Object.entries(p.infoDoc||{}).forEach(([k,v])=>{if(p.info[k]===v)p.info[k]=""});p.infoDoc={};
+ TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.obs&&x.obs.includes(OBS_DOC))x.obs=x.obs.split("\n").filter(l=>!l.startsWith(OBS_DOC)).join("\n")}));
+ p.docs={tec:null,fluxo:null};p.docsExtras=[];return n}
 const C_LAB="Cadastrados, vinculados e funcionando no fluxo do laboratório.";
 const TRILHA=[
  {id:"f0",t:"Fase 0 · Kick-off",fase:true,g:[["Abertura do projeto",[
@@ -935,9 +990,8 @@ const AUDIT=[
 const audKey=(gi,ii)=>`a${gi}_${ii}`;
 const STATUS_AD=["Aderente","Parcial","Não aderente","Customização","A definir"];
 const DOCS={
- tec:{t:"Projeto técnico",ic:"🛠️",d:"Estrutura do cliente, unidades, integrações, escopo e datas"},
- fluxo:{t:"Mapeamento de fluxo",ic:"🔀",d:"Como o atendimento acontece hoje no cliente"},
- ader:{t:"Levantamento de aderência",ic:"📋",d:"Processos do cliente e o quanto o sistema atende"}};
+ tec:{t:"Projeto técnico",ic:"🛠️",d:"Estrutura do cliente, unidades, módulos contratados, integrações e datas"},
+ fluxo:{t:"Mapeamento de fluxo e levantamento de aderência",ic:"🔀",d:"Como o atendimento acontece hoje e o quanto o sistema atende aos processos"}};
 // o: string ou {v, a: alerta, d: ponto de decisão}
 const ETAPAS=[
  {id:"agend",t:"Agendamento",s:0,qs:[
@@ -1001,12 +1055,13 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.classList.add("show");
 const KEY="ppi_store_v1",CFG="ppi_cfg_v1";
 function novoProjeto(nome){return{id:uid("p"),owner:(typeof USER!=="undefined"&&USER)?USER.id:"",membros:[],nome:nome||"Novo projeto",criado:Date.now(),upd:Date.now(),
  info:{cliente:"",sede:"",unidades:"",tipo:"",esp:"",gestor:"",responsavel:"",lider:"",tecnicos:"",gerente:"",fase:"f0",kickoff:"",start:"",obs:""},
- docs:{tec:null,fluxo:null,ader:null},iaTexto:"",
+ docs:{tec:null,fluxo:null},iaTexto:"",
  etapas:ETAPAS.map(e=>({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:true,r:{},passos:"",nota:""})),
  aderencia:[],tecnico:[],sugestoes:[],trilha:trilhaPadrao(),trilhaV:2,escopo:AREA_IDS.slice(),areaResp:{},modulos:{},audit:{},auditInfo:{parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""}}}
-function normaliza(p){if(p.escopo===undefined)p.escopo=p.trilha?["ger","clin"]:AREA_IDS.slice();if(p.trilha&&p.trilhaV===undefined)p.trilhaV=1;const n=novoProjeto();for(const k in n)if(p[k]===undefined)p[k]=n[k];p.info=Object.assign(n.info,p.info||{});p.docs=Object.assign({tec:null,fluxo:null,ader:null},p.docs||{});
+function normaliza(p){if(p.escopo===undefined)p.escopo=p.trilha?["ger","clin"]:AREA_IDS.slice();if(p.trilha&&p.trilhaV===undefined)p.trilhaV=1;const n=novoProjeto();for(const k in n)if(p[k]===undefined)p[k]=n[k];p.info=Object.assign(n.info,p.info||{});p.docs=Object.assign({tec:null,fluxo:null},p.docs||{});
  delete p.fases;if(!p.trilha)p.trilha=trilhaPadrao();{const pad=trilhaPadrao();TRILHA.forEach(f=>{if(!Array.isArray(p.trilha[f.id]))p.trilha[f.id]=pad[f.id]})}
- migraTrilha(p);if(!p.escopo.includes("ger"))p.escopo.unshift("ger");if(!p.areaResp||typeof p.areaResp!=="object")p.areaResp={};if(!p.modulos||typeof p.modulos!=="object")p.modulos={};
+ migraTrilha(p);if(!p.escopo.includes("ger"))p.escopo.unshift("ger");if(!p.areaResp||typeof p.areaResp!=="object")p.areaResp={};if(!p.modulos||typeof p.modulos!=="object")p.modulos={};if(!Array.isArray(p.docsExtras))p.docsExtras=[];
+ if(p.docs&&p.docs.ader){const d=p.docs.ader;if(d.texto&&!d.ref)p.docsExtras.push({id:uid("d"),nome:d.nome,texto:d.texto,cort:d.cort,data:d.data,aprov:d.aprov||[]});p.docs.ader=null}if(p.docs)delete p.docs.ader;if(!p.infoDoc)p.infoDoc={};if(!p.modFonte)p.modFonte={};
  if(!p.audit)p.audit={};p.auditInfo=Object.assign({parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""},p.auditInfo||{});
  {const mapa={"Levantamento":"f1","Parametrização":"f2b","Treinamento":"f4","Start":"f6","Pós-Start":"f7"};if(!FASES.includes(p.info.fase))p.info.fase=mapa[p.info.fase]||"f0"}
  ETAPAS.forEach(e=>{if(!p.etapas.some(x=>x.id===e.id))p.etapas.push({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:false,r:{},passos:"",nota:""})});return p}
@@ -1095,7 +1150,7 @@ async function lerPdf(buf){
  const B="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";await loadScript(B+"pdf.min.js");await loadScript(B+"pdf.worker.min.js");
  const lib=window.pdfjsLib;lib.GlobalWorkerOptions.workerSrc=B+"pdf.worker.min.js";
  const pdf=await lib.getDocument({data:new Uint8Array(buf)}).promise;let t="";
- for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);const c=await pg.getTextContent();t+=c.items.map(x=>x.str+(x.hasEOL?"\n":" ")).join("")+"\n\n"}return t}
+ for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);const c=await pg.getTextContent();t+=c.items.map(x=>x.str+(x.hasEOL?"\n":" ")).join("")+"\n\n"}return ligaduras(t)}
 async function lerXlsAntigo(buf){await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");const wb=XLSX.read(new Uint8Array(buf),{type:"array"});
  return wb.SheetNames.map(n=>{const c=XLSX.utils.sheet_to_csv(wb.Sheets[n],{FS:" | ",blankrows:false}).split("\n").filter(l=>l.replace(/[\s|]/g,"")).join("\n");return c?`### Aba: ${n}\n${c}`:""}).filter(Boolean).join("\n\n")}
 async function extrairTexto(file){
@@ -1117,13 +1172,19 @@ async function importarDoc(file,kind){
   p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};save();
   registrar(p,{tipo:"docs",alvo:DOCS[kind].t,campo:"",rot:"Documento importado",de:"",para:file.name});
   Object.keys(p.docs).forEach(k=>{if(k!==kind&&p.docs[k]&&p.docs[k].ref===kind)p.docs[k].nome=file.name});
-  if(kind==="tec"){const r=lerModulosDoc(p,false);if(r&&r.achados)setTimeout(()=>toast(`Projeto técnico: ${r.achados} módulos lidos (${r.nao} não contratados)${r.na?` · ${r.na} atividades marcadas como "não aplicar"`:""}`,5000),400);
-   else setTimeout(()=>toast("Não encontrei a tabela de módulos no projeto técnico. Marque os módulos em Gestão › Dados.",5000),400)}
+  {const res=aproveitarDoc(p,t,file.name);p.docs[kind].aprov=res;setTimeout(()=>toast(res.length?`Aproveitado de "${file.name}": ${res.join(" · ")}`:`"${file.name}" importado. Nenhuma informação com correspondência no sistema.`,6000),400)}
   {const par=PAR_DOC[kind];if(par&&!p.docs[par]&&/fluxo/i.test(file.name)&&/ader[êe]ncia/i.test(file.name)){p.docs[par]={nome:file.name,ref:kind,data:p.docs[kind].data};registrar(p,{tipo:"docs",alvo:DOCS[par].t,campo:"",rot:"Vinculado ao mesmo documento",de:"",para:DOCS[kind].t+" · "+file.name});setTimeout(()=>toast(`O arquivo contém fluxo e aderência: usado nos dois quadros`,4000),600)}}toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
  }catch(e){const m=e&&e.message;
   iaMsg={err:true,t:m==="formato"?"Formato não suportado. Use Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, CSV ou TXT.":m==="vazio"?"Não encontrei texto nesse arquivo. Se for PDF escaneado (imagem), não dá para ler.":m==="net"?"Para ler PDF e Excel antigo (.xls) o app precisa de internet no momento da importação. Conecte-se e tente de novo, ou salve o arquivo como .xlsx / .docx.":"Não consegui ler esse arquivo. Tente salvar em outro formato (.docx ou .xlsx)."}}
  lendo=null;render();
 }
+
+async function importarExtras(files){const p=P();const L=[...files||[]];if(!L.length)return;lendo="extra";iaMsg=null;render();const resumo=[];
+ for(const file of L){try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");const cort=t.length>70000;if(cort)t=t.slice(0,70000);
+   const d={id:uid("d"),nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};p.docsExtras.push(d);
+   registrar(p,{tipo:"docs",alvo:"Outros documentos",campo:"",rot:"Documento importado",de:"",para:file.name});d.aprov=aproveitarDoc(p,t,file.name);resumo.push(`"${file.name}": ${d.aprov.length?d.aprov.join(" · "):"nada com correspondência"}`)}
+  catch(e){const m=e&&e.message;resumo.push(`"${file.name}": ${m==="formato"?"formato não suportado":m==="vazio"?"sem texto legível":m==="net"?"precisa de internet para ler":"não foi possível ler"}`)}}
+ lendo=null;save();render();toast(resumo.join("  |  "),7000)}
 
 /* ============ IA ============ */
 /* Análise primária automática: ao importar os documentos, a IA lê tudo e já deixa o projeto pré-preenchido
@@ -1145,7 +1206,7 @@ function montarPedido(p=P()){
 ÁREAS DE ATUAÇÃO (ids): ${AREAS.map(a=>`${a.id} = ${a.l} (${a.d})`).join("; ")}.
 
 DOCUMENTOS DO CLIENTE:
-${doc("tec")}${doc("fluxo")}${doc("ader")}
+${doc("tec")}${doc("fluxo")}${(p.docsExtras||[]).map(d=>`\n=== OUTRO DOCUMENTO ("${d.nome}") ===\n${d.texto}\n`).join("")}
 ${p.iaTexto?`\n=== OBSERVAÇÕES DO GESTOR / IMPLANTADOR ===\n${p.iaTexto}\n`:""}
 === O QUE JÁ ESTÁ PREENCHIDO NO APP ===
 ${txtProjeto(p)}
@@ -1405,7 +1466,7 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
  const col=(n,t,body)=>`<div class="col"><h3><span class="num">${n}</span>${t}</h3>${body}</div>`;
  const dadosOk=["cliente","tipo","esp","start"].filter(k=>I[k]).length;
  let trT=0,trOk=0;TRILHA.forEach(f=>{const st=statusFase(p,f.id);trT+=st.tot;trOk+=st.ok});const trPc=trT?Math.round(trOk/trT*100):0;
- let prox="";if(!T.docs)prox=`<div class="next">👉 <span>Próximo passo: importar o projeto técnico, o mapeamento de fluxo e o levantamento de aderência.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos</button></div>`;
+ let prox="";if(!T.docs)prox=`<div class="next">👉 <span>Próximo passo: importar o projeto técnico e o mapeamento de fluxo / levantamento de aderência.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos</button></div>`;
  
  const dado=(l,v)=>`<div class="dv"><div class="dl">${l}</div><div class="dd">${v?esc(v):'<span class="vazio">—</span>'}</div></div>`;
  const c1=Object.keys(DOCS).map(k=>{const d=p.docs[k];return node({ic:DOCS[k].ic,t:DOCS[k].t,s:d?"✓ "+esc(d.nome):"Não importado",cls:d?"ok":"pend",act:"tab",arg:"docs"})}).join("")
@@ -1437,7 +1498,7 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
   <div class="kgrid">
    <div class="kpi" data-act="editar" data-arg="trilha"><div class="n">${trPc}%</div><div class="l">da trilha concluída (${trOk} de ${trT})</div></div>
    <div class="kpi" data-act="tab" data-arg="perg"><div class="n">${T.tot?Math.round(T.ok/T.tot*100):0}%</div><div class="l">do fluxo levantado</div></div>
-   <div class="kpi" data-act="tab" data-arg="docs"><div class="n">${T.docs}/3</div><div class="l">documentos importados</div></div>
+   <div class="kpi" data-act="tab" data-arg="docs"><div class="n">${T.docs}/2</div><div class="l">documentos importados</div></div>
    <div class="kpi" data-act="tab" data-arg="ader"><div class="n" style="${T.gaps?"color:var(--warn)":""}">${T.gaps}</div><div class="l">gaps de aderência</div></div>
    <div class="kpi" data-act="tab" data-arg="aten"><div class="n" style="${PT.length?"color:var(--red)":""}">${PT.length}</div><div class="l">pendências da trilha</div></div>
    <div class="kpi" data-act="tab" data-arg="aud"><div class="n">${A.pc}%</div><div class="l">auditoria validada</div></div>
@@ -1641,13 +1702,13 @@ function rDados(){const p=P(),I=p.info;
   <div class="full"><label style="display:flex;align-items:center;gap:8px">Observações gerais ${micBtn("obs")}</label><textarea data-bind="info.obs" data-mickey="obs">${esc(I.obs)}</textarea><div class="partial" id="partial"></div></div>
  </div></div>
  ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
-const PAR_DOC={fluxo:"ader",ader:"fluxo"};
+const PAR_DOC={};
 const docOk=d=>!!(d&&(d.texto||d.ref));
 function rDocs(){const p=P();
  const zona=k=>{const d=p.docs[k],K=DOCS[k],par=PAR_DOC[k],dp=par&&p.docs[par];
   if(d&&d.ref)return `<div class="drop lk"><div class="dz-ic">📎</div><div style="font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase">${K.t}</div><div class="dz-n">No mesmo documento do ${esc(DOCS[d.ref].t.toLowerCase())}</div><div class="hint" style="margin:0">${esc((p.docs[d.ref]||{}).nome||"")}</div>
    <div class="dz-act"><button class="sm" data-act="doc-desvincular" data-arg="${k}">Desvincular</button></div></div>`;
-  if(d)return `<div class="drop ok"><div class="dz-ic">📄</div><div style="font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase">${K.t}</div><div class="dz-n" title="${esc(d.nome)}">${esc(d.nome)}</div><div class="hint" style="margin:0">Importado em ${esc(d.data||"")} · ${(d.texto||"").length.toLocaleString("pt-BR")} caracteres${d.cort?" (arquivo grande: usei o início)":""}${d.texto?"":" · texto não guardado"}</div>
+  if(d)return `<div class="drop ok"><div class="dz-ic">📄</div><div style="font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase">${K.t}</div><div class="dz-n" title="${esc(d.nome)}">${esc(d.nome)}</div>${d.aprov&&d.aprov.length?`<div class="dzap">✓ Aproveitado: ${esc(d.aprov.join(" · "))}</div>`:""}<div class="hint" style="margin:0">Importado em ${esc(d.data||"")} · ${(d.texto||"").length.toLocaleString("pt-BR")} caracteres${d.cort?" (arquivo grande: usei o início)":""}${d.texto?"":" · texto não guardado"}</div>
    <div class="dz-act"><label class="btn sm">Trocar<input type="file" data-doc="${k}" hidden></label><button class="sm" data-act="rm-doc" data-arg="${k}">Remover</button></div></div>`;
   return `<label class="drop ${lendo?"busy":""}" data-drop="${k}">${lendo===k?`<div class="dz-ic"><span class="spin" style="width:24px;height:24px;color:var(--acc)"></span></div><div class="dz-t">Lendo o arquivo…</div>`:`<div class="dz-ic">${K.ic}</div><div class="dz-t">${K.t}</div><div class="hint" style="margin:0">${K.d}</div><div class="hint" style="margin-top:auto">Clique ou arraste o arquivo aqui<br>Word, Excel, PowerPoint, PDF, CSV ou TXT</div>`}
    <input type="file" data-doc="${k}" hidden ${lendo?"disabled":""}></label>`};
@@ -1656,8 +1717,11 @@ function rDocs(){const p=P();
  const algum=Object.values(p.docs).some(Boolean),modo=iaModo(),nDocs=Object.values(p.docs).filter(docOk).length;
  const meu=iaMsg&&(!iaMsg.pid||iaMsg.pid===p.id);
  const estado=p.iaAnalise?`<div class="iast ok"><div class="okic">✓</div><div><b>Análise com IA aplicada em ${fmtData(p.iaAnalise.data.slice(0,10))}${p.iaAnalise.por?" por "+esc(p.iaAnalise.por):""}</b><div class="hint" style="margin:0">Documentos: ${esc((p.iaAnalise.docs||[]).join(", ")||"—")}</div></div></div>`:"";
- return `<div class="panel"><h2>Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência. Ao importar o projeto técnico, o app lê os módulos contratados e já marca como "não aplicar" tudo o que não faz parte da implantação, para que cada técnico atue só no que for necessário.</p>
- <div class="drops">${zonaW("tec")}${zonaW("fluxo")}${zonaW("ader")}</div><p class="hint" style="margin:6px 0 0">Mapeamento de fluxo e levantamento de aderência no mesmo arquivo? Importe uma vez e use o botão 📎 no outro quadro.</p>${meu&&iaMsg.err?`<div class="msg err" style="margin-top:12px">${esc(iaMsg.t)}</div>`:""}</div>
+ return `<div class="panel"><div class="ptitle"><h2 style="margin:0">Documentos do cliente</h2>${podeGerir()&&(algum||p.docsExtras.length)?`<button class="sm" data-act="docs-reset" title="Remove todos os documentos e desfaz o que foi preenchido a partir deles">↺ Resetar documentos</button>`:""}</div><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico e o mapeamento de fluxo com o levantamento de aderência. A cada documento importado, o app aproveita o que tiver correspondência no sistema (dados do projeto ainda vazios, módulos contratados e informações úteis nas atividades da trilha). O que já está preenchido não é alterado e o que não condiz é ignorado.</p>
+ <div class="drops">${zonaW("tec")}${zonaW("fluxo")}</div><p class="hint" style="margin:6px 0 0">Se o levantamento de aderência vier em arquivo separado, inclua em "Outros documentos".</p>
+ <h3 class="sect" style="margin:18px 0 8px">Outros documentos <span class="hint" style="margin:0;font-weight:400">· inclua quantos precisar</span></h3>
+ <div class="drops">${p.docsExtras.map(d=>`<div class="drop ok"><div class="dz-ic">📄</div><div class="dz-n" title="${esc(d.nome)}">${esc(d.nome)}</div><div class="hint" style="margin:0">Importado em ${esc(d.data||"")} · ${(d.texto||"").length.toLocaleString("pt-BR")} caracteres</div>${d.aprov&&d.aprov.length?`<div class="dzap">✓ Aproveitado: ${esc(d.aprov.join(" · "))}</div>`:`<div class="hint" style="margin:0">Nenhuma informação com correspondência no sistema</div>`}<div class="dz-act"><button class="sm" data-act="rm-extra" data-arg="${d.id}">Remover</button></div></div>`).join("")}
+  <label class="drop addd ${lendo?"busy":""}" data-drop="extra">${lendo==="extra"?`<div class="dz-ic"><span class="spin" style="width:24px;height:24px;color:var(--acc)"></span></div><div class="dz-t">Lendo…</div>`:`<div class="addic">＋</div><div class="dz-t">Incluir documento</div><div class="hint" style="margin:0">Clique ou arraste um ou vários arquivos</div>`}<input type="file" data-docx="1" multiple hidden ${lendo?"disabled":""}></label></div>${meu&&iaMsg.err?`<div class="msg err" style="margin-top:12px">${esc(iaMsg.t)}</div>`:""}</div>
 `}
 function rPerg(){const p=P();
  let h="";p.etapas.forEach((e,i)=>{const t=tpl(e.id);const tot=t?t.qs.length:0,ok=tot-pendentes(e).length;
@@ -1876,7 +1940,7 @@ document.addEventListener("click",async ev=>{
   case"mod-ler":{if(!podeGerir())return;const r=lerModulosDoc(p,true);if(!r)return;save();
    toast(!r.achados?"Não encontrei a tabela de módulos no projeto técnico.":`${r.achados} módulos lidos (${r.nao} não contratados)${r.na?` · ${r.na} atividades → não aplicar`:""}${r.volta?` · ${r.volta} → a realizar`:""}`,5000);break}
   case"mod-set":{if(!podeGerir())return;const[id,k]=arg.split("|"),m=modDe(id);if(!m)return;const de=p.modulos[id],nv=k==="s"?true:k==="n"?false:undefined;if(de===nv)return;
-   if(nv===undefined)delete p.modulos[id];else p.modulos[id]=nv;const r=aplicarModulos(p);const txt=v=>v===true?"Sim":v===false?"Não":"Não informado";
+   if(nv===undefined){delete p.modulos[id];delete p.modFonte[id]}else{p.modulos[id]=nv;p.modFonte[id]="manual"}const r=aplicarModulos(p);const txt=v=>v===true?"Sim":v===false?"Não":"Não informado";
    registrar(p,{tipo:"escopo",a:m.area||"",alvo:"Módulo "+m.l,campo:"modulo",rot:"Módulo contratado",de:txt(de),para:txt(nv)+(r.na?` · ${r.na} atividade(s) → não aplicar`:"")+(r.volta?` · ${r.volta} atividade(s) → a realizar`:"")});
    save();toast(r.na?`${m.l}: ${r.na} atividade(s) marcadas como "não aplicar"`:r.volta?`${m.l}: ${r.volta} atividade(s) voltaram para "a realizar"`:`${m.l}: ${txt(nv)}`,3500);break}
   case"log-mais":logFiltro.lim+=150;break;
@@ -1906,6 +1970,9 @@ document.addEventListener("click",async ev=>{
   case"rm-etapa":p.etapas.splice(+arg,1);sel=null;save();break;
   case"chip":{const e=p.etapas.find(x=>x.id===sel),q=b.dataset.q,v=b.dataset.v;if(b.dataset.tp==="m"){const a=e.r[q]||[];e.r[q]=a.includes(v)?a.filter(x=>x!==v):[...a,v]}else e.r[q]=e.r[q]===v?"":v;save();break}
   case"mic":toggleMic(arg);return;
+  case"rm-extra":{const d=p.docsExtras.find(x=>x.id===arg);if(d)registrar(p,{tipo:"docs",alvo:"Outros documentos",campo:"",rot:"Documento removido",de:d.nome,para:""});p.docsExtras=p.docsExtras.filter(x=>x.id!==arg);save();break}
+  case"docs-reset":{if(!podeGerir())return;confirmar({titulo:"Resetar documentos?",texto:"Todos os documentos deste projeto serão removidos e o que foi preenchido a partir deles será desfeito: módulos lidos, dados do projeto que estavam vazios e observações da trilha marcadas com 📄. O que foi preenchido ou alterado à mão é mantido.",ok:"Resetar documentos",icone:"↺"},
+   ()=>{const n=resetarDocs(p);registrar(p,{tipo:"docs",alvo:"Documentos do cliente",campo:"",rot:"Documentos resetados",de:"",para:`${n} módulo(s) desfeito(s)`});save();render();toast("Documentos resetados. Pode importar novamente.",3500)});return}
   case"doc-vincular":{const par=PAR_DOC[arg],dp=p.docs[par];if(!dp||!dp.texto)return;p.docs[arg]={nome:dp.nome,ref:par,data:new Date().toLocaleDateString("pt-BR")};
    registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Vinculado ao mesmo documento",de:"",para:DOCS[par].t+" · "+dp.nome});save();render();toast(`${DOCS[arg].t}: usando o mesmo documento do ${DOCS[par].t.toLowerCase()}`);agendarIA(p);return}
   case"doc-desvincular":registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento desvinculado",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
@@ -1963,6 +2030,7 @@ document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
  if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;setFiltroArea(areaPadrao(P()));sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
  if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
  if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
+ if(d.docx){const fs=[...(t.files||[])];t.value="";if(fs.length)importarExtras(fs);return}
  if(d.bind&&(t.tagName==="SELECT"||t.type==="date")){const ks=d.bind.split(".");let o=p;for(let i=0;i<ks.length-1;i++)o=o[ks[i]];const k=ks[ks.length-1],de=o[k];o[k]=t.value;
   if(d.bind.startsWith("info."))registrar(p,{tipo:"dados",campo:k,rot:ROT_INFO[k]||k,alvo:"Dados do projeto",de:valLog(k,de),para:valLog(k,t.value)});save();render();return}
  if(d.et==="setor"){p.etapas.find(x=>x.id===sel).setor=t.value;save();render();return}
@@ -1989,7 +2057,8 @@ async function importarBackup(f){try{const o=JSON.parse(await f.text());let list
  catch(e){toast("Arquivo de backup inválido")}}
 ["dragover","dragenter"].forEach(t=>document.addEventListener(t,ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(z){ev.preventDefault();z.classList.add("over")}}));
 document.addEventListener("dragleave",ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(z)z.classList.remove("over")});
-document.addEventListener("drop",ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(!z)return;ev.preventDefault();z.classList.remove("over");const f=ev.dataTransfer&&ev.dataTransfer.files&&ev.dataTransfer.files[0];if(f&&!lendo)importarDoc(f,z.dataset.drop)});
+document.addEventListener("drop",ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(!z)return;ev.preventDefault();z.classList.remove("over");if(z.dataset.drop==="extra"){const fs=[...(ev.dataTransfer&&ev.dataTransfer.files||[])];if(fs.length&&!lendo)importarExtras(fs);return}
+ const f=ev.dataTransfer&&ev.dataTransfer.files&&ev.dataTransfer.files[0];if(f&&!lendo)importarDoc(f,z.dataset.drop)});
 window.addEventListener("dragover",ev=>ev.preventDefault());window.addEventListener("drop",ev=>ev.preventDefault());
 
 /* ============ NUVEM (Supabase): login e projetos por usuário ============ */
