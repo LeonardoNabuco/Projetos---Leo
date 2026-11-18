@@ -76,7 +76,7 @@ tr.late td{background:#fffaf0}
 tr.na td input[type=text]{text-decoration:line-through;color:var(--mut)}
 tr.det td{background:#fafbfc}
 .detg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.detg .w2{grid-column:span 2}.detg label{display:block;font-size:11px;color:var(--mut);font-weight:600;margin-bottom:3px}
-.ss{font-weight:600}.ss-ar{background:#f1f3f5}.ss-em{background:#fef6d8;color:#92400e}.ss-ok{background:#e3f3f1;color:#0f7c74}.ss-pc{background:#fde8e8;color:#b91c1c}.ss-na{background:#fff;color:#9aa5ad}
+.ss{font-weight:600}.ss-ar{background:#f1f3f5}.ss-em{background:#fef6d8;color:#92400e}.ss-ok{background:#e3f3f1;color:#0f7c74}.ss-pc{background:#fde8e8;color:#b91c1c}.ss-na{background:#334155;color:#fff}
 .fases{grid-template-columns:repeat(5,1fr)!important}
 /* auditoria */
 table.au{width:100%;border-collapse:collapse;background:var(--card)}
@@ -135,11 +135,14 @@ h3.sect{font-size:15px;margin:6px 2px 10px}
 .agrp{margin-bottom:14px}.agh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--acc);border-bottom:2px solid var(--acc2);padding:4px 2px;margin-bottom:6px}
 .agh small{text-transform:none;letter-spacing:0;font-weight:600;color:var(--mut)}
 .ativ{border:1px solid var(--line);border-left:5px solid #cbd5e1;border-radius:10px;background:#fff;margin-bottom:6px}
-.ativ.st-em{border-left-color:#eab308}.ativ.st-ok{border-left-color:#16a34a;background:#fbfefc}.ativ.st-pc{border-left-color:#dc2626}.ativ.st-na{border-left-color:#e2e8f0;background:#fafbfc}
+.ativ.st-em{border-left-color:#eab308}.ativ.st-ok{border-left-color:#16a34a;background:#fbfefc}.ativ.st-pc{border-left-color:#dc2626}.ativ.st-na{border:1px dashed #94a3b8;border-left:6px solid #475569;background:repeating-linear-gradient(135deg,#f1f5f9 0 10px,#e9eef4 10px 20px)}
 .ativ.late{border-color:#fecaca}.ativ.open{box-shadow:0 2px 10px rgba(0,0,0,.07)}
 .arow{display:flex;gap:12px;align-items:center;padding:9px 12px;flex-wrap:wrap}
 .atit{flex:1 1 300px;min-width:0}
-.att{font-weight:600;font-size:14px;line-height:1.3;overflow-wrap:anywhere}.ativ.st-ok .att{color:#64748b}.ativ.st-na .att{color:#94a3b8;text-decoration:line-through}
+.att{font-weight:600;font-size:14px;line-height:1.3;overflow-wrap:anywhere}.ativ.st-ok .att{color:#64748b}.ativ.st-na .att{color:#64748b;text-decoration:line-through;text-decoration-thickness:2px}
+.nab{display:inline-block;background:#334155;color:#fff;font-weight:800;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:2px 8px}
+.nam{color:#334155;font-weight:600}.gna{color:#475569}
+.ativ.st-na .fl select.ss{background:#334155;color:#fff;border-color:#334155}
 .acod{display:inline-block;font-size:11px;font-weight:700;color:var(--mut);background:#f1f5f9;border-radius:6px;padding:1px 6px;margin-right:6px;vertical-align:1px}
 .ameta{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:3px;font-size:11px;color:var(--mut)}.ameta .atag{margin:0}
 .acrit{overflow-wrap:anywhere}.alate{color:#b91c1c;font-weight:700}.anote{color:#0369a1}
@@ -425,7 +428,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.15.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.16.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1504,17 +1507,18 @@ function rHistorico(p){const A=segAtual(p);const tudo=(p.log||[]).slice().revers
  <input type="search" data-logf="busca" value="${esc(logFiltro.busca)}" placeholder="Buscar atividade, campo ou valor" style="flex:1;min-width:180px"><span class="hint" style="margin:0">${L.length} registro(s)</span></div>
  ${L.length?h:`<p class="hint">Nenhuma alteração registrada${A||logFiltro.pessoa||logFiltro.tipo||bq?" neste filtro":" ainda"}.</p>`}
  ${L.length>logFiltro.lim?`<div class="dlrow"><button data-act="log-mais">Mostrar mais (${L.length-logFiltro.lim})</button></div>`:""}</div>`}
+function motivoNA(x){if(x.naMod){const m=modDe(x.naMod);return "Módulo não contratado: "+(m?m.l:x.naMod)}const l=String(x.obs||"").split("\n").find(l=>/^IA:/.test(l));return l?l.replace(/^IA:\s*/,""):""}
 function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
  const LA=trL(p,f).filter(x=>!A||x.a===A.id),st=statusFase(p,f,A?A.id:null);
- const filtros=[["todas","Todas",LA.length],["abertas","Em aberto",LA.filter(x=>x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR").length],["pendente","Pendente cliente",LA.filter(x=>x.st==="PENDENTE CLIENTE").length],["atrasadas","Atrasadas",LA.filter(atrasada).length],["concluidas","Concluídas",LA.filter(x=>x.st==="CONCLUÍDO").length]];
+ const filtros=[["todas","Todas",LA.length],["abertas","Em aberto",LA.filter(x=>x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR").length],["pendente","Pendente cliente",LA.filter(x=>x.st==="PENDENTE CLIENTE").length],["atrasadas","Atrasadas",LA.filter(atrasada).length],["concluidas","Concluídas",LA.filter(x=>x.st==="CONCLUÍDO").length],["naoaplica","🚫 Não se aplica",LA.filter(x=>x.st==="NÃO APLICAR").length]];
  if(!filtros.some(([v])=>v===filtroTr))filtroTr="todas";
- const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":filtroTr==="concluidas"?x.st==="CONCLUÍDO":atrasada(x)));
+ const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":filtroTr==="concluidas"?x.st==="CONCLUÍDO":filtroTr==="naoaplica"?x.st==="NÃO APLICAR":atrasada(x)));
  const grupos=[...new Set(vis.map(x=>x.g))];
  const card=x=>{const op=trOpen.has(x.id),u=respDe(x),late=atrasada(x),tem=x.obs||x.link;
   return `<div class="ativ st-${stSlug(x.st)} ${late?"late":""} ${op?"open":""}">
    <div class="arow">
     <div class="atit"><div class="att">${x.cod?`<span class="acod">${esc(x.cod)}</span>`:""}${esc(x.t)||'<i style="color:var(--mut)">Atividade sem descrição</i>'}</div>
-     <div class="ameta">${!A?areaTag(x.a):""}${x.crit?`<span class="acrit">✓ ${esc(x.crit)}</span>`:""}${late?`<span class="alate">⏰ atrasada</span>`:""}${tem&&!op?`<span class="anote">📝 tem anotações</span>`:""}${(()=>{const u=ultLog(p,x.id);return u?`<span class="ault" title="${esc(u.rot)}: ${esc(u.de)} → ${esc(u.para)}">✎ ${esc(u.n)} · ${fmtHora(u.t)}</span>`:""})()}</div></div>
+     <div class="ameta">${x.st==="NÃO APLICAR"?`<span class="nab">🚫 Não se aplica</span>${motivoNA(x)?`<span class="nam">${esc(motivoNA(x))}</span>`:""}`:""}${!A?areaTag(x.a):""}${x.crit?`<span class="acrit">✓ ${esc(x.crit)}</span>`:""}${late?`<span class="alate">⏰ atrasada</span>`:""}${tem&&!op?`<span class="anote">📝 tem anotações</span>`:""}${(()=>{const u=ultLog(p,x.id);return u?`<span class="ault" title="${esc(u.rot)}: ${esc(u.de)} → ${esc(u.para)}">✎ ${esc(u.n)} · ${fmtHora(u.t)}</span>`:""})()}</div></div>
     <div class="actl">
      <label class="fl"><span>Status</span><select data-tr="st" data-id="${x.id}" class="ss ss-${stSlug(x.st)}">${ST_TR.map(o=>`<option value="${o}" ${x.st===o?"selected":""}>${ST_IC[o]} ${o.charAt(0)+o.slice(1).toLowerCase()}</option>`).join("")}</select></label>
      <label class="fl"><span>Responsável</span>${selResp(x)}</label>
@@ -1527,7 +1531,7 @@ function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
     <div><label>Área de atuação</label><select data-tr="a" data-id="${x.id}">${AREAS.map(a=>`<option value="${a.id}" ${x.a===a.id?"selected":""}>${AREA_IC[a.id]} ${esc(a.l)}</option>`).join("")}</select></div>
     <div class="ahist">${rHistAtiv(p,x.id)}</div></div>`:""}</div>`};
  let body="";grupos.forEach(g=>{const its=vis.filter(x=>x.g===g),todos=LA.filter(x=>x.g===g),ok=todos.filter(x=>x.st==="CONCLUÍDO").length,ap=todos.filter(x=>x.st!=="NÃO APLICAR").length;
-  body+=`<div class="agrp"><div class="agh"><span>${esc(g)}</span><small>${ok} de ${ap} concluídas</small></div>${its.map(card).join("")}</div>`});
+  body+=`<div class="agrp"><div class="agh"><span>${esc(g)}</span><small>${ok} de ${ap} concluídas${todos.length-ap?` · <b class="gna">🚫 ${todos.length-ap} não se aplica${todos.length-ap>1?"m":""}</b>`:""}</small></div>${its.map(card).join("")}</div>`});
  const nenhuma=!LA.length?`<div class="vazio2"><div style="font-size:28px">${A?AREA_IC[A.id]:"🗂️"}</div><b>Nenhuma atividade ${A?"de "+esc(A.l)+" ":""}nesta fase.</b><div class="hint">Escolha outra fase acima${A?" ou outra área":""}.</div></div>`:!vis.length?`<div class="vazio2"><b>Nenhuma atividade neste filtro.</b></div>`:"";
  return `<div class="fpanel">
   <div class="fhead"><div><h3>${esc(faseNome(f))}${p.info.fase===f?` <span class="tag d" style="margin:0 0 0 6px;vertical-align:middle">Fase atual</span>`:""}</h3>
