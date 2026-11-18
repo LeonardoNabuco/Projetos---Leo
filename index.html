@@ -291,14 +291,15 @@ table.hmt td{padding:8px 6px;border-bottom:1px solid #eef1f3}.hm{text-align:cent
 @media(max-width:1100px){.map{grid-template-columns:1fr 1fr}.col::after{display:none}}
 @media(max-width:640px){.map{grid-template-columns:1fr}.hero .cd{text-align:left}.fatual{margin-left:0}}
 /* documentos */
-.drops{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 4px}
+.drops{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin:14px 0 4px}.drops>*{min-width:0}.dzw{display:flex;flex-direction:column;gap:6px;min-width:0}
 .drop{display:flex;flex-direction:column;gap:6px;border:2px dashed var(--acc);background:var(--acc2);border-radius:14px;padding:18px;cursor:pointer;transition:.15s;min-height:150px}
 .drop:hover,.drop.over{background:#d3ede9;border-color:#0b5f59}
 .drop.ok{border-style:solid;background:#fff;cursor:default}
 .drop.busy{cursor:default}
 .dz-ic{font-size:28px;line-height:1}
 .dz-t{font-weight:700;font-size:15px}
-.dz-n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dz-n{font-weight:600;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.drop.lk{border-style:solid;border-color:#94a3b8;background:#f8fafc;cursor:default}.dzlink{font-size:12px;padding:6px 10px;white-space:normal;text-align:left}
 .dz-act{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
 .ia-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .steps{margin:8px 0 0;padding-left:20px}.steps li{margin:6px 0}
@@ -424,7 +425,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.10.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.11.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1080,7 +1081,9 @@ async function importarDoc(file,kind){
  try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");
   const cort=t.length>70000;if(cort)t=t.slice(0,70000);
   p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};save();
-  registrar(p,{tipo:"docs",alvo:DOCS[kind].t,campo:"",rot:"Documento importado",de:"",para:file.name});toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
+  registrar(p,{tipo:"docs",alvo:DOCS[kind].t,campo:"",rot:"Documento importado",de:"",para:file.name});
+  Object.keys(p.docs).forEach(k=>{if(k!==kind&&p.docs[k]&&p.docs[k].ref===kind)p.docs[k].nome=file.name});
+  {const par=PAR_DOC[kind];if(par&&!p.docs[par]&&/fluxo/i.test(file.name)&&/ader[êe]ncia/i.test(file.name)){p.docs[par]={nome:file.name,ref:kind,data:p.docs[kind].data};registrar(p,{tipo:"docs",alvo:DOCS[par].t,campo:"",rot:"Vinculado ao mesmo documento",de:"",para:DOCS[kind].t+" · "+file.name});setTimeout(()=>toast(`O arquivo contém fluxo e aderência: usado nos dois quadros`,4000),600)}}toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
  }catch(e){const m=e&&e.message;
   iaMsg={err:true,t:m==="formato"?"Formato não suportado. Use Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, CSV ou TXT.":m==="vazio"?"Não encontrei texto nesse arquivo. Se for PDF escaneado (imagem), não dá para ler.":m==="net"?"Para ler PDF e Excel antigo (.xls) o app precisa de internet no momento da importação. Conecte-se e tente de novo, ou salve o arquivo como .xlsx / .docx.":"Não consegui ler esse arquivo. Tente salvar em outro formato (.docx ou .xlsx)."}}
  lendo=null;render();
@@ -1097,7 +1100,8 @@ function iaModo(){if(USER&&SB&&nuvemAtiva()&&!iaNuvemFalta)return"nuvem";if(cfg.
 const iaModoNome=m=>({nuvem:"IA da equipe (servidor)",chave:"chave de API deste navegador"}[m]||"");
 function montarPedido(p=P()){
  const catalogo=ETAPAS.map(e=>({etapa_id:e.id,etapa:e.t,perguntas:e.qs.map(q=>({pergunta_id:q.id,pergunta:q.q,escolha:q.tp==="m"?"varias":"uma",opcoes:q.o.map(o=>ov(o).v)}))}));
- const doc=k=>p.docs[k]&&p.docs[k].texto?`\n=== ${DOCS[k].t.toUpperCase()} ("${p.docs[k].nome}") ===\n${p.docs[k].texto}\n`:"";
+ const juntos=k=>Object.keys(p.docs).filter(o=>p.docs[o]&&p.docs[o].ref===k).map(o=>DOCS[o].t.toUpperCase());
+ const doc=k=>p.docs[k]&&p.docs[k].texto?`\n=== ${[DOCS[k].t.toUpperCase(),...juntos(k)].join(" E ")} ("${p.docs[k].nome}"${juntos(k).length?" · documento único com os dois conteúdos":""}) ===\n${p.docs[k].texto}\n`:"";
  const trilha=[];TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.st==="A REALIZAR")trilha.push(`${x.id} | ${x.a} | ${(CURTO[f.id]||[""])[1]} | ${x.g} | ${x.t}`)}));
  return `Você ajuda a equipe de implantação do sistema de gestão de saúde Klingo (e do KLIS, sistema de laboratório) a montar o projeto de implantação de um cliente. Faça a ANÁLISE PRIMÁRIA dos documentos: o objetivo é deixar o projeto pré-preenchido para que cada técnico atue somente no que for necessário na sua área.
 
@@ -1121,7 +1125,7 @@ ${trilha.join("\n")}
 
 TAREFA:
 1. "projeto": dados do cliente que aparecerem. tipo deve ser um de ${JSON.stringify(TIPOS)} ou "". Datas no formato AAAA-MM-DD ou "". gestor_sistema = pessoa do cliente responsável pelo sistema.
-0. "modulos": o projeto técnico normalmente traz a relação de módulos adquiridos (sim/não, contratado/não contratado, incluso/não incluso na implantação). Para CADA módulo do catálogo acima que o documento mencionar, informe true (adquirido / incluso na implantação) ou false (não adquirido / marcado como "não" / fora da implantação). Não inclua módulos que o documento não menciona.
+0. "modulos": o projeto técnico normalmente traz a relação de módulos adquiridos (sim/não, contratado/não contratado, incluso/não incluso na implantação). Informe true para cada módulo do catálogo adquirido / incluso na implantação e false para cada módulo marcado como "não", não contratado ou fora da implantação. IMPORTANTE: se o projeto técnico apresentar uma lista ou tabela dos módulos adquiridos, todo módulo do catálogo que NÃO estiver nessa lista também é false (não foi adquirido). Considere sinônimos (ex.: "Agenda/Agendamento" = callcenter; "Prontuário Eletrônico/PEP" = consultorio; "Estoque" = suprimentos; "Faturamento de convênios/TISS" = faturamento; "LIS/KLIS" = klis). Só deixe de fora módulos sobre os quais o documento não permite concluir nada (quando não há lista de módulos).
 2. "escopo": ids das áreas contratadas/necessárias segundo os documentos (sempre inclua "ger"). Ex.: sem laboratório próprio e sem KLIS → não inclua "lab". Se os documentos não permitirem concluir sobre uma área, mantenha-a.
 3. "trilha_nao_aplicar": além do que já decorre dos módulos não adquiridos (o app marca essas atividades sozinho), atividades da lista acima que CLARAMENTE não se aplicam a este cliente (ex.: totem não será usado, não há vacinas, não há PACS, não há internação), com motivo curto. Não liste atividades de áreas que você já deixou fora do escopo. Na dúvida, não inclua.
 4. "trilha_obs": até 30 atividades em que os documentos trazem informação útil para quem vai executar (quantidades, nomes de sistemas, unidades, convênios, equipamentos, prazos). obs curta.
@@ -1175,7 +1179,7 @@ function resumoIA(n){const partes=[];
 function aplicarTexto(txt,p=P(),origem){
  let out;try{out=lerJsonIA(txt)}catch(e){iaMsg={err:true,pid:p.id,t:origem?"A IA respondeu, mas a resposta veio incompleta ou fora do formato. Tente \"Analisar de novo\"; se repetir, use o modo manual.":"Não reconheci a resposta. Copie a resposta inteira do Claude (o bloco que começa com { e termina com })."};render();return false}
  iaUndo={pid:p.id,snap:JSON.stringify(p)};const n=aplicarIA(p,out);registrar(p,{tipo:"docs",alvo:"Análise primária com IA",campo:"",rot:"Análise aplicada",de:"",para:resumoIA(n)});
- p.iaAnalise={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:origem||"manual",docs:Object.keys(DOCS).filter(k=>p.docs[k]).map(k=>p.docs[k].nome)};
+ p.iaAnalise={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:origem||"manual",docs:[...new Set(Object.keys(DOCS).filter(k=>p.docs[k]).map(k=>p.docs[k].nome))]};
  p.upd=Date.now();marcar(p.id);clearTimeout(saveT);saveT=setTimeout(persist,300);
  iaMsg={pid:p.id,t:`Análise concluída: ${resumoIA(n)}. Revise em Gestão do projeto (trilha e dados), Fluxo e Aderência.`};
  const ta=$("respIA");if(ta)ta.value="";render();return true}
@@ -1208,7 +1212,7 @@ async function rodarIA(auto){
  iaBusy=false;render()}
 /* agenda a análise após a importação: começa na hora com os 3 documentos; com parte deles, espera alguns segundos (dá tempo de importar o resto) */
 function cancelarAuto(){if(iaAuto){clearInterval(iaAuto.t);iaAuto=null}}
-function agendarIA(p){cancelarAuto();if(!iaModo())return;const n=Object.values(p.docs).filter(d=>d&&d.texto).length;
+function agendarIA(p){cancelarAuto();if(!iaModo())return;const n=Object.values(p.docs).filter(docOk).length;
  if(n>=3){rodarIA(true);return}
  iaAuto={pid:p.id,s:IA_ESPERA,t:setInterval(()=>{if(!iaAuto)return;iaAuto.s--;const el=$("iaCd");if(el)el.textContent=iaAuto.s;if(iaAuto.s<=0){const pid=iaAuto.pid;cancelarAuto();if(P().id===pid)rodarIA(true)}},1000)};render()}
 const rodarAPI=()=>rodarIA(false);
@@ -1603,13 +1607,19 @@ function rDados(){const p=P(),I=p.info;
   <div class="full"><label style="display:flex;align-items:center;gap:8px">Observações gerais ${micBtn("obs")}</label><textarea data-bind="info.obs" data-mickey="obs">${esc(I.obs)}</textarea><div class="partial" id="partial"></div></div>
  </div></div>
  ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
+const PAR_DOC={fluxo:"ader",ader:"fluxo"};
+const docOk=d=>!!(d&&(d.texto||d.ref));
 function rDocs(){const p=P();
- const zona=k=>{const d=p.docs[k],K=DOCS[k];
+ const zona=k=>{const d=p.docs[k],K=DOCS[k],par=PAR_DOC[k],dp=par&&p.docs[par];
+  if(d&&d.ref)return `<div class="drop lk"><div class="dz-ic">📎</div><div style="font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase">${K.t}</div><div class="dz-n">No mesmo documento do ${esc(DOCS[d.ref].t.toLowerCase())}</div><div class="hint" style="margin:0">${esc((p.docs[d.ref]||{}).nome||"")}</div>
+   <div class="dz-act"><button class="sm" data-act="doc-desvincular" data-arg="${k}">Desvincular</button></div></div>`;
   if(d)return `<div class="drop ok"><div class="dz-ic">📄</div><div style="font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase">${K.t}</div><div class="dz-n" title="${esc(d.nome)}">${esc(d.nome)}</div><div class="hint" style="margin:0">Importado em ${esc(d.data||"")} · ${(d.texto||"").length.toLocaleString("pt-BR")} caracteres${d.cort?" (arquivo grande: usei o início)":""}${d.texto?"":" · texto não guardado"}</div>
    <div class="dz-act"><label class="btn sm">Trocar<input type="file" data-doc="${k}" hidden></label><button class="sm" data-act="rm-doc" data-arg="${k}">Remover</button></div></div>`;
   return `<label class="drop ${lendo?"busy":""}" data-drop="${k}">${lendo===k?`<div class="dz-ic"><span class="spin" style="width:24px;height:24px;color:var(--acc)"></span></div><div class="dz-t">Lendo o arquivo…</div>`:`<div class="dz-ic">${K.ic}</div><div class="dz-t">${K.t}</div><div class="hint" style="margin:0">${K.d}</div><div class="hint" style="margin-top:auto">Clique ou arraste o arquivo aqui<br>Word, Excel, PowerPoint, PDF, CSV ou TXT</div>`}
    <input type="file" data-doc="${k}" hidden ${lendo?"disabled":""}></label>`};
- const algum=Object.values(p.docs).some(Boolean),modo=iaModo(),nDocs=Object.values(p.docs).filter(Boolean).length;
+ const zonaW=k=>{const par=PAR_DOC[k],d=p.docs[k],dp=par&&p.docs[par];
+  return `<div class="dzw">${zona(k)}${!d&&dp&&dp.texto&&!lendo?`<button class="sm dzlink" data-act="doc-vincular" data-arg="${k}">📎 Está no mesmo documento do ${esc(DOCS[par].t.toLowerCase())}</button>`:""}</div>`};
+ const algum=Object.values(p.docs).some(Boolean),modo=iaModo(),nDocs=Object.values(p.docs).filter(docOk).length;
  const meu=iaMsg&&(!iaMsg.pid||iaMsg.pid===p.id);
  let estado;
  if(iaBusy&&iaPid===p.id)estado=`<div class="iast run"><span class="spin" style="width:22px;height:22px;color:var(--acc)"></span><div><b>Analisando os documentos com IA…</b><div class="hint" style="margin:0" id="iaProg">${iaProgTxt()}</div><div class="hint" style="margin:0">Leva de 1 a 3 minutos. Pode continuar usando o app; o resultado entra sozinho neste projeto.</div></div></div>`;
@@ -1618,7 +1628,7 @@ function rDocs(){const p=P();
  else if(p.iaAnalise)estado=`<div class="iast ok"><div class="okic">✓</div><div><b>Análise primária feita em ${fmtData(p.iaAnalise.data.slice(0,10))}${p.iaAnalise.por?" por "+esc(p.iaAnalise.por):""}</b><div class="hint" style="margin:0">Documentos: ${esc((p.iaAnalise.docs||[]).join(", ")||"—")} · ${esc(p.iaAnalise.modo||"")}</div></div><div class="iabt"><button data-act="ia-agora" ${algum&&modo?"":"disabled"}>↻ Analisar de novo</button></div></div>`;
  else estado=`<div class="iast"><div class="okic" style="background:#eef2f7;color:var(--mut)">✨</div><div><b>${algum?"Documentos prontos para a análise":"Importe os documentos acima"}</b><div class="hint" style="margin:0">${modo?"A análise roda sozinha ao importar. Se preferir, comece manualmente.":"A análise automática ainda não está ativada (veja abaixo). Use o modo manual."}</div></div><div class="iabt"><button class="pri" data-act="ia-agora" ${algum&&modo?"":"disabled"}>✨ Analisar documentos agora</button></div></div>`;
  return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência: a IA lê os três juntos e já deixa preenchidos os dados do projeto, o escopo por área, a trilha (marcando o que não se aplica), o fluxo e a aderência. Assim cada técnico atua só no que for necessário.</p>
- <div class="drops">${zona("tec")}${zona("fluxo")}${zona("ader")}</div></div>
+ <div class="drops">${zonaW("tec")}${zonaW("fluxo")}${zonaW("ader")}</div><p class="hint" style="margin:6px 0 0">Mapeamento de fluxo e levantamento de aderência no mesmo arquivo? Importe uma vez e use o botão 📎 no outro quadro.</p></div>
  <div class="panel"><h2>2. Análise primária com IA <span class="iamode ${modo?"on":""}">${modo?"● Automática · "+iaModoNome(modo):"○ Automática não ativada"}</span></h2>
  ${estado}
  ${meu?`<div class="msg ${iaMsg.err?"err":""}" style="margin-top:12px">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
@@ -1882,7 +1892,10 @@ document.addEventListener("click",async ev=>{
   case"rm-etapa":p.etapas.splice(+arg,1);sel=null;save();break;
   case"chip":{const e=p.etapas.find(x=>x.id===sel),q=b.dataset.q,v=b.dataset.v;if(b.dataset.tp==="m"){const a=e.r[q]||[];e.r[q]=a.includes(v)?a.filter(x=>x!==v):[...a,v]}else e.r[q]=e.r[q]===v?"":v;save();break}
   case"mic":toggleMic(arg);return;
-  case"rm-doc":registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento removido",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
+  case"doc-vincular":{const par=PAR_DOC[arg],dp=p.docs[par];if(!dp||!dp.texto)return;p.docs[arg]={nome:dp.nome,ref:par,data:new Date().toLocaleDateString("pt-BR")};
+   registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Vinculado ao mesmo documento",de:"",para:DOCS[par].t+" · "+dp.nome});save();render();toast(`${DOCS[arg].t}: usando o mesmo documento do ${DOCS[par].t.toLowerCase()}`);agendarIA(p);return}
+  case"doc-desvincular":registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento desvinculado",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
+  case"rm-doc":Object.keys(p.docs).forEach(k=>{if(p.docs[k]&&p.docs[k].ref===arg)p.docs[k]=null});registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento removido",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
   case"copy-prompt":{const ok=await copiar(montarPedido());toast(ok?"Pedido copiado. Cole numa conversa nova no Claude.":"Não consegui copiar automaticamente",3500);return}
   case"apply-resp":aplicarTexto(($("respIA")||{}).value);return;
   case"api-run":rodarAPI();return;
