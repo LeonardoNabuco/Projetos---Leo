@@ -431,7 +431,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.18.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.19.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -531,7 +531,7 @@ function lerModulosTecnico(texto){const out={};if(!texto)return out;
  return out}
 
 function lerModulosDoc(p,sobrescrever){const d=p.docs.tec;if(!d||!d.texto)return null;const r=lerModulosTecnico(d.texto),ids=Object.keys(r).filter(id=>modDe(id));if(!ids.length)return{achados:0,mud:0,nao:0,na:0,volta:0};
- let mud=0;ids.forEach(id=>{if(p.modulos[id]===r[id])return;if(p.modulos[id]!==undefined&&!sobrescrever)return;p.modulos[id]=r[id];if(!p.modFonte)p.modFonte={};p.modFonte[id]="doc";mud++});
+ let mud=0;if(!d.ef)d.ef=novoEf();ids.forEach(id=>{if(p.modulos[id]===r[id])return;if(p.modulos[id]!==undefined&&!sobrescrever)return;const m=modDe(id);if(m.area&&r[id]===false&&p.escopo.includes(m.area)&&!d.ef.areas.includes(m.area))d.ef.areas.push(m.area);p.modulos[id]=r[id];if(!p.modFonte)p.modFonte={};p.modFonte[id]="doc";if(!d.ef.mods.includes(id))d.ef.mods.push(id);mud++});
  const a=aplicarModulos(p);const nao=ids.filter(id=>r[id]===false).length;
  if(mud)registrar(p,{tipo:"escopo",alvo:"Módulos contratados",campo:"modulos",rot:"Lidos do projeto técnico",de:"",para:`${ids.length} módulo(s): ${ids.length-nao} sim, ${nao} não${a.na?` · ${a.na} atividade(s) → não aplicar`:""}`});
  return{achados:ids.length,mud,nao,na:a.na,volta:a.volta}}
@@ -561,25 +561,56 @@ function extrairDados(texto){const t=limpaDoc(texto),r={},cap=(re)=>{const m=t.m
  const prazo=cap(/Prazo de execu[çc][ãa]o:?\s*(\d{1,4}\s*dias)/i);if(prazo)obs.prazo=prazo;
  Object.keys(r).forEach(k=>{if(!r[k])delete r[k]});return{info:r,obs}}
 const ROT_EXTR={cliente:"Cliente",tipo:"Tipo de estabelecimento",sede:"Sede",unidades:"Filiais / unidades",esp:"Especialidades",gerente:"Gerente do projeto",gestor:"Gestor do sistema"};
-function obsEm(p,teste,texto){let n=0;TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(!teste(x))return;const linha=OBS_DOC+texto;if(String(x.obs||"").includes(linha))return;x.obs=(x.obs?x.obs+"\n":"")+linha;n++}));return n}
-function aproveitarDoc(p,texto,nome){const res=[];if(!texto)return res;
+const novoEf=()=>({info:{},obs:[],mods:[],areas:[]});
+function obsEm(p,teste,texto,ef){let n=0;TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(!teste(x))return;const linha=OBS_DOC+texto;if(String(x.obs||"").includes(linha))return;x.obs=(x.obs?x.obs+"\n":"")+linha;if(ef)ef.obs.push([x.id,linha]);n++}));return n}
+function aproveitarDoc(p,texto,nome,ef){const res=[];if(!texto)return res;ef=ef||novoEf();
  const e=extrairDados(texto);if(!p.infoDoc)p.infoDoc={};
- Object.entries(e.info).forEach(([k,v])=>{if(!p.info[k]||!String(p.info[k]).trim()){p.info[k]=v;p.infoDoc[k]=v;res.push(ROT_EXTR[k]);registrar(p,{tipo:"dados",campo:k,rot:ROT_EXTR[k],alvo:"Dados do projeto · lido de "+nome,de:"",para:v})}});
+ Object.entries(e.info).forEach(([k,v])=>{if(!p.info[k]||!String(p.info[k]).trim()){p.info[k]=v;p.infoDoc[k]=v;ef.info[k]=v;res.push(ROT_EXTR[k]);registrar(p,{tipo:"dados",campo:k,rot:ROT_EXTR[k],alvo:"Dados do projeto · lido de "+nome,de:"",para:v})}});
  if(p.info.cliente&&/^(Novo projeto|Meu primeiro projeto)$/.test(p.nome))p.nome=p.info.cliente;
  const o=e.obs;let nObs=0;const cod=c=>x=>x.cod===c,txt=re=>x=>re.test(x.t);
- if(o.conv){nObs+=obsEm(p,x=>x.cod==="3.6"||x.cod==="8.2","Convênios citados no documento: "+o.conv)}
- if(o.sistema){nObs+=obsEm(p,x=>x.cod==="3.10"||x.cod==="3.1","Sistema atual do cliente (migração): "+o.sistema)}
- if(o.lic){nObs+=obsEm(p,cod("44.58"),"Licenças previstas no projeto técnico: "+o.lic)}
- if(o.integ){nObs+=obsEm(p,x=>x.cod==="37.1","Integrações citadas: "+o.integ)}
- if(o.prof){nObs+=obsEm(p,cod("4.12"),o.prof+" profissional(is) informados pelo cliente")}
- if(o.locais){nObs+=obsEm(p,txt(/^Locais de atendimento por unidade$/),"Estrutura informada: "+o.locais)}
- if(o.prazo){nObs+=obsEm(p,cod("47.1"),"Prazo de execução previsto no projeto técnico: "+o.prazo)}
+ if(o.conv){nObs+=obsEm(p,x=>x.cod==="3.6"||x.cod==="8.2","Convênios citados no documento: "+o.conv,ef)}
+ if(o.sistema){nObs+=obsEm(p,x=>x.cod==="3.10"||x.cod==="3.1","Sistema atual do cliente (migração): "+o.sistema,ef)}
+ if(o.lic){nObs+=obsEm(p,cod("44.58"),"Licenças previstas no projeto técnico: "+o.lic,ef)}
+ if(o.integ){nObs+=obsEm(p,x=>x.cod==="37.1","Integrações citadas: "+o.integ,ef)}
+ if(o.prof){nObs+=obsEm(p,cod("4.12"),o.prof+" profissional(is) informados pelo cliente",ef)}
+ if(o.locais){nObs+=obsEm(p,txt(/^Locais de atendimento por unidade$/),"Estrutura informada: "+o.locais,ef)}
+ if(o.prazo){nObs+=obsEm(p,cod("47.1"),"Prazo de execução previsto no projeto técnico: "+o.prazo,ef)}
  if(nObs)res.push(nObs+" observação(ões) na trilha");
  const mods=lerModulosTecnico(texto),ids=Object.keys(mods).filter(id=>modDe(id));let mud=0;if(!p.modFonte)p.modFonte={};
- ids.forEach(id=>{if(p.modulos[id]!==undefined)return;p.modulos[id]=mods[id];p.modFonte[id]="doc";mud++});
+ ids.forEach(id=>{if(p.modulos[id]!==undefined)return;p.modulos[id]=mods[id];p.modFonte[id]="doc";ef.mods.push(id);const m=modDe(id);if(m.area&&mods[id]===false&&p.escopo.includes(m.area))ef.areas.push(m.area);mud++});
  if(mud){const a=aplicarModulos(p,"doc");const nao=ids.filter(id=>mods[id]===false&&p.modFonte[id]==="doc").length;res.push(`${mud} módulo(s) (${nao} não contratado${nao===1?"":"s"}${a.na?`, ${a.na} atividades ocultadas`:""})`);
   registrar(p,{tipo:"escopo",alvo:"Módulos contratados",campo:"modulos",rot:"Lidos de "+nome,de:"",para:`${mud} módulo(s) · ${nao} não contratado(s)`})}
  return res}
+/* impactos de um documento e como desfazê-los */
+function efLegado(p){/* documentos importados antes do controle por documento */
+ return{info:Object.assign({},p.infoDoc||{}),obs:TRILHA.flatMap(f=>(p.trilha[f.id]||[]).flatMap(x=>String(x.obs||"").split("\n").filter(l=>l.startsWith(OBS_DOC)).map(l=>[x.id,l]))),mods:Object.keys(p.modulos||{}).filter(id=>{const f=(p.modFonte||{})[id];if(f)return f==="doc";
+   /* sem origem registrada (versões anteriores): manual só se o histórico mostrar o clique em Sim/Não */
+   const m=modDe(id);const manual=m&&(p.log||[]).some(l=>l.campo==="modulo"&&l.rot==="Módulo contratado"&&l.alvo==="Módulo "+m.l);if(!manual){if(!p.modFonte)p.modFonte={};p.modFonte[id]="doc"}return !manual}),areas:[]}}
+function previaDoc(p,ef){const it=[];if(!ef)return it;
+ const mods=(ef.mods||[]).filter(id=>p.modFonte&&p.modFonte[id]==="doc"&&p.modulos[id]!==undefined);
+ if(mods.length){const nao=mods.filter(id=>p.modulos[id]===false);const ocult=TRILHA.reduce((t,f)=>t+(p.trilha[f.id]||[]).filter(x=>x.naMod&&nao.includes(x.naMod)&&x.st==="NÃO APLICAR").length,0);
+  it.push(`<b>${mods.length} módulo(s) contratado(s)</b> voltam para "não informado"${nao.length?` (${nao.length} estavam como não contratados)`:""}.`);
+  if(ocult)it.push(`<b>${ocult} atividade(s) da trilha</b> que estavam ocultas por módulo não contratado voltam a aparecer como "a realizar".`)}
+ const ar=[...new Set([...(ef.areas||[]),...mods.map(id=>modDe(id)).filter(m=>m&&m.area&&p.modulos[m.id]===false&&!p.escopo.includes(m.area)).map(m=>m.area)])].filter(a=>!p.escopo.includes(a));
+ if(ar.length)it.push(`Área(s) <b>${ar.map(a=>esc(areaDe(a).l)).join(", ")}</b> voltam ao escopo do projeto.`);
+ const inf=Object.entries(ef.info||{}).filter(([k,v])=>p.info[k]===v).map(([k])=>ROT_EXTR[k]||k);
+ if(inf.length)it.push(`Dados do projeto que serão limpos: <b>${inf.map(esc).join(", ")}</b>.`);
+ const ob=(ef.obs||[]).filter(([id,l])=>{const r=acharAtiv(p,id);return r&&String(r.x.obs||"").includes(l)}).length;
+ if(ob)it.push(`<b>${ob} observação(ões)</b> inseridas na trilha a partir do documento serão removidas.`);
+ return it}
+function desfazerDoc(p,ef){if(!ef)return;
+ (ef.mods||[]).forEach(id=>{if(p.modFonte&&p.modFonte[id]==="doc"){const m=modDe(id);if(m&&m.area&&p.modulos[id]===false&&!p.escopo.includes(m.area))p.escopo=AREA_IDS.filter(a=>a===m.area||p.escopo.includes(a));delete p.modulos[id];delete p.modFonte[id]}});
+ (ef.areas||[]).forEach(a=>{if(!p.escopo.includes(a))p.escopo=AREA_IDS.filter(x=>x===a||p.escopo.includes(x))});
+ aplicarModulos(p);
+ Object.entries(ef.info||{}).forEach(([k,v])=>{if(p.info[k]===v){p.info[k]="";if(p.infoDoc)delete p.infoDoc[k]}});
+ (ef.obs||[]).forEach(([id,l])=>{const r=acharAtiv(p,id);if(r&&r.x.obs)r.x.obs=r.x.obs.split("\n").filter(x=>x!==l).join("\n")})}
+function confirmarRemocaoDoc(p,d,rotulo,acao){const ef=d.ef||(d.ref?null:efLegado(p));const it=previaDoc(p,ef);
+ confirmar({titulo:"Remover documento?",icone:"🗑️",ok:"Remover documento",texto:`<b>${esc(d.nome)}</b> (${esc(rotulo)}) será removido do projeto.${it.length?`<div style="text-align:left;margin-top:10px"><b>Impactos no sistema:</b><ul style="margin:6px 0 0;padding-left:18px">${it.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:`<div style="margin-top:8px">Nenhuma informação do sistema veio deste documento; nada mais será alterado.</div>`}<div class="hint" style="margin-top:8px">O que foi preenchido ou alterado à mão é mantido.</div>`},
+  ()=>{desfazerDoc(p,ef);acao();registrar(p,{tipo:"docs",alvo:rotulo,campo:"",rot:"Documento removido",de:d.nome,para:it.length?"impactos desfeitos":""});save();render();toast("Documento removido e informações desfeitas",3500)})}
+/* projeto sem nenhum documento mas com informações que vieram de documentos já removidos (versões anteriores): desfaz */
+function limparOrfaos(p){if(!p||Object.values(p.docs||{}).some(Boolean)||(p.docsExtras||[]).length)return false;const ef=efLegado(p);
+ if(!ef.mods.length&&!Object.keys(ef.info).length&&!ef.obs.length)return false;const it=previaDoc(p,ef);desfazerDoc(p,ef);
+ registrar(p,{tipo:"docs",alvo:"Documentos do cliente",campo:"",rot:"Informações de documentos removidos desfeitas",de:"",para:it.map(x=>x.replace(/<[^>]+>/g,"")).join(" ")});p.upd=Date.now();marcar(p.id);persist();return true}
 /* desfaz tudo o que veio dos documentos (mantém o que foi feito à mão) */
 function resetarDocs(p){let n=0;
  Object.keys(p.modFonte||{}).forEach(id=>{if(p.modFonte[id]==="doc"){const m=modDe(id);if(m&&m.area&&p.modulos[id]===false&&!p.escopo.includes(m.area))p.escopo=AREA_IDS.filter(a=>a===m.area||p.escopo.includes(a));delete p.modulos[id];delete p.modFonte[id];n++}});
@@ -1169,10 +1200,11 @@ async function importarDoc(file,kind){
  if(!file||!DOCS[kind])return;const p=P();lendo=kind;iaMsg=null;render();
  try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");
   const cort=t.length>70000;if(cort)t=t.slice(0,70000);
-  p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};save();
+  {const ant=p.docs[kind];if(ant)desfazerDoc(p,ant.ef||efLegado(p))}
+  p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR"),ef:novoEf()};save();
   registrar(p,{tipo:"docs",alvo:DOCS[kind].t,campo:"",rot:"Documento importado",de:"",para:file.name});
   Object.keys(p.docs).forEach(k=>{if(k!==kind&&p.docs[k]&&p.docs[k].ref===kind)p.docs[k].nome=file.name});
-  {const res=aproveitarDoc(p,t,file.name);p.docs[kind].aprov=res;setTimeout(()=>toast(res.length?`Aproveitado de "${file.name}": ${res.join(" · ")}`:`"${file.name}" importado. Nenhuma informação com correspondência no sistema.`,6000),400)}
+  {const res=aproveitarDoc(p,t,file.name,p.docs[kind].ef);p.docs[kind].aprov=res;setTimeout(()=>toast(res.length?`Aproveitado de "${file.name}": ${res.join(" · ")}`:`"${file.name}" importado. Nenhuma informação com correspondência no sistema.`,6000),400)}
   {const par=PAR_DOC[kind];if(par&&!p.docs[par]&&/fluxo/i.test(file.name)&&/ader[êe]ncia/i.test(file.name)){p.docs[par]={nome:file.name,ref:kind,data:p.docs[kind].data};registrar(p,{tipo:"docs",alvo:DOCS[par].t,campo:"",rot:"Vinculado ao mesmo documento",de:"",para:DOCS[kind].t+" · "+file.name});setTimeout(()=>toast(`O arquivo contém fluxo e aderência: usado nos dois quadros`,4000),600)}}toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
  }catch(e){const m=e&&e.message;
   iaMsg={err:true,t:m==="formato"?"Formato não suportado. Use Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, CSV ou TXT.":m==="vazio"?"Não encontrei texto nesse arquivo. Se for PDF escaneado (imagem), não dá para ler.":m==="net"?"Para ler PDF e Excel antigo (.xls) o app precisa de internet no momento da importação. Conecte-se e tente de novo, ou salve o arquivo como .xlsx / .docx.":"Não consegui ler esse arquivo. Tente salvar em outro formato (.docx ou .xlsx)."}}
@@ -1181,8 +1213,8 @@ async function importarDoc(file,kind){
 
 async function importarExtras(files){const p=P();const L=[...files||[]];if(!L.length)return;lendo="extra";iaMsg=null;render();const resumo=[];
  for(const file of L){try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");const cort=t.length>70000;if(cort)t=t.slice(0,70000);
-   const d={id:uid("d"),nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};p.docsExtras.push(d);
-   registrar(p,{tipo:"docs",alvo:"Outros documentos",campo:"",rot:"Documento importado",de:"",para:file.name});d.aprov=aproveitarDoc(p,t,file.name);resumo.push(`"${file.name}": ${d.aprov.length?d.aprov.join(" · "):"nada com correspondência"}`)}
+   const d={id:uid("d"),nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR"),ef:novoEf()};p.docsExtras.push(d);
+   registrar(p,{tipo:"docs",alvo:"Outros documentos",campo:"",rot:"Documento importado",de:"",para:file.name});d.aprov=aproveitarDoc(p,t,file.name,d.ef);resumo.push(`"${file.name}": ${d.aprov.length?d.aprov.join(" · "):"nada com correspondência"}`)}
   catch(e){const m=e&&e.message;resumo.push(`"${file.name}": ${m==="formato"?"formato não suportado":m==="vazio"?"sem texto legível":m==="net"?"precisa de internet para ler":"não foi possível ler"}`)}}
  lendo=null;save();render();toast(resumo.join("  |  "),7000)}
 
@@ -1951,7 +1983,7 @@ document.addEventListener("click",async ev=>{
    save();toast(n?`${n} atividade(s) de ${areaDe(arg).l} atribuídas a ${nomeU(u)}`:"Todas as atividades desta área já têm responsável",3500);break}
   case"menu":menuAberto=!menuAberto;break;
   case"gantt-ab":ganttAberto.has(arg)?ganttAberto.delete(arg):ganttAberto.add(arg);break;
-  case"abrir-proj":S.cur=arg;projSel=true;setFiltroArea(areaPadrao(P()));tab="mapa";sel=null;faseVista=null;persist();break;
+  case"abrir-proj":S.cur=arg;projSel=true;limparOrfaos(P());setFiltroArea(areaPadrao(P()));tab="mapa";sel=null;faseVista=null;persist();break;
   case"fase":faseVista=arg;tab="gest";gestSub="trilha";filtroTr="todas";break;
   case"editar":tab="gest";gestSub=arg;if(arg==="trilha"&&!faseVista)faseVista=p.info.fase;break;
   case"fase-atual":registrar(p,{tipo:"dados",campo:"fase",rot:"Fase atual",alvo:"Dados do projeto",de:faseNome(p.info.fase),para:faseNome(arg)});p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
@@ -1970,13 +2002,13 @@ document.addEventListener("click",async ev=>{
   case"rm-etapa":p.etapas.splice(+arg,1);sel=null;save();break;
   case"chip":{const e=p.etapas.find(x=>x.id===sel),q=b.dataset.q,v=b.dataset.v;if(b.dataset.tp==="m"){const a=e.r[q]||[];e.r[q]=a.includes(v)?a.filter(x=>x!==v):[...a,v]}else e.r[q]=e.r[q]===v?"":v;save();break}
   case"mic":toggleMic(arg);return;
-  case"rm-extra":{const d=p.docsExtras.find(x=>x.id===arg);if(d)registrar(p,{tipo:"docs",alvo:"Outros documentos",campo:"",rot:"Documento removido",de:d.nome,para:""});p.docsExtras=p.docsExtras.filter(x=>x.id!==arg);save();break}
+  case"rm-extra":{const d=p.docsExtras.find(x=>x.id===arg);if(!d)return;confirmarRemocaoDoc(p,d,"Outros documentos",()=>{p.docsExtras=p.docsExtras.filter(x=>x.id!==arg)});return}
   case"docs-reset":{if(!podeGerir())return;confirmar({titulo:"Resetar documentos?",texto:"Todos os documentos deste projeto serão removidos e o que foi preenchido a partir deles será desfeito: módulos lidos, dados do projeto que estavam vazios e observações da trilha marcadas com 📄. O que foi preenchido ou alterado à mão é mantido.",ok:"Resetar documentos",icone:"↺"},
    ()=>{const n=resetarDocs(p);registrar(p,{tipo:"docs",alvo:"Documentos do cliente",campo:"",rot:"Documentos resetados",de:"",para:`${n} módulo(s) desfeito(s)`});save();render();toast("Documentos resetados. Pode importar novamente.",3500)});return}
   case"doc-vincular":{const par=PAR_DOC[arg],dp=p.docs[par];if(!dp||!dp.texto)return;p.docs[arg]={nome:dp.nome,ref:par,data:new Date().toLocaleDateString("pt-BR")};
    registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Vinculado ao mesmo documento",de:"",para:DOCS[par].t+" · "+dp.nome});save();render();toast(`${DOCS[arg].t}: usando o mesmo documento do ${DOCS[par].t.toLowerCase()}`);agendarIA(p);return}
   case"doc-desvincular":registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento desvinculado",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
-  case"rm-doc":Object.keys(p.docs).forEach(k=>{if(p.docs[k]&&p.docs[k].ref===arg)p.docs[k]=null});registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento removido",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
+  case"rm-doc":{const d=p.docs[arg];if(!d)return;confirmarRemocaoDoc(p,d,DOCS[arg].t,()=>{p.docs[arg]=null});return}
   case"copy-prompt":{const ok=await copiar(montarPedido());toast(ok?"Pedido copiado. Cole numa conversa nova no Claude.":"Não consegui copiar automaticamente",3500);return}
   case"apply-resp":aplicarTexto(($("respIA")||{}).value);return;
   case"api-run":rodarAPI();return;
@@ -2027,7 +2059,7 @@ document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
   else if(d.audi)registrar(p,{tipo:"auditoria",alvo:"Parecer da auditoria",campo:d.audi,rot:d.audi,de,para:t.value});
   if(d.tr||d.bind||d.ad||d.aud||d.audi){p.upd=Date.now();marcar(p.id);clearTimeout(saveT);saveT=setTimeout(persist,300)}}
  if(t.id==="selArea"){setFiltroArea(t.value);render();return}
- if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;setFiltroArea(areaPadrao(P()));sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
+ if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;if(limparOrfaos(P()))setTimeout(()=>toast("Os documentos deste projeto foram removidos antes: módulos e informações que vieram deles foram desfeitos.",5000),300);setFiltroArea(areaPadrao(P()));sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
  if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
  if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
  if(d.docx){const fs=[...(t.files||[])];t.value="";if(fs.length)importarExtras(fs);return}
