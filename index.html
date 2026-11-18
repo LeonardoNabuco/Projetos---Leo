@@ -425,7 +425,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.14.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.15.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1386,7 +1386,7 @@ function render(){
   ${podeGerir()?`<div class="pbtns"><button class="sm" data-act="proj-new" title="Abrir novo projeto">+ Novo</button>${projSel&&projMenu().length?(P().oculto?`<button class="sm" data-act="proj-reexibir" data-arg="${P().id}" title="Reexibir este projeto">Reexibir</button>`:`<button class="sm" data-act="proj-ocultar" title="Ocultar este projeto">Ocultar</button>`):""}<button class="sm ${mostrarOcultos?"on":""}" data-act="mostrar-ocultos" title="${mostrarOcultos?"Esconder projetos ocultos do menu":"Mostrar projetos ocultos no menu"} (${S.projetos.filter(x=>x.oculto).length} oculto(s))">${mostrarOcultos?"✓ Ocultos":"👁 Ocultos"}</button></div>`:""}
   ${podeGerir()&&mostrarOcultos?`<div class="ocbox"><div class="ocb-t">Projetos ocultos (${S.projetos.filter(x=>x.oculto).length})</div>${S.projetos.filter(x=>x.oculto).length?S.projetos.filter(x=>x.oculto).map(x=>`<div class="oci ${x.id===p.id?"on":""}"><button class="ocn" data-act="abrir-oculto" data-arg="${x.id}" title="Abrir projeto oculto">🙈 ${esc(x.nome)}</button><button class="sm" data-act="proj-reexibir" data-arg="${x.id}" title="Reexibir">Reexibir</button></div>`).join(""):`<div class="hint" style="margin:2px 0 0">Nenhum projeto oculto.</div>`}</div>`:""}
   ${projSel&&projMenu().length?`<div class="mg">Área de atuação</div><div class="sarea" style="--ac:${segAtual(p)?segAtual(p).c:"#334155"}"><span>${segAtual(p)?AREA_IC[segAtual(p).id]:"🗂️"}</span><select id="selArea" title="Área em que você está atuando"><option value="todas">Todas as áreas</option>${AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>`<option value="${a.id}" ${filtroArea===a.id?"selected":""}>${esc(a.l)}${minhasAreas(p).includes(a.id)?" ⭐":""}</option>`).join("")}</select></div>
-  <div class="mg">Navegação</div>${it("mapa","🗺","Mapa do projeto")}${it("docs","📄","Documentos e IA",!Object.values(p.docs).some(Boolean)?"!":"")}${it("gest","✏️","Gestão do projeto")}
+  <div class="mg">Navegação</div>${it("mapa","🗺","Mapa do projeto")}${it("docs","📄","Documentos",!Object.values(p.docs).some(Boolean)?"!":"")}${it("gest","✏️","Gestão do projeto")}
   ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
   ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:projMenu().length?`<p class="hint" style="margin:6px 10px">Escolha um projeto na lista acima para ver o mapa, os documentos, a gestão e as demais opções.</p>`:`<p class="hint" style="margin:6px 10px">${podeGerir()?"Nenhum projeto visível. Use \"+ Novo\" para abrir um projeto.":"Nenhum projeto disponível. Peça ao gestor para abrir um projeto ou incluir você na equipe."}</p>`}
  </nav>`;
@@ -1406,7 +1406,7 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
  
  const dado=(l,v)=>`<div class="dv"><div class="dl">${l}</div><div class="dd">${v?esc(v):'<span class="vazio">—</span>'}</div></div>`;
  const c1=Object.keys(DOCS).map(k=>{const d=p.docs[k];return node({ic:DOCS[k].ic,t:DOCS[k].t,s:d?"✓ "+esc(d.nome):"Não importado",cls:d?"ok":"pend",act:"tab",arg:"docs"})}).join("")
-  +node({ic:"✨",t:"Pré-preenchimento com IA",s:p.iaAnalise?"✓ Aplicado em "+fmtData(p.iaAnalise.data.slice(0,10)):"Opcional",cls:p.iaAnalise?"ok":"",act:"tab",arg:"docs"});
+  ;
  const c2=node({ic:"🏥",t:"Dados do projeto",s:`${dadosOk} de 4 campos principais`,pct:dadosOk/4*100,cls:dadosOk===4?"ok":"pend",act:"editar",arg:"dados"})
   +node({ic:"🧭",t:"Trilha de implantação",s:`${trOk} de ${trT} atividades · ${trPc}%`,pct:trPc,cls:trPc===100?"ok":"pend",act:"editar",arg:"trilha"})
   +node({ic:"💲",t:"Tabela de preço",s:"Em breve",cls:"soon"});
@@ -1489,7 +1489,7 @@ const linhaLog=l=>`<div class="hlg"><span class="lgw">${fmtHora(l.t)}</span><spa
 function rHistAtiv(p,ref){const L=(p.log||[]).filter(l=>l.ref===ref).slice(-12).reverse();
  return `<label>Histórico desta atividade</label>${L.length?L.map(linhaLog).join(""):`<div class="hint" style="margin:0">Nenhuma alteração registrada ainda.</div>`}`}
 let logFiltro={pessoa:"",tipo:"",busca:"",lim:150};
-const TIPOS_LOG={trilha:"Trilha",dados:"Dados do projeto",escopo:"Escopo e áreas",equipe:"Equipe",docs:"Documentos e IA",aderencia:"Aderência",auditoria:"Auditoria"};
+const TIPOS_LOG={trilha:"Trilha",dados:"Dados do projeto",escopo:"Escopo e áreas",equipe:"Equipe",docs:"Documentos",aderencia:"Aderência",auditoria:"Auditoria"};
 function rHistorico(p){const A=segAtual(p);const tudo=(p.log||[]).slice().reverse();
  const pessoas=[...new Set(tudo.map(l=>l.n))].sort();
  const bq=normT(logFiltro.busca);
@@ -1651,21 +1651,9 @@ function rDocs(){const p=P();
  const algum=Object.values(p.docs).some(Boolean),modo=iaModo(),nDocs=Object.values(p.docs).filter(docOk).length;
  const meu=iaMsg&&(!iaMsg.pid||iaMsg.pid===p.id);
  const estado=p.iaAnalise?`<div class="iast ok"><div class="okic">✓</div><div><b>Análise com IA aplicada em ${fmtData(p.iaAnalise.data.slice(0,10))}${p.iaAnalise.por?" por "+esc(p.iaAnalise.por):""}</b><div class="hint" style="margin:0">Documentos: ${esc((p.iaAnalise.docs||[]).join(", ")||"—")}</div></div></div>`:"";
- return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência. Ao importar o projeto técnico, o app lê os módulos contratados e já marca como "não aplicar" tudo o que não faz parte da implantação, para que cada técnico atue só no que for necessário.</p>
- <div class="drops">${zonaW("tec")}${zonaW("fluxo")}${zonaW("ader")}</div><p class="hint" style="margin:6px 0 0">Mapeamento de fluxo e levantamento de aderência no mesmo arquivo? Importe uma vez e use o botão 📎 no outro quadro.</p></div>
- <div class="panel"><h2>2. Pré-preenchimento com IA <span class="hint" style="margin:0;font-weight:400">· opcional</span></h2>
- <p class="hint" style="font-size:13px">Os módulos contratados já são lidos automaticamente do projeto técnico. Se quiser, o Claude também pré-preenche os dados do projeto, o fluxo, a aderência e as observações da trilha a partir dos documentos.</p>
- ${estado}
- ${meu&&(iaMsg.err?!/análise automática|IA da equipe|Failed to fetch/i.test(iaMsg.t):true)?`<div class="msg ${iaMsg.err?"err":""}" style="margin-top:12px">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
- <ol class="steps"><li><button class="pri sm" data-act="copy-prompt" ${algum||p.iaTexto?"":"disabled"}>📋 Copiar pedido para o Claude</button></li>
-  <li>Abra uma conversa nova no Claude (<a href="https://claude.ai/new" target="_blank">claude.ai/new</a>) e cole o pedido.</li>
-  <li>Copie a resposta inteira do Claude, cole abaixo e clique em Aplicar.</li></ol>
- <textarea id="respIA" placeholder="Cole aqui a resposta do Claude" style="min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
- <div class="dlrow"><button class="pri" data-act="apply-resp">Aplicar resposta</button></div>
- <details ${p.iaTexto?"open":""} style="margin:12px 0 0"><summary>Acrescentar observações do gestor para a IA (opcional)</summary><div style="display:flex;justify-content:flex-end;margin:6px 0">${micBtn("ia")}</div><textarea data-bind="iaTexto" data-mickey="ia" placeholder="O que o cliente contou e não está nos documentos...">${esc(p.iaTexto)}</textarea><div class="partial" id="partial"></div></details>
- </div>
- ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}
- ${p.sugestoes.length?`<div class="box sug"><h3>Sugestões de melhoria</h3><ul>${p.sugestoes.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
+ return `<div class="panel"><h2>Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência. Ao importar o projeto técnico, o app lê os módulos contratados e já marca como "não aplicar" tudo o que não faz parte da implantação, para que cada técnico atue só no que for necessário.</p>
+ <div class="drops">${zonaW("tec")}${zonaW("fluxo")}${zonaW("ader")}</div><p class="hint" style="margin:6px 0 0">Mapeamento de fluxo e levantamento de aderência no mesmo arquivo? Importe uma vez e use o botão 📎 no outro quadro.</p>${meu&&iaMsg.err?`<div class="msg err" style="margin-top:12px">${esc(iaMsg.t)}</div>`:""}</div>
+`}
 function rPerg(){const p=P();
  let h="";p.etapas.forEach((e,i)=>{const t=tpl(e.id);const tot=t?t.qs.length:0,ok=tot-pendentes(e).length;
   h+=`<div class="it ${sel===e.id?"on":""} ${e.ativa?"":"off"}"><span class="mv"><button data-act="up" data-arg="${i}" title="Subir">▲</button><button data-act="dn" data-arg="${i}" title="Descer">▼</button></span>
