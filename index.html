@@ -21,9 +21,9 @@ button:disabled{opacity:.5;cursor:default}
 .pri{background:var(--acc)!important;color:#fff!important;border-color:var(--acc)!important}
 .danger{color:var(--red)}
 .sm{padding:3px 8px!important;font-size:12px}
-nav{display:flex;gap:2px;padding:0 16px;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto}
-nav button{border:none;border-bottom:3px solid transparent;border-radius:0;padding:11px 12px;color:var(--mut);font-weight:500;white-space:nowrap}
-nav button.on{color:var(--acc);border-bottom-color:var(--acc)}
+nav#tabs{display:flex;gap:2px;padding:0 16px;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto}
+nav#tabs button{border:none;border-bottom:3px solid transparent;border-radius:0;padding:11px 12px;color:var(--mut);font-weight:500;white-space:nowrap}
+nav#tabs button.on{color:var(--acc);border-bottom-color:var(--acc)}
 .badge{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:1px 7px;font-size:11px}
 main{padding:18px 20px;max-width:1400px;margin:0 auto}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
@@ -88,7 +88,7 @@ table.au textarea{min-height:34px}
 .fatual .fv{font-weight:700;color:var(--acc);font-size:15px}
 .mgrid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
 .kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}.kgrid .kpi{padding:12px 14px}.kgrid .kpi .n{font-size:22px}
-.ptitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.ptitle h3{margin:0;font-size:16px}
+.ptitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}.ptitle h3{margin:0;font-size:16px}
 .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px}
 .dv .dl{font-size:11px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.03em}.dv .dd{font-size:14px;font-weight:600;margin-top:2px}.vazio{color:#c3cbd1;font-weight:400}
 h3.sect{font-size:15px;margin:6px 2px 10px}
@@ -121,6 +121,56 @@ table.cgt td{padding:10px;border-bottom:1px solid var(--line);vertical-align:mid
 tr.cg{cursor:pointer}tr.cg:hover td,tr.cg.open td{background:#f7faf9}
 .cbar{display:inline-block;width:calc(100% - 34px);height:8px;background:#eef1f3;border-radius:4px;overflow:hidden;vertical-align:middle;margin-right:6px}.cbar i{display:block;height:100%}.c-r{background:#dc2626}.c-y{background:#eab308}.c-g{background:#16a34a}
 table.cgl{width:100%;border-collapse:collapse;font-size:12px}table.cgl th{text-align:left;color:var(--mut);padding:5px 6px;border-bottom:1px solid var(--line)}table.cgl td{padding:5px 6px;border-bottom:1px solid #eef1f3}
+.shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:calc(100vh - 53px)}
+#side{background:var(--card);border-right:1px solid var(--line)}
+.menu{position:sticky;top:0;padding:12px 10px;display:flex;flex-direction:column;gap:2px}
+.mi{border:none;background:transparent;justify-content:flex-start;width:100%;padding:8px 10px;border-radius:8px;color:#3b4a54;font-weight:500;gap:8px}
+.mi:hover{background:var(--bg)}.mi.on{background:var(--acc2);color:var(--acc);font-weight:700}
+.mic2{width:20px;text-align:center}.ml{flex:1;text-align:left}
+.mg{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin:14px 10px 6px}
+#selProj{width:100%;margin-bottom:6px;font-weight:600}
+.pbtns{display:flex;gap:4px;margin-bottom:8px}.pbtns button{flex:1;justify-content:center;padding:4px 2px!important}
+.menubtn{display:none;border:none;font-size:20px;padding:2px 8px}
+main{max-width:none!important;margin:0!important;padding:18px 22px!important}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cards.k6{grid-template-columns:repeat(6,1fr)}
+.pgrid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:16px}
+.pb{display:grid;grid-template-columns:170px 1fr 40px;gap:10px;align-items:center;padding:7px 6px;border-radius:8px;cursor:pointer}
+.pb:hover,.pb.open{background:#f7faf9}.pn b{display:block;font-size:13px}.pn span{font-size:11px;color:var(--mut)}
+.pbar2{display:flex;height:16px;background:#f1f4f6;border-radius:5px;overflow:hidden}.pbar2 i{display:block;height:100%}
+.pt{font-weight:700;text-align:right}
+table.cgl td .ss{white-space:nowrap}
+.pdet{padding:4px 6px 12px}
+.lg{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.sx{display:flex;gap:12px;align-items:center;padding:8px;border-radius:8px;cursor:pointer;border-bottom:1px solid #eef1f3}.sx:hover{background:#f7faf9}
+.sd2{background:var(--acc2);color:var(--acc);border-radius:8px;padding:4px 8px;text-align:center;min-width:58px}.sd2 b{display:block;font-size:15px}.sd2 span{font-size:10px}
+.gantt{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.gr{display:grid;grid-template-columns:240px 1fr;border-bottom:1px solid #eef1f3;min-height:46px}
+.gr.head{background:#fafbfc;min-height:30px;border-bottom:1px solid var(--line)}
+.gr.sub{background:#fbfcfd;min-height:34px}.gr.sub .gl{padding-left:34px;font-size:12px}
+.gl{padding:7px 10px;border-right:1px solid var(--line);font-size:13px;overflow:hidden}.gl a{color:inherit;text-decoration:none}.gl a:hover{text-decoration:underline}
+.gs{font-size:11px;color:var(--mut)}
+.gx{border:none;background:transparent;padding:0 4px 0 0;font-size:12px;color:var(--mut)}
+.gt{position:relative;overflow:hidden}
+.gm{position:absolute;top:0;bottom:0;border-left:1px solid #e3e8eb;font-size:11px;color:var(--mut);padding:7px 5px;text-transform:capitalize}
+.gtoday{position:absolute;top:0;bottom:0;width:2px;background:#ef4444;opacity:.55;z-index:2}
+.gtl{position:absolute;bottom:0;transform:translateX(-50%);font-size:9px;color:#ef4444;font-weight:700;background:#fafbfc;padding:0 2px;z-index:3}
+.gb{position:absolute;border-radius:5px}
+.gb.proj{top:10px;height:14px;background:#cfe9e5;overflow:hidden}.gb.proj i{display:block;height:100%;background:var(--acc)}
+.gb.mini{top:28px;height:6px;opacity:.9}
+.gb.fase{top:10px;height:14px}
+.gstart{position:absolute;top:6px;transform:translateX(-50%);color:var(--dec);font-size:16px;z-index:3;line-height:1}.gstart span{position:absolute;left:12px;top:2px;font-size:10px;white-space:nowrap;color:var(--dec);font-weight:600}
+.gnd{position:absolute;left:10px;top:14px;font-size:11px;color:#b0bac1;font-style:italic}
+.gdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+table.hmt{width:100%;border-collapse:collapse;font-size:13px}table.hmt th{font-size:11px;color:var(--mut);text-align:left;padding:6px;border-bottom:1px solid var(--line)}
+table.hmt td{padding:8px 6px;border-bottom:1px solid #eef1f3}.hm{text-align:center!important;width:9%}td.hm{font-weight:700;border-radius:4px}td.hm.late{background:#fde8e8;color:#b91c1c}td.hm.nd{color:var(--mut);font-weight:500}
+@media(max-width:1100px){.cards.k6{grid-template-columns:repeat(3,1fr)}.pgrid{grid-template-columns:1fr}}
+@media(max-width:900px){.shell{grid-template-columns:minmax(0,1fr)}
+ .fases{grid-template-columns:repeat(2,minmax(0,1fr))!important}.hero{flex-wrap:wrap}.fatual{margin-left:0}.mgrid{grid-template-columns:minmax(0,1fr)}.dgrid{grid-template-columns:1fr 1fr}.kgrid{grid-template-columns:1fr 1fr}#side{border-right:none;border-bottom:1px solid var(--line)}
+ .menubtn{display:inline-flex}.menu{display:none;position:static}.menu.aberto{display:flex}
+ .gr{grid-template-columns:120px minmax(0,1fr)}.panel{padding:14px}.pb{grid-template-columns:110px 1fr 34px}.cards.k6{grid-template-columns:repeat(2,1fr)}
+ main{padding:12px!important}}
+@media(max-width:560px){.fases{grid-template-columns:minmax(0,1fr)!important}.dgrid{grid-template-columns:1fr}}
 .fpanel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:-6px 0 16px}
 .fpanel h3 select{font-size:13px;font-weight:500;padding:5px 8px}
 .fpanel h3{margin:0;font-size:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -259,17 +309,13 @@ details>summary{cursor:pointer;font-weight:600}
 </head>
 <body>
 <header>
+ <button class="menubtn" data-act="menu" title="Menu">☰</button>
  <h1>Projetos de Implantação · Klingo</h1>
- <select id="selProj" title="Projeto aberto"></select>
- <button data-act="proj-new">+ Novo projeto</button>
- <button data-act="proj-dup">Duplicar</button>
- <button data-act="proj-del" class="danger" id="btnDel">Excluir</button>
  <span class="st" id="st"></span>
  <span id="userbox"></span>
 </header>
-<nav id="tabs"></nav>
-<main id="app"></main>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.1</footer>
+<div class="shell"><aside id="side"></aside><main id="app"></main></div>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.2</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div class="toast" id="toast"></div>
@@ -850,18 +896,24 @@ function imprimir(){const r=relatorio();let h=`<div class="k">PROJETO DE IMPLANT
  $("print").innerHTML=h;setTimeout(()=>window.print(),50)}
 
 /* ============ TELAS ============ */
-let tab="mapa",gestSub="trilha",faseVista=null,filtroTr="todas",trOpen=new Set(),sel=null,delArm=false,filtroAd="todos";
+let tab="painel",menuAberto=false,ganttAberto=new Set(),gestSub="trilha",faseVista=null,filtroTr="todas",trOpen=new Set(),sel=null,delArm=false,filtroAd="todos";
 function render(){
  const p=P();
- $("selProj").innerHTML=S.projetos.slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}</option>`).join("");
- $("btnDel").textContent=delArm?"Confirmar exclusão":"Excluir";
  $("userbox").innerHTML=USER?`<span class="ubox" title="${esc(USER.email||"")}">👤 ${esc(nomeU(MEU)||(USER.email||"").split("@")[0])}${ehGestor()?" · gestor":""}</span><button class="sm" data-act="sair">Sair</button>`:"";
- const T=totais();const at=T.al+T.gaps;
- $("tabs").innerHTML=[["mapa","🗺 Mapa do projeto"],["gest","✏️ Gestão do projeto"],["docs","Documentos e IA"],["perg","Fluxo: perguntas"],["visual","Fluxo: visual"],["ader","Aderência"+(T.gaps?` <span class="badge">${T.gaps}</span>`:"")],["aud","Auditoria"],...(ehGestor()?[["carga","👥 Carga da equipe"]]:[]),["aten","Pontos de atenção"+((at+pendenciasTrilha(p).length)?` <span class="badge">${at+pendenciasTrilha(p).length}</span>`:"")],["exp","Exportar"]]
-  .map(([k,l])=>`<button data-act="tab" data-arg="${k}" class="${tab===k?"on":""}">${l}</button>`).join("");
- if(tab==="carga"&&!ehGestor())tab="mapa";
+ const T=totais();const at=T.al+T.gaps+pendenciasTrilha(p).length;
+ const it=(k,ic,l,b)=>`<button class="mi ${tab===k?"on":""}" data-act="tab" data-arg="${k}"><span class="mic2">${ic}</span><span class="ml">${l}</span>${b?`<span class="badge">${b}</span>`:""}</button>`;
+ $("side").innerHTML=`<nav class="menu ${menuAberto?"aberto":""}">
+  ${it("painel","📊",ehGestor()||!USER?"Painel gerencial":"Meu painel")}
+  <div class="mg">Projeto</div>
+  <select id="selProj" title="Projeto aberto">${S.projetos.slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}</option>`).join("")}</select>
+  <div class="pbtns"><button class="sm" data-act="proj-new" title="Novo projeto">+ Novo</button><button class="sm" data-act="proj-dup">Duplicar</button><button class="sm danger" data-act="proj-del">${delArm?"Confirmar":"Excluir"}</button></div>
+  ${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
+  ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
+  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}
+ </nav>`;
+ if(tab==="carga")tab="painel";
  if(!sel||!p.etapas.some(e=>e.id===sel))sel=(ativas(p)[0]||p.etapas[0]||{}).id;
- $("app").innerHTML={mapa:rMapa,gest:rGest,docs:rDocs,perg:rPerg,visual:rVisual,ader:rAder,aud:rAud,carga:rCarga,aten:rAten,exp:rExp}[tab]();
+ $("app").innerHTML=({painel:rPainel,mapa:rMapa,gest:rGest,docs:rDocs,perg:rPerg,visual:rVisual,ader:rAder,aud:rAud,aten:rAten,exp:rExp}[tab]||rPainel)();
  setSt();
 }
 function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=pendenciasTrilha(p);
@@ -1070,13 +1122,82 @@ function rAud(){const p=P(),A=p.auditInfo,R=resumoAud(p);let n=0;
  <div class="panel" style="padding:0;overflow-x:auto"><table class="au"><thead><tr><th style="width:44px">Nº</th><th style="width:24%">Item de verificação</th><th>Critério de aceite</th><th style="width:150px">Validado?</th><th style="width:24%">Observações</th></tr></thead><tbody>${rows}</tbody></table></div>`}
 function addDias(n){const d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function cargaEquipe(){const hoje=hojeISO(),em7=addDias(7),em30=addDias(30);
- const reg=u=>({u,proj:[],ab:[],em:0,atr:0,pc:0,v7:0,starts:[]});
- const P_=EQUIPE.map(reg),sem=reg({id:"",nome:"Sem responsável"});
+ const reg=u=>({u,proj:[],ab:[],em:0,ar:0,atr:0,pc:0,v7:0,starts:[]});
+ let base=EQUIPE.slice();
+ if(!base.length){const nomes=new Map();S.projetos.forEach(p=>TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{const n=String(a.rw||"").trim();if(n&&!nomes.has(normT(n)))nomes.set(normT(n),{id:"txt:"+normT(n),nome:n})})));base=[...nomes.values()]}
+ const P_=base.map(reg),sem=reg({id:"",nome:"Sem responsável"});
  S.projetos.forEach(p=>{const membrosP=[p.owner,...(p.membros||[])];
   P_.forEach(x=>{if(membrosP.includes(x.u.id)){x.proj.push(p);if(p.info.start&&p.info.start>=hoje&&p.info.start<=em30)x.starts.push(p)}});
-  TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{if(a.st==="CONCLUÍDO"||a.st==="NÃO APLICAR")return;const u=respDe(a);const alvo=u?P_.find(x=>x.u.id===u.id):sem;if(!alvo)return;
-   alvo.ab.push({p,f:f.id,a});if(a.st==="EM ANDAMENTO")alvo.em++;if(a.st==="PENDENTE CLIENTE")alvo.pc++;if(atrasada(a))alvo.atr++;else if(a.fim&&a.fim>=hoje&&a.fim<=em7)alvo.v7++}))});
+  TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{if(a.st==="CONCLUÍDO"||a.st==="NÃO APLICAR")return;const u=respDe(a);let alvo=u?P_.find(x=>x.u.id===u.id):null;if(!alvo&&!EQUIPE.length&&a.rw)alvo=P_.find(x=>x.u.id==="txt:"+normT(a.rw));if(!alvo)alvo=sem;
+   alvo.ab.push({p,f:f.id,a});if(atrasada(a))alvo.atr++;else if(a.st==="PENDENTE CLIENTE")alvo.pc++;else if(a.st==="EM ANDAMENTO")alvo.em++;else alvo.ar++;if(!atrasada(a)&&a.fim&&a.fim>=hoje&&a.fim<=em7)alvo.v7++}))});
  return{pessoas:P_,sem}}
+const dt=s=>new Date(s+"T00:00:00");
+const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+function spansProjeto(p){const fases=[];TRILHA.filter(f=>f.fase).forEach(f=>{const L=(p.trilha[f.id]||[]).filter(x=>x.st!=="NÃO APLICAR");let a=null,b=null;
+  L.forEach(x=>{const i=x.ini||x.fim,e=x.fim||x.ini;if(i&&(!a||i<a))a=i;if(e&&(!b||e>b))b=e});if(a&&b){const st=statusFase(p,f.id);fases.push({f:f.id,a,b,st,late:L.some(atrasada)})}});
+ let a=p.info.kickoff||(fases.length?fases.reduce((m,x)=>x.a<m?x.a:m,fases[0].a):""),b=p.info.start||(fases.length?fases.reduce((m,x)=>x.b>m?x.b:m,fases[0].b):"");
+ if(a&&b&&b<a)[a,b]=[b,a];return{a,b,fases}}
+function progressoProjeto(p){let t=0,o=0;TRILHA.forEach(f=>{const st=statusFase(p,f.id);t+=st.tot;o+=st.ok});return t?Math.round(o/t*100):0}
+function rGantt(){const hoje=hojeISO();const rows=S.projetos.map(p=>({p,...spansProjeto(p)}));
+ const datas=[];rows.forEach(r=>{if(r.a)datas.push(r.a);if(r.b)datas.push(r.b);r.fases.forEach(x=>{datas.push(x.a,x.b)})});datas.push(hoje);
+ let ini=datas.reduce((m,x)=>x<m?x:m),fim=datas.reduce((m,x)=>x>m?x:m);
+ let d0=dt(ini);d0.setDate(1);let d1=dt(fim);d1=new Date(d1.getFullYear(),d1.getMonth()+1,1);
+ if((d1-d0)/864e5<90)d1=new Date(d0.getFullYear(),d0.getMonth()+3,1);
+ const tot=(d1-d0)/864e5,pos=s=>Math.max(0,Math.min(100,(dt(s)-d0)/864e5/tot*100));
+ let meses="";for(let m=new Date(d0);m<d1;m=new Date(m.getFullYear(),m.getMonth()+1,1)){const nx=new Date(m.getFullYear(),m.getMonth()+1,1);meses+=`<div class="gm" style="left:${(m-d0)/864e5/tot*100}%;width:${(nx-m)/864e5/tot*100}%">${MES[m.getMonth()]}${m.getMonth()===0||+m===+d0?" "+String(m.getFullYear()).slice(2):""}</div>`}
+ const hojeL=`<div class="gtoday" style="left:${pos(hoje)}%"></div>`;
+ const COR={g:"#16a34a",y:"#eab308",r:"#dc2626",n:"#9aa5ad"};
+ const barra=(a,b,cls,txt,cor)=>a&&b?`<div class="gb ${cls}" style="left:${pos(a)}%;width:${Math.max(0.8,pos(b)-pos(a))}%;${cor?`background:${cor}`:""}" title="${esc(txt)}"></div>`:"";
+ let h="";rows.sort((x,y)=>String(x.b||"9999").localeCompare(String(y.b||"9999"))).forEach(r=>{const p=r.p,ab=ganttAberto.has(p.id),pc=progressoProjeto(p),dono=USER&&p.owner?nomeU(pessoaPorId(p.owner)):"";
+  const semData=!r.a&&!r.b&&!r.fases.length;
+  h+=`<div class="gr"><div class="gl"><button class="gx" data-act="gantt-ab" data-arg="${p.id}" ${r.fases.length?"":"disabled"}>${r.fases.length?(ab?"▾":"▸"):"·"}</button>
+   <a href="#" data-act="abrir-proj" data-arg="${p.id}"><b>${esc(p.nome)}</b></a><div class="gs">${esc((CURTO[p.info.fase]||["",""])[1])} · ${pc}%${dono?" · "+esc(dono):""}</div></div>
+   <div class="gt">${hojeL}${semData?`<div class="gnd">Sem datas: defina kickoff, Start ou prazos da trilha</div>`:""}
+    ${r.a&&r.b?`<div class="gb proj" style="left:${pos(r.a)}%;width:${Math.max(0.8,pos(r.b)-pos(r.a))}%"><i style="width:${pc}%"></i></div>`:""}
+    ${!ab?r.fases.map(x=>barra(x.a,x.b,"mini",faseNome(x.f),x.late?COR.r:COR[x.st.c])).join(""):""}
+    ${p.info.start?`<div class="gstart" style="left:${pos(p.info.start)}%" title="Start ${fmtData(p.info.start)}">◆<span>Start ${fmtData(p.info.start).slice(0,5)}</span></div>`:""}</div></div>`;
+  if(ab)r.fases.forEach(x=>{h+=`<div class="gr sub"><div class="gl"><span class="gdot" style="background:${x.late?COR.r:COR[x.st.c]}"></span>${esc(faseNome(x.f))}<div class="gs">${x.st.pc}% · ${fmtData(x.a)} → ${fmtData(x.b)}${x.late?" · atrasada":""}</div></div>
+   <div class="gt">${hojeL}${barra(x.a,x.b,"fase",faseNome(x.f),x.late?COR.r:COR[x.st.c])}</div></div>`})});
+ return `<div class="gantt"><div class="gr head"><div class="gl"><b>Projeto</b></div><div class="gt">${meses}${hojeL}<div class="gtl" style="left:${pos(hoje)}%">hoje</div></div></div>${h}</div>
+ <div class="legend" style="margin-top:8px"><span><i class="lg" style="background:#cfe9e5"></i> duração do projeto (kickoff → Start), com avanço da trilha</span><span><i class="lg" style="background:#16a34a"></i> fase concluída</span><span><i class="lg" style="background:#eab308"></i> em andamento</span><span><i class="lg" style="background:#dc2626"></i> pendente/atrasada</span><span>◆ Start</span></div>`}
+function rCargaSemanal(C){const seg=d=>{const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);x.setHours(0,0,0,0);return x};
+ const s0=seg(new Date());const sem=[...Array(8)].map((_,i)=>{const a=new Date(s0);a.setDate(a.getDate()+7*i);const b=new Date(a);b.setDate(b.getDate()+6);return{a,b}});
+ const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+ const pessoas=[...C.pessoas,...(C.sem.ab.length?[C.sem]:[])];let max=1;
+ const M=pessoas.map(x=>{const atr=x.ab.filter(y=>atrasada(y.a)).length,sd=x.ab.filter(y=>!y.a.fim).length;const c=sem.map(w=>x.ab.filter(y=>y.a.fim&&!atrasada(y.a)&&y.a.fim>=iso(w.a)&&y.a.fim<=iso(w.b)).length);c.forEach(v=>max=Math.max(max,v));return{x,atr,sd,c}});
+ const cel=(v,cls)=>`<td class="hm ${cls||""}" style="${v&&!cls?`background:rgba(15,124,116,${0.12+0.78*v/max});color:${v/max>0.55?"#fff":"inherit"}`:""}">${v||""}</td>`;
+ return `<div style="overflow-x:auto"><table class="hmt"><thead><tr><th>Pessoa</th><th class="hm">Atrasadas</th>${sem.map((w,i)=>`<th class="hm">${i===0?"Esta semana":String(w.a.getDate()).padStart(2,"0")+"/"+String(w.a.getMonth()+1).padStart(2,"0")}</th>`).join("")}<th class="hm">Sem prazo</th></tr></thead>
+ <tbody>${M.map(r=>`<tr><td><b>${esc(nomeU(r.x.u)||r.x.u.nome)}</b></td>${cel(r.atr,r.atr?"late":"")}${r.c.map(v=>cel(v)).join("")}<td class="hm nd">${r.sd||""}</td></tr>`).join("")}</tbody></table></div>
+ <p class="hint">Atividades em aberto da trilha pelo fim previsto. Quanto mais escuro, mais entregas na semana.</p>`}
+function rPainel(){const C=cargaEquipe(),hoje=hojeISO(),em30=addDias(30);
+ const pessoas=[...C.pessoas,...(C.sem.ab.length?[C.sem]:[])];
+ const tot=pessoas.reduce((a,x)=>({ab:a.ab+x.ab.length,atr:a.atr+x.atr,pc:a.pc+x.pc}),{ab:0,atr:0,pc:0});
+ const ativos=S.projetos.filter(p=>p.info.fase!=="f7"||statusFase(p,"f7").c!=="g");
+ const starts=S.projetos.filter(p=>p.info.start&&p.info.start>=hoje).sort((a,b)=>a.info.start.localeCompare(b.info.start));
+ const media=S.projetos.length?Math.round(S.projetos.reduce((a,p)=>a+progressoProjeto(p),0)/S.projetos.length):0;
+ const max=Math.max(1,...C.pessoas.map(x=>x.ab.length));
+ const barras=pessoas.length?pessoas.map(x=>{const id=x.u.id||"__sem",ab=cargaAberta===id;const seg=(n,c,l)=>n?`<i style="width:${Math.min(100,n/max*100)}%;background:${c}" title="${l}: ${n}"></i>`:"";
+   let h=`<div class="pb ${ab?"open":""}" data-act="carga-ab" data-arg="${id}"><div class="pn"><b>${esc(nomeU(x.u)||x.u.nome)}</b><span>${x.u.id&&!String(x.u.id).startsWith("txt:")?`${x.proj.length} projeto${x.proj.length===1?"":"s"}`:""}</span></div>
+    <div class="pbar2">${seg(x.atr,"#dc2626","Atrasadas")}${seg(x.pc,"#f59e0b","Pendente cliente")}${seg(x.em,"#eab308","Em andamento")}${seg(x.ar,"#b8c4cc","A realizar")}</div><div class="pt">${x.ab.length}</div></div>`;
+   if(ab){const L=x.ab.slice().sort((a,b)=>(atrasada(b.a)-atrasada(a.a))||String(a.a.fim||"9").localeCompare(String(b.a.fim||"9")));
+    h+=`<div class="pdet" style="overflow-x:auto">${L.length?`<table class="cgl"><tr><th>Projeto</th><th>Fase</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th></th></tr>${L.slice(0,60).map(({p,f,a})=>`<tr class="${atrasada(a)?"late":""}"><td>${esc(p.nome)}</td><td>${esc((CURTO[f]||["",f])[1])}</td><td>${esc((a.cod?a.cod+" · ":"")+a.t)}</td><td><span class="ss ss-${stSlug(a.st)}" style="padding:2px 6px;border-radius:6px;font-size:11px">${esc(a.st)}</span></td><td>${a.fim?fmtData(a.fim)+(atrasada(a)?" ⚠":""):"—"}</td><td><button class="sm" data-act="abrir-ativ" data-arg="${p.id}|${f}">Abrir</button></td></tr>`).join("")}</table>${L.length>60?`<p class="hint">Mostrando 60 de ${L.length}.</p>`:""}`:`<p class="hint">Nenhuma atividade em aberto.</p>`}</div>`}
+   return h}).join(""):`<p class="hint">Nenhuma atividade com responsável ainda. Defina o "Responsável Wisetech" nas atividades da trilha.</p>`;
+ const titulo=ehGestor()||!USER?"Painel gerencial":"Meu painel";
+ return `<div class="ph"><div><h2 style="margin:0">${titulo}</h2><div class="hint" style="margin-top:2px">${ehGestor()?"Todos os projetos e a carga de cada pessoa da equipe":USER?"Seus projetos e suas atividades":"Projetos deste computador"} · ${fmtData(hoje)}</div></div></div>
+ <div class="cards k6">
+  <div class="kpi"><div class="n">${ativos.length}</div><div class="l">projetos ativos</div></div>
+  <div class="kpi"><div class="n">${tot.ab}</div><div class="l">atividades em aberto</div></div>
+  <div class="kpi"><div class="n" style="color:${tot.atr?"#b91c1c":"inherit"}">${tot.atr}</div><div class="l">atrasadas</div></div>
+  <div class="kpi"><div class="n" style="color:${tot.pc?"#b45309":"inherit"}">${tot.pc}</div><div class="l">pendentes do cliente</div></div>
+  <div class="kpi"><div class="n">${starts.filter(p=>p.info.start<=em30).length}</div><div class="l">Starts nos próximos 30 dias</div></div>
+  <div class="kpi"><div class="n">${media}%</div><div class="l">avanço médio da trilha</div></div></div>
+ <div class="pgrid">
+  <div class="panel" style="margin:0"><div class="ptitle"><h3>Carga por pessoa</h3><span class="legend" style="margin:0"><span><i class="lg" style="background:#dc2626"></i>atrasadas</span><span><i class="lg" style="background:#f59e0b"></i>pend. cliente</span><span><i class="lg" style="background:#eab308"></i>em andamento</span><span><i class="lg" style="background:#b8c4cc"></i>a realizar</span></span></div>${barras}<p class="hint">Clique numa pessoa para ver as atividades.</p></div>
+  <div class="panel" style="margin:0"><div class="ptitle"><h3>Próximos Starts</h3></div>${starts.length?starts.slice(0,8).map(p=>{const d=Math.ceil((dt(p.info.start)-dt(hoje))/864e5);return `<div class="sx" data-act="abrir-proj" data-arg="${p.id}"><div class="sd2"><b>${fmtData(p.info.start).slice(0,5)}</b><span>${d===0?"hoje":d+" dia"+(d===1?"":"s")}</span></div><div><b>${esc(p.nome)}</b><div class="hint" style="margin:0">${esc(faseNome(p.info.fase))} · ${progressoProjeto(p)}% da trilha</div></div></div>`}).join(""):`<p class="hint">Nenhum Start agendado. Defina a previsão do Start em Gestão do projeto.</p>`}</div></div>
+ <div class="panel"><div class="ptitle"><h3>Cronograma dos projetos (Gantt)</h3><span class="hint" style="margin:0">Clique em ▸ para abrir as fases · no nome para abrir o projeto</span></div>${rGantt()}</div>
+ <div class="panel"><div class="ptitle"><h3>Carga semanal · próximas 8 semanas</h3></div>${rCargaSemanal(C)}</div>
+ ${ehGestor()?`<div class="panel"><h3 style="margin:0 0 4px">Equipe</h3><p class="hint" style="font-size:13px;margin-top:0">Todos que criaram conta no app. Gestores veem e editam todos os projetos.</p>
+ <table class="cgl"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`:""}`}
 function rCarga(){if(!ehGestor())return"";const C=cargaEquipe(),hoje=hojeISO();
  const maxAb=Math.max(1,...C.pessoas.map(x=>x.ab.length));
  const linha=(x,i)=>{const ab=cargaAberta===(x.u.id||"__sem");const nivel=x.atr?"r":x.ab.length>maxAb*0.66?"y":"g";
@@ -1141,7 +1262,10 @@ document.addEventListener("click",async ev=>{
   return}
  const p=P();if(act!=="proj-del"&&delArm){delArm=false}
  switch(act){
-  case"tab":tab=arg;break;
+  case"tab":tab=arg;menuAberto=false;break;
+  case"menu":menuAberto=!menuAberto;break;
+  case"gantt-ab":ganttAberto.has(arg)?ganttAberto.delete(arg):ganttAberto.add(arg);break;
+  case"abrir-proj":S.cur=arg;tab="mapa";sel=null;faseVista=null;persist();break;
   case"fase":faseVista=arg;tab="gest";gestSub="trilha";filtroTr="todas";break;
   case"editar":tab="gest";gestSub=arg;if(arg==="trilha"&&!faseVista)faseVista=p.info.fase;break;
   case"fase-atual":p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
@@ -1189,7 +1313,7 @@ document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
  else if(d.cfg){cfg[d.cfg]=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify(cfg))}catch(e){}const bt=document.querySelector('[data-act="api-run"]');if(bt&&!iaBusy)bt.disabled=!cfg.key}
 });
 document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
- if(t.id==="selProj"){S.cur=t.value;sel=null;iaMsg=null;delArm=false;tab="mapa";persist();render();return}
+ if(t.id==="selProj"){S.cur=t.value;sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
  if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
  if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
  if(d.bind&&t.tagName==="SELECT"||d.bind&&t.type==="date"){render();return}
@@ -1278,7 +1402,7 @@ async function entrou(user){
  const locais=legado&&Array.isArray(legado.projetos)?legado.projetos.filter(x=>temConteudoProj(x)&&!lista.some(y=>y.id===x.id)):[];
  lista.forEach(x=>{if(!x.owner)x.owner=USER.id;if(!x.membros)x.membros=[]});
  if(!lista.length){const n=novoProjeto("Meu primeiro projeto");S.projetos.push(n);S.cur=n.id;if(!locais.length)marcar(n.id)}
- tab="mapa";sel=null;persist();render();if(sync.dirty.size||sync.del.size)enviarNuvem();
+ tab="painel";sel=null;persist();render();if(sync.dirty.size||sync.del.size)enviarNuvem();
  if(locais.length&&!localStorage.getItem("ppi_migrado_"+USER.id))mostrarMigracao(locais);else if(MEU&&!MEU.nome)pedirNome()}
 function temConteudoProj(p){try{normaliza(p);return !!(p.info.cliente||Object.values(p.docs).some(Boolean)||p.aderencia.length||p.etapas.some(e=>Object.keys(e.r).length)||TRILHA.some(f=>(p.trilha[f.id]||[]).some(x=>x.st!=="A REALIZAR")))}catch(e){return false}}
 function mostrarMigracao(locais){const L=$("login");L.style.display="flex";
@@ -1303,7 +1427,7 @@ window.addEventListener("focus",()=>atualizarDaNuvem());
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")atualizarDaNuvem()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&$("login").style.display==="flex"&&ev.target.closest&&ev.target.closest("#login")){ev.preventDefault();acaoLogin()}});
 async function sair(){try{if(sync.dirty.size||sync.del.size)await enviarNuvem()}catch(e){}if(sync.dirty.size&&!confirmSair){confirmSair=true;toast("Há alterações ainda não enviadas. Clique em Sair de novo para sair mesmo assim.",4000);return}
- confirmSair=false;try{await SB.auth.signOut()}catch(e){}USER=null;EQUIPE=[];MEU=null;if(tab==="carga")tab="mapa";sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
+ confirmSair=false;try{await SB.auth.signOut()}catch(e){}USER=null;EQUIPE=[];MEU=null;tab="painel";sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
 let confirmSair=false;
 iniciarNuvem();
 </script>
