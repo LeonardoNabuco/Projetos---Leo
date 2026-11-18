@@ -166,6 +166,21 @@ table.hmt{table-layout:fixed}table.hmt th:first-child,table.hmt td:first-child{w
  table.hmt{font-size:11px}table.hmt th,table.hmt td{padding:5px 2px!important}table.hmt th{font-size:9px;line-height:1.1;overflow-wrap:anywhere;vertical-align:bottom}
  .step .sn{font-size:10.5px;overflow-wrap:normal;word-break:normal;hyphens:auto}
  .segbar{padding:10px}.sgv{font-size:17px}.sgo{font-size:11px;padding:5px 9px}}
+.ault{color:#64748b}.ahist{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:8px}
+.hlg{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12px;padding:3px 0;border-bottom:1px solid #f1f5f9}.lgw{color:var(--mut);white-space:nowrap}.lgn{font-weight:600}.lgc{overflow-wrap:anywhere}.lgc s,.hlg s{color:#94a3b8}
+.lgd{font-size:12px;font-weight:800;color:var(--acc);text-transform:uppercase;margin:14px 0 4px;border-bottom:2px solid var(--acc2);padding-bottom:3px}
+.lgi{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.lgi .lgw{width:44px;flex:none;padding-top:1px}.lgb{min-width:0;flex:1}
+.lgt{color:var(--mut);font-size:12px}.lga{color:var(--ink);overflow-wrap:anywhere}.lnk{border:none;background:none;padding:0;color:#0369a1;text-decoration:underline;cursor:pointer;font:inherit;text-align:left}
+.mcnt{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px;font-size:12px;font-weight:700}.mcnt span{border-radius:999px;padding:2px 10px}.ms{background:#dcfce7;color:#166534}.mn{background:#fee2e2;color:#991b1b}.mi2{background:#f1f5f9;color:#475569}
+.mgr{margin-bottom:10px}.mgt{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--mut);letter-spacing:.04em;margin:6px 0}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:8px}
+.mod{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-left:4px solid #cbd5e1;border-radius:10px;padding:7px 8px 7px 10px;background:#fff}
+.mod.m-s{border-left-color:#16a34a}.mod.m-n{border-left-color:#dc2626;background:#fef7f7}
+.mdn{flex:1;min-width:0;font-size:13px;font-weight:600;line-height:1.25}.mdn small{display:block;font-weight:400;color:var(--mut);font-size:11px}
+.mdb{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}.mdb button{border:none;border-radius:0;padding:4px 9px;font-size:12px;font-weight:700;background:#fff;color:var(--mut)}
+.mdb button+button{border-left:1px solid var(--line)}.m-s .mdb button.on{background:#16a34a;color:#fff}.m-n .mdb button.on{background:#dc2626;color:#fff}.m-i .mdb button.on{background:#e2e8f0;color:var(--ink)}
+.mapt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:18px 0 10px;cursor:pointer;flex-wrap:wrap}
+.mapt b{font-size:15px}.mapt .mtc{width:24px;height:24px;border-radius:6px;background:var(--acc2);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800}.mapt.on{border-color:var(--acc)}
 .vazio2{text-align:center;padding:24px;color:var(--ink);border:1px dashed var(--line);border-radius:10px;margin-bottom:12px}
 @media(max-width:700px){.adet .w2{grid-column:auto}.actl{width:100%}.fl{flex:1 1 140px}.fl select.ss,.fl select[data-tr="rwId"],.fl input[data-tr="rw"],.fl input[type=date]{width:100%}.amais{flex:1 1 100%}}
 .eq{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -409,7 +424,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 2026-11-18.8</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.10.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -438,6 +453,50 @@ const AREAS=[
  {id:"lab",l:"Laboratório",c:"#1d4ed8",d:"Coleta, área técnica (KLIS), amostras, apoios, interfaces e portal de resultados"}];
 const AREA_IDS=AREAS.map(a=>a.id);
 const areaDe=id=>AREAS.find(a=>a.id===id)||AREAS[0];
+/* Módulos do Klingo/KLIS: o projeto técnico informa se cada módulo foi contratado (sim/não).
+   Módulo "não" → todas as atividades da trilha ligadas a ele vão como "não aplicar" (e voltam se o módulo passar a "sim"). */
+const MODULOS=[
+ {id:"callcenter",l:"Call Center",g:"Atendimento",re:/call ?center|^agenda$|agendas compartilhadas|bloqueio de agenda|feriados|teto de atendimento|or[çc]amento|reagendar|marca[çc][ãa]o para/i},
+ {id:"recepcao",l:"Recepção",g:"Atendimento",re:/recep[çc](ão|ões)|alçadas de desconto|motivos de cancelamento/i},
+ {id:"totem",l:"Totem de check-in",g:"Atendimento",re:/totem/i},
+ {id:"painel",l:"Painel de chamada",g:"Atendimento",re:/pain(el|éis)/i},
+ {id:"consultorio",l:"Consultório / Prontuário",g:"Atendimento",re:/consult[óo]rio|prontu[áa]rio|prescri[çc]|al[ée]rgenos|evolu[çc][ãa]o/i,grp:/^(Prontuário|Consultório|Operação Consultório)$/},
+ {id:"laudos",l:"Laudos",g:"Atendimento",re:/laudo/i,ex:/anamnese/i,naoArea:"lab",grp:/^Laudos$/},
+ {id:"assistencia",l:"Assistência",g:"Atendimento",re:/assist[êe]ncia/i},
+ {id:"vacinas",l:"Vacinas",g:"Atendimento",re:/vacina/i,grp:/^Vacinas$/},
+ {id:"infusao",l:"Infusão",g:"Atendimento",re:/infus[ãa]o/i},
+ {id:"internacao",l:"Internação",g:"Atendimento",re:/interna[çc][ãa]o/i},
+ {id:"centrocir",l:"Centro Cirúrgico",g:"Atendimento",re:/centros? cir[úu]rgic/i},
+ {id:"pesquisa",l:"Pesquisa Clínica",g:"Atendimento",re:/pesquisa cl[íi]nica/i},
+ {id:"escala",l:"Escala",g:"Atendimento",re:/m[óo]dulo escala/i},
+ {id:"crm",l:"CRM",g:"Relacionamento",re:/\bcrm\b|leads|cuidado coordenado|retorno programado|capta[çc][ãa]o de requisi|contato com profissional solicitante/i,grp:/^CRM$/},
+ {id:"nps",l:"NPS / Enquetes",g:"Relacionamento",re:/enquete|\bnps\b/i},
+ {id:"mensageria",l:"Mensageria (confirmação / lembrete)",g:"Relacionamento",re:/mensageria|envio (programado )?de mensagem/i},
+ {id:"pacs",l:"Integração PACS",g:"Integrações",re:/\bpacs\b/i},
+ {id:"faturamento",l:"Faturamento (convênios / TISS)",g:"Administrativo",area:"fat"},
+ {id:"autorizacoes",l:"Autorizações",g:"Administrativo",re:/m[óo]dulo autoriza[çc][õo]es/i},
+ {id:"financeiro",l:"Financeiro",g:"Administrativo",area:"fin"},
+ {id:"repasse",l:"Repasse médico",g:"Administrativo",re:/m[óo]dulo repasse|rateio|repasse m[ée]dico/i},
+ {id:"nfe",l:"Nota fiscal (NF-e / NFS-e)",g:"Administrativo",re:/nota fiscal|nf-e/i},
+ {id:"contabilidade",l:"Contabilidade",g:"Administrativo",re:/contabilidade/i},
+ {id:"suprimentos",l:"Suprimentos / Estoque",g:"Administrativo",area:"sup"},
+ {id:"relatorios",l:"Relatórios",g:"Administrativo",re:/m[óo]dulo relat[óo]rios/i},
+ {id:"laboratorio",l:"Laboratório (coleta no Klingo)",g:"Laboratório",area:"lab"},
+ {id:"klis",l:"KLIS (área técnica do laboratório)",g:"Laboratório",re:/\bklis\b|folhas? de trabalho|bancadas|bact[ée]rias|antibiograma|equipe t[ée]cnica|[áa]rea t[ée]cnica|triagem de amostras/i,grp:/^KLIS/},
+ {id:"apoio",l:"Laboratórios de apoio (B2B)",g:"Laboratório",re:/apoio|apoiados|\bb2b\b/i},
+ {id:"interfaces",l:"Interfaceamento de equipamentos",g:"Laboratório",re:/interface|interfacear/i},
+ {id:"portal",l:"Portal de resultados",g:"Laboratório",re:/portal/i}];
+const modDe=id=>MODULOS.find(m=>m.id===id);
+function modCasa(m,x){if(m.area)return x.a===m.area;if(m.naoArea&&x.a===m.naoArea)return false;const t=String(x.t||"").replace(/\([^)]*\)/g," ");if(m.ex&&m.ex.test(t))return false;return (m.grp&&m.grp.test(x.g||""))||m.re.test(t)}
+const modAtivs=(p,m)=>{const out=[];TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(modCasa(m,x))out.push({x,f:f.id})}));return out};
+const MARCA_MOD="Módulo não contratado (projeto técnico): ";
+function aplicarModulos(p,origem){const nao=MODULOS.filter(m=>p.modulos[m.id]===false);let na=0,volta=0;
+ TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{const m=nao.find(mm=>modCasa(mm,x));
+  if(m&&x.st==="A REALIZAR"){x.st="NÃO APLICAR";x.naMod=m.id;x.obs=(x.obs?x.obs+"\n":"")+MARCA_MOD+m.l;na++}
+  else if(!m&&x.naMod&&x.st==="NÃO APLICAR"){x.st="A REALIZAR";x.obs=String(x.obs||"").split("\n").filter(l=>!l.startsWith(MARCA_MOD)).join("\n");delete x.naMod;volta++}
+  else if(!m&&x.naMod)delete x.naMod}));
+ MODULOS.filter(m=>m.area).forEach(m=>{const v=p.modulos[m.id];if(v===false)p.escopo=p.escopo.filter(a=>a!==m.area);else if(v===true&&!p.escopo.includes(m.area))p.escopo=AREA_IDS.filter(a=>a===m.area||p.escopo.includes(a))});
+ return{na,volta}}
 const C_LAB="Cadastrados, vinculados e funcionando no fluxo do laboratório.";
 const TRILHA=[
  {id:"f0",t:"Fase 0 · Kick-off",fase:true,g:[["Abertura do projeto",[
@@ -909,10 +968,10 @@ function novoProjeto(nome){return{id:uid("p"),owner:(typeof USER!=="undefined"&&
  info:{cliente:"",sede:"",unidades:"",tipo:"",esp:"",gestor:"",responsavel:"",lider:"",tecnicos:"",gerente:"",fase:"f0",kickoff:"",start:"",obs:""},
  docs:{tec:null,fluxo:null,ader:null},iaTexto:"",
  etapas:ETAPAS.map(e=>({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:true,r:{},passos:"",nota:""})),
- aderencia:[],tecnico:[],sugestoes:[],trilha:trilhaPadrao(),trilhaV:2,escopo:AREA_IDS.slice(),areaResp:{},audit:{},auditInfo:{parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""}}}
+ aderencia:[],tecnico:[],sugestoes:[],trilha:trilhaPadrao(),trilhaV:2,escopo:AREA_IDS.slice(),areaResp:{},modulos:{},audit:{},auditInfo:{parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""}}}
 function normaliza(p){if(p.escopo===undefined)p.escopo=p.trilha?["ger","clin"]:AREA_IDS.slice();if(p.trilha&&p.trilhaV===undefined)p.trilhaV=1;const n=novoProjeto();for(const k in n)if(p[k]===undefined)p[k]=n[k];p.info=Object.assign(n.info,p.info||{});p.docs=Object.assign({tec:null,fluxo:null,ader:null},p.docs||{});
  delete p.fases;if(!p.trilha)p.trilha=trilhaPadrao();{const pad=trilhaPadrao();TRILHA.forEach(f=>{if(!Array.isArray(p.trilha[f.id]))p.trilha[f.id]=pad[f.id]})}
- migraTrilha(p);if(!p.escopo.includes("ger"))p.escopo.unshift("ger");if(!p.areaResp||typeof p.areaResp!=="object")p.areaResp={};
+ migraTrilha(p);if(!p.escopo.includes("ger"))p.escopo.unshift("ger");if(!p.areaResp||typeof p.areaResp!=="object")p.areaResp={};if(!p.modulos||typeof p.modulos!=="object")p.modulos={};
  if(!p.audit)p.audit={};p.auditInfo=Object.assign({parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""},p.auditInfo||{});
  {const mapa={"Levantamento":"f1","Parametrização":"f2b","Treinamento":"f4","Start":"f6","Pós-Start":"f7"};if(!FASES.includes(p.info.fase))p.info.fase=mapa[p.info.fase]||"f0"}
  ETAPAS.forEach(e=>{if(!p.etapas.some(x=>x.id===e.id))p.etapas.push({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:false,r:{},passos:"",nota:""})});return p}
@@ -1021,7 +1080,7 @@ async function importarDoc(file,kind){
  try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");
   const cort=t.length>70000;if(cort)t=t.slice(0,70000);
   p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};save();
-  toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
+  registrar(p,{tipo:"docs",alvo:DOCS[kind].t,campo:"",rot:"Documento importado",de:"",para:file.name});toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
  }catch(e){const m=e&&e.message;
   iaMsg={err:true,t:m==="formato"?"Formato não suportado. Use Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, CSV ou TXT.":m==="vazio"?"Não encontrei texto nesse arquivo. Se for PDF escaneado (imagem), não dá para ler.":m==="net"?"Para ler PDF e Excel antigo (.xls) o app precisa de internet no momento da importação. Conecte-se e tente de novo, ou salve o arquivo como .xlsx / .docx.":"Não consegui ler esse arquivo. Tente salvar em outro formato (.docx ou .xlsx)."}}
  lendo=null;render();
@@ -1051,6 +1110,9 @@ ${p.iaTexto?`\n=== OBSERVAÇÕES DO GESTOR / IMPLANTADOR ===\n${p.iaTexto}\n`:""
 ${txtProjeto(p)}
 Escopo atual: ${p.escopo.join(", ")}
 
+=== MÓDULOS DO KLINGO / KLIS (id = nome) ===
+${MODULOS.map(m=>`${m.id} = ${m.l}`).join("\n")}
+
 === CATÁLOGO DE PERGUNTAS DO FLUXO CLÍNICO (use exatamente estes ids e os textos exatos das opções) ===
 ${JSON.stringify(catalogo)}
 
@@ -1059,8 +1121,9 @@ ${trilha.join("\n")}
 
 TAREFA:
 1. "projeto": dados do cliente que aparecerem. tipo deve ser um de ${JSON.stringify(TIPOS)} ou "". Datas no formato AAAA-MM-DD ou "". gestor_sistema = pessoa do cliente responsável pelo sistema.
+0. "modulos": o projeto técnico normalmente traz a relação de módulos adquiridos (sim/não, contratado/não contratado, incluso/não incluso na implantação). Para CADA módulo do catálogo acima que o documento mencionar, informe true (adquirido / incluso na implantação) ou false (não adquirido / marcado como "não" / fora da implantação). Não inclua módulos que o documento não menciona.
 2. "escopo": ids das áreas contratadas/necessárias segundo os documentos (sempre inclua "ger"). Ex.: sem laboratório próprio e sem KLIS → não inclua "lab". Se os documentos não permitirem concluir sobre uma área, mantenha-a.
-3. "trilha_nao_aplicar": atividades da lista acima que CLARAMENTE não se aplicam a este cliente (ex.: totem não será usado, não há vacinas, não há PACS, não há internação), com motivo curto. Não liste atividades de áreas que você já deixou fora do escopo. Na dúvida, não inclua.
+3. "trilha_nao_aplicar": além do que já decorre dos módulos não adquiridos (o app marca essas atividades sozinho), atividades da lista acima que CLARAMENTE não se aplicam a este cliente (ex.: totem não será usado, não há vacinas, não há PACS, não há internação), com motivo curto. Não liste atividades de áreas que você já deixou fora do escopo. Na dúvida, não inclua.
 4. "trilha_obs": até 30 atividades em que os documentos trazem informação útil para quem vai executar (quantidades, nomes de sistemas, unidades, convênios, equipamentos, prazos). obs curta.
 5. "respostas": percorra TODAS as etapas e perguntas do fluxo clínico. Marque uma opção sempre que os documentos indicarem a resposta, mesmo com outras palavras. Só deixe sem resposta o que realmente não aparece. Para "uma", um texto; para "varias", uma lista.
 6. "passos": por etapa do fluxo, frases curtas com o que os documentos dizem e não cabe nas opções (no máximo 4 por etapa).
@@ -1070,16 +1133,18 @@ TAREFA:
 10. "sugestoes": 3 a 6 melhorias práticas para este cliente usando os recursos do Klingo. Para o início da operação no sistema use a palavra "Start", nunca "Go-Live".
 
 Responda SOMENTE com um JSON válido e compacto, sem texto antes ou depois, neste formato:
-{"projeto":{"cliente":"","sede":"","unidades":"","tipo":"","especialidades":"","gestor_sistema":"","data_kickoff":"","data_start":""},"escopo":["ger"],"trilha_nao_aplicar":[{"id":"","motivo":""}],"trilha_obs":[{"id":"","obs":""}],"respostas":{"etapa_id":{"pergunta_id":"opção ou [opções]"}},"passos":{"etapa_id":["passo"]},"etapas_nao_aplicaveis":[],"aderencia":[{"processo":"","area":"","etapa_id":"","status":"","obs":""}],"infos_tecnicas":[""],"sugestoes":[""]}`;
+{"projeto":{"cliente":"","sede":"","unidades":"","tipo":"","especialidades":"","gestor_sistema":"","data_kickoff":"","data_start":""},"modulos":{"id_do_modulo":true},"escopo":["ger"],"trilha_nao_aplicar":[{"id":"","motivo":""}],"trilha_obs":[{"id":"","obs":""}],"respostas":{"etapa_id":{"pergunta_id":"opção ou [opções]"}},"passos":{"etapa_id":["passo"]},"etapas_nao_aplicaveis":[],"aderencia":[{"processo":"","area":"","etapa_id":"","status":"","obs":""}],"infos_tecnicas":[""],"sugestoes":[""]}`;
 }
 function lerJsonIA(txt){let t=String(txt||"").trim().replace(/^```(?:json)?/i,"").replace(/```$/,"");const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("json");return JSON.parse(t.slice(a,b+1))}
 function aplicarIA(p,out){
- const n={r:0,p:0,d:0,a:0,na:0,ob:0,e:null,dados:0};const pj=out.projeto||{},I=p.info;
+ const n={r:0,p:0,d:0,a:0,na:0,ob:0,e:null,dados:0,mod:0,modNa:0};const pj=out.projeto||{},I=p.info;
  const set=(k,v,ok=true)=>{if(v&&ok&&!I[k]){I[k]=String(v);n.dados++}};
  set("cliente",pj.cliente);set("sede",pj.sede);set("unidades",pj.unidades);set("tipo",pj.tipo,TIPOS.includes(pj.tipo));set("esp",pj.especialidades);set("gestor",pj.gestor_sistema);
  const dt=/^\d{4}-\d{2}-\d{2}$/;set("kickoff",pj.data_kickoff,dt.test(pj.data_kickoff||""));set("start",pj.data_start,dt.test(pj.data_start||""));
  if(I.cliente&&/^(Novo projeto|Meu primeiro projeto)$/.test(p.nome))p.nome=I.cliente;
  if(Array.isArray(out.escopo)){const e=["ger",...out.escopo.filter(x=>AREA_IDS.includes(x)&&x!=="ger")];if(e.length>1||out.escopo.length){const antes=p.escopo.join();p.escopo=AREA_IDS.filter(x=>e.includes(x));if(antes!==p.escopo.join())n.e=p.escopo}}
+ if(out.modulos&&typeof out.modulos==="object"){Object.entries(out.modulos).forEach(([id,v])=>{if(modDe(id)&&typeof v==="boolean"&&p.modulos[id]===undefined){p.modulos[id]=v;n.mod++}});
+  if(n.mod){const r=aplicarModulos(p);n.modNa=r.na;n.e=p.escopo}}
  const achar=id=>{for(const f of TRILHA){const x=(p.trilha[f.id]||[]).find(y=>y.id===id);if(x)return x}return null};
  (out.trilha_nao_aplicar||[]).forEach(o=>{const x=o&&achar(String(o.id||"").trim());if(x&&x.st==="A REALIZAR"){x.st="NÃO APLICAR";x.obs=(x.obs?x.obs+"\n":"")+"IA: "+String(o.motivo||"não se aplica segundo os documentos");n.na++}});
  (out.trilha_obs||[]).slice(0,40).forEach(o=>{const x=o&&achar(String(o.id||"").trim());const t=String((o&&o.obs)||"").trim();if(x&&t&&!(x.obs||"").includes(t)){x.obs=(x.obs?x.obs+"\n":"")+"IA: "+t;n.ob++}});
@@ -1100,6 +1165,7 @@ function aplicarIA(p,out){
 }
 function resumoIA(n){const partes=[];
  if(n.dados)partes.push(`${n.dados} dado(s) do projeto`);
+ if(n.mod)partes.push(`${n.mod} módulo(s) identificado(s) no projeto técnico${n.modNa?` (${n.modNa} atividade(s) de módulos não adquiridos marcadas como "não aplicar")`:""}`);
  if(n.e)partes.push(`escopo: ${n.e.map(x=>areaDe(x).l).join(", ")}`);
  if(n.na)partes.push(`${n.na} atividade(s) da trilha marcadas como "não aplicar"`);
  if(n.ob)partes.push(`${n.ob} observação(ões) nas atividades`);
@@ -1108,7 +1174,7 @@ function resumoIA(n){const partes=[];
  return partes.join(" · ")}
 function aplicarTexto(txt,p=P(),origem){
  let out;try{out=lerJsonIA(txt)}catch(e){iaMsg={err:true,pid:p.id,t:origem?"A IA respondeu, mas a resposta veio incompleta ou fora do formato. Tente \"Analisar de novo\"; se repetir, use o modo manual.":"Não reconheci a resposta. Copie a resposta inteira do Claude (o bloco que começa com { e termina com })."};render();return false}
- iaUndo={pid:p.id,snap:JSON.stringify(p)};const n=aplicarIA(p,out);
+ iaUndo={pid:p.id,snap:JSON.stringify(p)};const n=aplicarIA(p,out);registrar(p,{tipo:"docs",alvo:"Análise primária com IA",campo:"",rot:"Análise aplicada",de:"",para:resumoIA(n)});
  p.iaAnalise={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:origem||"manual",docs:Object.keys(DOCS).filter(k=>p.docs[k]).map(k=>p.docs[k].nome)};
  p.upd=Date.now();marcar(p.id);clearTimeout(saveT);saveT=setTimeout(persist,300);
  iaMsg={pid:p.id,t:`Análise concluída: ${resumoIA(n)}. Revise em Gestão do projeto (trilha e dados), Fluxo e Aderência.`};
@@ -1250,6 +1316,20 @@ function imprimir(){const r=relatorio();let h=`<div class="k">PROJETO DE IMPLANT
  $("print").innerHTML=h;setTimeout(()=>window.print(),50)}
 
 /* ============ TELAS ============ */
+/* ===== Histórico de alterações (quem, o quê, de → para, quando) ===== */
+const LOG_MAX=4000;
+const ROT_TR={st:"Status",fim:"Prazo",ini:"Início previsto",val:"Validação do cliente",obs:"Observações",crit:"Critério de aceite",ru:"Responsável na unidade",link:"Link de documentos",a:"Área",t:"Descrição",rwId:"Responsável",rw:"Responsável"};
+const ROT_INFO={cliente:"Cliente",sede:"Sede",unidades:"Filiais / unidades",tipo:"Tipo de estabelecimento",esp:"Especialidades",gestor:"Gestor do sistema",responsavel:"Técnico alocado",lider:"Líder técnico",tecnicos:"Técnicos envolvidos",gerente:"Gerente do projeto",fase:"Fase atual",kickoff:"Kickoff",start:"Previsão do Start",obs:"Observações gerais"};
+const quemSou=()=>USER?(nomeU(MEU)||(USER.email||"").split("@")[0]):"Uso local";
+function registrar(p,o){if(!p)return;if(!Array.isArray(p.log))p.log=[];const de=o.de==null?"":String(o.de),para=o.para==null?"":String(o.para);if(o.campo&&de===para)return;
+ p.log.push(Object.assign({id:uid("l"),t:new Date().toISOString(),u:USER?USER.id:"",n:quemSou()},o,{de,para}));if(p.log.length>LOG_MAX)p.log.splice(0,p.log.length-LOG_MAX)}
+const valLog=(campo,v)=>{if(v==null||v==="")return "—";if((campo==="fim"||campo==="ini"||campo==="kickoff"||campo==="start")&&/^\d{4}-\d{2}-\d{2}$/.test(v))return fmtData(v);if(campo==="a")return areaDe(v).l;if(campo==="fase")return faseNome(v);return v};
+const fmtHora=iso=>{const d=new Date(iso);return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"})+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})};
+const valorOrig=new WeakMap();
+document.addEventListener("focusin",ev=>{const t=ev.target;if(t&&(t.tagName==="INPUT"||t.tagName==="TEXTAREA"))valorOrig.set(t,t.value)});
+const acharAtiv=(p,id)=>{for(const f of TRILHA){const x=(p.trilha[f.id]||[]).find(y=>y.id===id);if(x)return{x,f:f.id}}return null};
+function logAtiv(p,x,f,campo,de,para){registrar(p,{tipo:"trilha",ref:x.id,f,a:x.a,alvo:(x.cod?x.cod+" ":"")+x.t,campo,rot:ROT_TR[campo]||campo,de:valLog(campo,de),para:valLog(campo,para)})}
+let mapaAberto=false;try{mapaAberto=localStorage.getItem("ppi_mapa")==="1"}catch(e){}
 let projSel=false;
 let filtroArea="todas";try{filtroArea=localStorage.getItem("ppi_area")||"todas"}catch(e){}
 const setFiltroArea=v=>{filtroArea=v;try{localStorage.setItem("ppi_area",v)}catch(e){}};
@@ -1330,8 +1410,8 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
  <div class="areas">${AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>{let t=0,o=0,pe=0;TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.a!==a.id||x.st==="NÃO APLICAR")return;t++;if(x.st==="CONCLUÍDO")o++;if(x.st==="PENDENTE CLIENTE")pe++}));
   const pc=t?Math.round(o/t*100):0,c=!t?"n":o===t?"g":pc>=20?"y":"r",r=pessoaPorId(p.areaResp[a.id]);
   return `<button class="acard" style="--ac:${a.c}" data-act="ver-area" data-arg="${a.id}"><div class="an"><i></i>${esc(a.l)}</div><div class="ap">${pc}%</div><div class="pbar ${c}"><i style="width:${pc}%"></i></div><div class="cnt">${o} de ${t} concluídas${pe?` · <span style="color:#b91c1c">${pe} pend. cliente</span>`:""}</div><div class="cnt">${r?"👤 "+esc(nomeU(r)):'<span style="color:var(--mut)">Sem responsável da área</span>'}</div></button>`}).join("")}</div>
- <h3 class="sect">Mapa do projeto</h3>
- <div class="map">${col(1,"Entrada",c1)}${col(2,"Projeto",c2)}${col(3,"Fluxo clínico",c3)}${col(4,"Análise",c4)}${col(5,"Entregas",c5)}</div>`}
+ <button class="mapt ${mapaAberto?"on":""}" data-act="mapa-toggle"><span class="mtc">${mapaAberto?"▾":"▸"}</span><b>Mapa do projeto</b><span class="hint" style="margin:0">${mapaAberto?"clique para esconder":"entrada, projeto, fluxo clínico, análise e entregas · clique para ver"}</span></button>
+ ${mapaAberto?`<div class="map">${col(1,"Entrada",c1)}${col(2,"Projeto",c2)}${col(3,"Fluxo clínico",c3)}${col(4,"Análise",c4)}${col(5,"Entregas",c5)}</div>`:""}`}
 /* ===== Segmento de atuação (área) · sempre visível para quem está trabalhando ===== */
 const AREA_IC={ger:"⚙️",clin:"🩺",fat:"🧾",fin:"💰",sup:"📦",lab:"🔬"};
 const segAtual=p=>filtroArea!=="todas"&&p.escopo.includes(filtroArea)?areaDe(filtroArea):null;
@@ -1345,8 +1425,8 @@ function segBar(p,ctx){const A=segAtual(p),mA=minhasAreas(p);
 /* ===== Gestão do projeto ===== */
 const ST_IC={"A REALIZAR":"○","EM ANDAMENTO":"◐","CONCLUÍDO":"✓","PENDENTE CLIENTE":"⏸","NÃO APLICAR":"–"};
 function rGest(){const p=P();const f=FASES.includes(faseVista)||faseVista==="gp"?faseVista:p.info.fase;faseVista=f;
- const sub=`<div class="seg"><button class="${gestSub!=="dados"?"on":""}" data-act="editar" data-arg="trilha">📋 Atividades da trilha</button><button class="${gestSub==="dados"?"on":""}" data-act="editar" data-arg="dados">🏥 Dados, escopo e equipe</button></div>`;
- if(gestSub==="dados")return sub+rDados();
+ const sub=`<div class="seg"><button class="${gestSub==="trilha"?"on":""}" data-act="editar" data-arg="trilha">📋 Atividades da trilha</button><button class="${gestSub==="dados"?"on":""}" data-act="editar" data-arg="dados">🏥 Dados, escopo e equipe</button><button class="${gestSub==="hist"?"on":""}" data-act="editar" data-arg="hist">🕓 Histórico</button></div>`;
+ if(gestSub==="dados")return sub+rDados();if(gestSub==="hist")return sub+rHistorico(p);
  const A=segAtual(p),ar=A?A.id:null;
  const steps=TRILHA.map(x=>{const st=statusFase(p,x.id,ar),[num,nome]=CURTO[x.id]||["",x.t];const vazio=!st.tot&&ar&&!trL(p,x.id).some(y=>y.a===ar);
   return `<button class="step s-${st.c} ${f===x.id?"on":""} ${x.id==="gp"?"gp":""} ${vazio?"vz":""}" data-act="fase" data-arg="${x.id}" title="${esc(x.t)} · ${vazio?"sem atividades desta área":st.l+(st.c!=="n"?" "+st.pc+"%":"")}">
@@ -1366,6 +1446,26 @@ function selResp(x){
  if(!EQUIPE.length)return `<input type="text" data-tr="rw" data-id="${x.id}" value="${esc(x.rw)}" placeholder="Nome">`;
  const u=respDe(x),livre=!u&&x.rw;
  return `<select data-tr="rwId" data-id="${x.id}"><option value="">—</option>${livre?`<option value="__livre" selected>${esc(x.rw)} (texto)</option>`:""}${EQUIPE.map(m=>`<option value="${m.id}" ${u&&u.id===m.id?"selected":""}>${esc(nomeU(m))}</option>`).join("")}</select>`}
+const ultLog=(p,ref)=>{const L=p.log||[];for(let i=L.length-1;i>=0;i--)if(L[i].ref===ref)return L[i];return null};
+const linhaLog=l=>`<div class="hlg"><span class="lgw">${fmtHora(l.t)}</span><span class="lgn">👤 ${esc(l.n)}</span><span class="lgc"><b>${esc(l.rot||l.campo)}</b>${l.de||l.para?`: ${l.de?`<s>${esc(l.de)}</s> → `:""}${esc(l.para||"—")}`:""}</span></div>`;
+function rHistAtiv(p,ref){const L=(p.log||[]).filter(l=>l.ref===ref).slice(-12).reverse();
+ return `<label>Histórico desta atividade</label>${L.length?L.map(linhaLog).join(""):`<div class="hint" style="margin:0">Nenhuma alteração registrada ainda.</div>`}`}
+let logFiltro={pessoa:"",tipo:"",busca:"",lim:150};
+const TIPOS_LOG={trilha:"Trilha",dados:"Dados do projeto",escopo:"Escopo e áreas",equipe:"Equipe",docs:"Documentos e IA",aderencia:"Aderência",auditoria:"Auditoria"};
+function rHistorico(p){const A=segAtual(p);const tudo=(p.log||[]).slice().reverse();
+ const pessoas=[...new Set(tudo.map(l=>l.n))].sort();
+ const bq=normT(logFiltro.busca);
+ const L=tudo.filter(l=>(!A||!l.a||l.a===A.id)&&(!logFiltro.pessoa||l.n===logFiltro.pessoa)&&(!logFiltro.tipo||l.tipo===logFiltro.tipo)&&(!bq||normT([l.alvo,l.rot,l.de,l.para,l.n].join(" ")).includes(bq)));
+ let dia="",h="";L.slice(0,logFiltro.lim).forEach(l=>{const d=fmtData(l.t.slice(0,10));if(d!==dia){dia=d;h+=`<div class="lgd">${d}</div>`}
+  h+=`<div class="lgi"><span class="lgw">${new Date(l.t).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</span><div class="lgb"><div><b>${esc(l.n)}</b> · <span class="lgt">${esc(TIPOS_LOG[l.tipo]||l.tipo)}</span>${l.a&&!A?" "+areaTag(l.a):""}</div>
+   <div class="lga">${l.ref&&l.tipo==="trilha"&&l.f?`<button class="lnk" data-act="log-ir" data-arg="${l.f}|${l.ref}">${esc(l.alvo)}</button>`:esc(l.alvo||"")}</div>
+   <div class="lgc"><b>${esc(l.rot||l.campo)}</b>${l.de||l.para?`: ${l.de?`<s>${esc(l.de)}</s> → `:""}${esc(l.para||"—")}`:""}</div></div></div>`});
+ return segBar(p,"Histórico da área")+`<div class="panel"><h2>Histórico de alterações</h2><p class="hint" style="font-size:13px">Registro automático de quem alterou o quê, com o valor anterior e o novo. Textos são registrados ao sair do campo.</p>
+ <div class="tbar"><select data-logf="pessoa"><option value="">Todas as pessoas</option>${pessoas.map(x=>`<option ${logFiltro.pessoa===x?"selected":""}>${esc(x)}</option>`).join("")}</select>
+ <select data-logf="tipo"><option value="">Tudo</option>${Object.entries(TIPOS_LOG).map(([k,v])=>`<option value="${k}" ${logFiltro.tipo===k?"selected":""}>${v}</option>`).join("")}</select>
+ <input type="search" data-logf="busca" value="${esc(logFiltro.busca)}" placeholder="Buscar atividade, campo ou valor" style="flex:1;min-width:180px"><span class="hint" style="margin:0">${L.length} registro(s)</span></div>
+ ${L.length?h:`<p class="hint">Nenhuma alteração registrada${A||logFiltro.pessoa||logFiltro.tipo||bq?" neste filtro":" ainda"}.</p>`}
+ ${L.length>logFiltro.lim?`<div class="dlrow"><button data-act="log-mais">Mostrar mais (${L.length-logFiltro.lim})</button></div>`:""}</div>`}
 function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
  const LA=trL(p,f).filter(x=>!A||x.a===A.id),st=statusFase(p,f,A?A.id:null);
  const filtros=[["todas","Todas",LA.length],["abertas","Em aberto",LA.filter(x=>x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR").length],["pendente","Pendente cliente",LA.filter(x=>x.st==="PENDENTE CLIENTE").length],["atrasadas","Atrasadas",LA.filter(atrasada).length],["concluidas","Concluídas",LA.filter(x=>x.st==="CONCLUÍDO").length]];
@@ -1376,7 +1476,7 @@ function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
   return `<div class="ativ st-${stSlug(x.st)} ${late?"late":""} ${op?"open":""}">
    <div class="arow">
     <div class="atit"><div class="att">${x.cod?`<span class="acod">${esc(x.cod)}</span>`:""}${esc(x.t)||'<i style="color:var(--mut)">Atividade sem descrição</i>'}</div>
-     <div class="ameta">${!A?areaTag(x.a):""}${x.crit?`<span class="acrit">✓ ${esc(x.crit)}</span>`:""}${late?`<span class="alate">⏰ atrasada</span>`:""}${tem&&!op?`<span class="anote">📝 tem anotações</span>`:""}</div></div>
+     <div class="ameta">${!A?areaTag(x.a):""}${x.crit?`<span class="acrit">✓ ${esc(x.crit)}</span>`:""}${late?`<span class="alate">⏰ atrasada</span>`:""}${tem&&!op?`<span class="anote">📝 tem anotações</span>`:""}${(()=>{const u=ultLog(p,x.id);return u?`<span class="ault" title="${esc(u.rot)}: ${esc(u.de)} → ${esc(u.para)}">✎ ${esc(u.n)} · ${fmtHora(u.t)}</span>`:""})()}</div></div>
     <div class="actl">
      <label class="fl"><span>Status</span><select data-tr="st" data-id="${x.id}" class="ss ss-${stSlug(x.st)}">${ST_TR.map(o=>`<option value="${o}" ${x.st===o?"selected":""}>${ST_IC[o]} ${o.charAt(0)+o.slice(1).toLowerCase()}</option>`).join("")}</select></label>
      <label class="fl"><span>Responsável</span>${selResp(x)}</label>
@@ -1391,7 +1491,8 @@ function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
     <div><label>Responsável / referência na unidade</label><input type="text" data-tr="ru" data-id="${x.id}" value="${esc(x.ru)}"></div>
     <div><label>Link de documentos (vídeos, RAPs...)</label><input type="text" data-tr="link" data-id="${x.id}" value="${esc(x.link)}"></div>
     <div><label>Área de atuação</label><select data-tr="a" data-id="${x.id}">${AREAS.map(a=>`<option value="${a.id}" ${x.a===a.id?"selected":""}>${AREA_IC[a.id]} ${esc(a.l)}</option>`).join("")}</select></div>
-    <div class="adel"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div></div>`:""}</div>`};
+    <div class="adel"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div>
+    <div class="ahist">${rHistAtiv(p,x.id)}</div></div>`:""}</div>`};
  let body="";grupos.forEach(g=>{const its=vis.filter(x=>x.g===g),todos=LA.filter(x=>x.g===g),ok=todos.filter(x=>x.st==="CONCLUÍDO").length,ap=todos.filter(x=>x.st!=="NÃO APLICAR").length;
   body+=`<div class="agrp"><div class="agh"><span>${esc(g)}</span><small>${ok} de ${ap} concluídas</small></div>${its.map(card).join("")}</div>`});
  const nenhuma=!LA.length?`<div class="vazio2"><div style="font-size:28px">${A?AREA_IC[A.id]:"🗂️"}</div><b>Nenhuma atividade ${A?"de "+esc(A.l)+" ":""}nesta fase.</b><div class="hint">Escolha outra fase acima${A?" ou outra área":""}.</div></div>`:!vis.length?`<div class="vazio2"><b>Nenhuma atividade neste filtro.</b></div>`:"";
@@ -1420,7 +1521,7 @@ function salvarRenomear(){const p=P(),novo=(($("rn_nome")||{}).value||"").trim()
  if(e.length){$("rn_err").innerHTML=`<div class="merr">${e.map(esc).join("<br>")}</div>`;$("rn_nome").classList.add("inv");return}
  const antigo=p.nome;
  confirmar({titulo:"Confirmar alteração do nome?",texto:`O projeto <b>${esc(antigo)}</b> passará a se chamar <b>${esc(novo)}</b> para toda a equipe. A alteração fica registrada no histórico do projeto.`,ok:"Confirmar alteração",icone:"✏️"},
-  ()=>{p.renomeacoes=[...(p.renomeacoes||[]),{de:antigo,para:novo,por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()}];p.nome=novo;save();render();toast("Nome do projeto alterado")})}
+  ()=>{p.renomeacoes=[...(p.renomeacoes||[]),{de:antigo,para:novo,por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()}];registrar(p,{tipo:"dados",campo:"nome",rot:"Nome do projeto",alvo:"Dados do projeto",de:antigo,para:novo});p.nome=novo;save();render();toast("Nome do projeto alterado")})}
 function fecharModal(){const m=$("modal");m.style.display="none";m.innerHTML="";m.classList.remove("centro");formModo=null}
 function abrirFormProjeto(modo){formModo=modo;const base=modo==="dup"?P():null,I=base?base.info:{};
  const hoje=hojeISO();const gest=ehGestor()&&EQUIPE.length;const eu=USER?USER.id:"";
@@ -1467,7 +1568,7 @@ function salvarFormProjeto(){const g=id=>(($(id)||{}).value||"").trim();const er
  n.nome=g("np_nome");Object.assign(n.info,{cliente:g("np_cliente"),tipo:g("np_tipo"),sede:g("np_sede"),unidades:g("np_unid"),esp:g("np_esp"),kickoff:g("np_kick"),start:g("np_start"),fase:g("np_fase")||"f0",responsavel:g("np_resp"),lider:g("np_lider"),gerente:g("np_ger"),gestor:g("np_gestor")});
  n.escopo=["ger",...[...document.querySelectorAll(".np_area:checked")].map(x=>x.value).filter(x=>x!=="ger")];
  if(USER){n.owner=g("np_owner")||USER.id;n.membros=[...document.querySelectorAll(".np_mem:checked")].map(x=>x.value).filter(x=>x!==n.owner)}
- n.abertura={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:formModo==="dup"?"duplicado de "+P().nome:"novo"};
+ n.log=[];registrar(n,{tipo:"dados",campo:"",rot:"Projeto aberto",alvo:"Projeto",de:"",para:n.nome});n.abertura={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:formModo==="dup"?"duplicado de "+P().nome:"novo"};
  S.projetos.push(n);S.cur=n.id;projSel=true;tab="docs";sel=null;faseVista=null;iaMsg=null;iaUndo=null;menuAberto=false;fecharModal();save();render();
  toast(formModo==="dup"?"Cópia criada":`Projeto "${n.nome}" aberto e salvo`,3500)}
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&$("modal").style.display==="flex")fecharModal();if(ev.key==="Enter"&&$("modal").style.display==="flex"&&ev.target.tagName==="INPUT"&&ev.target.type!=="checkbox"){ev.preventDefault();if(ev.target.id==="rn_nome")salvarRenomear();else if(formModo)salvarFormProjeto()}});
@@ -1478,10 +1579,17 @@ function rEscopo(p){const g=podeGerir();
    <div class="escr">${EQUIPE.length?`<select data-arearesp="${a.id}" ${!g||!on?"disabled":""}><option value="">Responsável da área —</option>${EQUIPE.map(u=>`<option value="${u.id}" ${r===u.id?"selected":""}>${esc(nomeU(u))}</option>`).join("")}</select>${g&&on&&r?`<button class="sm" data-act="area-aplicar" data-arg="${a.id}" title="Preenche o responsável nas atividades desta área que estão sem responsável">Aplicar às atividades sem responsável</button>`:""}`:`<span class="hint" style="margin:0">Responsável por área disponível com login</span>`}</div></div>`};
  return `<div class="panel"><h2>Escopo do projeto e áreas de atuação</h2><p class="hint" style="font-size:13px">Marque as áreas contratadas. Áreas fora do escopo ficam ocultas na trilha e não contam no andamento (nada é apagado). ${g?"Defina o responsável de cada área para que cada técnico atue na sua parte.":"Somente o gestor altera o escopo e os responsáveis."}</p>
  <div class="escg">${AREAS.map(linha).join("")}</div></div>`}
+function rModulos(p){const g=podeGerir();const gr=[...new Set(MODULOS.map(m=>m.g))];
+ const c={s:0,n:0,i:0};MODULOS.forEach(m=>{const v=p.modulos[m.id];v===true?c.s++:v===false?c.n++:c.i++});
+ return `<div class="panel"><h2>Módulos contratados <span class="hint" style="margin:0;font-weight:400">· conforme o projeto técnico</span></h2>
+ <p class="hint" style="font-size:13px">A análise do projeto técnico preenche este quadro sozinha. Módulo marcado como <b>Não</b> leva todas as atividades ligadas a ele para "não aplicar" (e as áreas Faturamento, Financeiro, Suprimentos e Laboratório saem do escopo). Se voltar para <b>Sim</b>, as atividades voltam para "a realizar". ${g?"":"Somente o gestor altera."}</p>
+ <div class="mcnt"><span class="ms">✓ ${c.s} sim</span><span class="mn">✕ ${c.n} não</span><span class="mi2">? ${c.i} não informado</span></div>
+ ${gr.map(G=>`<div class="mgr"><div class="mgt">${esc(G)}</div><div class="mods">${MODULOS.filter(m=>m.g===G).map(m=>{const v=p.modulos[m.id],k=v===true?"s":v===false?"n":"i",n=modAtivs(p,m).length;
+  return `<div class="mod m-${k}"><div class="mdn">${esc(m.l)}<small>${m.area?"área inteira":n+" atividade"+(n===1?"":"s")}</small></div><div class="mdb">${[["s","Sim"],["n","Não"],["i","?"]].map(([kk,l])=>`<button class="${k===kk?"on":""}" data-act="mod-set" data-arg="${m.id}|${kk}" ${g?"":"disabled"} title="${kk==="i"?"Não informado":l}">${l}</button>`).join("")}</div></div>`}).join("")}</div></div>`).join("")}</div>`}
 function rDados(){const p=P(),I=p.info;
  const sel_=(k,ops)=>`<select data-bind="info.${k}" style="width:100%"><option value=""></option>${ops.map(o=>`<option ${I[k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
  const txt=(k,ph)=>`<input type="text" data-bind="info.${k}" value="${esc(I[k])}" placeholder="${esc(ph||"")}">`;
- return `${rEquipeProjeto(p)} ${rEscopo(p)} <div class="panel"><h2>Dados do projeto</h2>
+ return `${rEquipeProjeto(p)} ${rModulos(p)} ${rEscopo(p)} <div class="panel"><h2>Dados do projeto</h2>
  <div class="form">
   <div class="full"><label>Nome do projeto</label><div style="display:flex;gap:8px;align-items:center"><input type="text" value="${esc(p.nome)}" disabled style="flex:1;background:#f5f7f8;color:var(--ink);font-weight:600">${podeGerir()?`<button data-act="proj-renomear">✏️ Alterar nome</button>`:`<span class="hint" style="margin:0">Somente o gestor pode alterar o nome</span>`}</div>
    ${(p.renomeacoes||[]).length?`<div class="hint">Histórico: ${p.renomeacoes.map(r=>`"${esc(r.de)}" → "${esc(r.para)}" (${fmtData(r.data.slice(0,10))}${r.por?", "+esc(r.por):""})`).join(" · ")}</div>`:""}</div>
@@ -1742,8 +1850,15 @@ document.addEventListener("click",async ev=>{
   case"tab":tab=arg;menuAberto=false;break;
   case"farea":setFiltroArea(arg);break;
   case"ftr":filtroTr=arg;break;
+  case"mapa-toggle":mapaAberto=!mapaAberto;try{localStorage.setItem("ppi_mapa",mapaAberto?"1":"0")}catch(e){}break;
+  case"mod-set":{if(!podeGerir())return;const[id,k]=arg.split("|"),m=modDe(id);if(!m)return;const de=p.modulos[id],nv=k==="s"?true:k==="n"?false:undefined;if(de===nv)return;
+   if(nv===undefined)delete p.modulos[id];else p.modulos[id]=nv;const r=aplicarModulos(p);const txt=v=>v===true?"Sim":v===false?"Não":"Não informado";
+   registrar(p,{tipo:"escopo",a:m.area||"",alvo:"Módulo "+m.l,campo:"modulo",rot:"Módulo contratado",de:txt(de),para:txt(nv)+(r.na?` · ${r.na} atividade(s) → não aplicar`:"")+(r.volta?` · ${r.volta} atividade(s) → a realizar`:"")});
+   save();toast(r.na?`${m.l}: ${r.na} atividade(s) marcadas como "não aplicar"`:r.volta?`${m.l}: ${r.volta} atividade(s) voltaram para "a realizar"`:`${m.l}: ${txt(nv)}`,3500);break}
+  case"log-mais":logFiltro.lim+=150;break;
+  case"log-ir":{const[f,id]=arg.split("|");faseVista=f;gestSub="trilha";filtroTr="todas";const r=acharAtiv(p,id);if(r&&segAtual(p)&&r.x.a!==filtroArea)setFiltroArea("todas");trOpen.add(id);render();setTimeout(()=>{const el=document.querySelector(`[data-act="tr-det"][data-arg="${id}"]`);if(el)el.scrollIntoView({block:"center"})},50);return}
   case"ver-area":setFiltroArea(arg);tab="gest";gestSub="trilha";window.scrollTo({top:0});break;
-  case"area-aplicar":{if(!podeGerir())return;const uidR=p.areaResp[arg],u=pessoaPorId(uidR);if(!u)return;let n=0;
+  case"area-aplicar":{if(!podeGerir())return;const uidR=p.areaResp[arg],u=pessoaPorId(uidR);if(!u)return;let n=0;registrar(p,{tipo:"escopo",a:arg,alvo:"Responsável da área "+areaDe(arg).l,campo:"",rot:"Atribuído às atividades sem responsável",de:"",para:nomeU(u)});
    TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.a===arg&&!x.rwId&&!String(x.rw||"").trim()&&x.st!=="NÃO APLICAR"&&x.st!=="CONCLUÍDO"){x.rwId=u.id;x.rw=nomeU(u);n++}}));
    save();toast(n?`${n} atividade(s) de ${areaDe(arg).l} atribuídas a ${nomeU(u)}`:"Todas as atividades desta área já têm responsável",3500);break}
   case"menu":menuAberto=!menuAberto;break;
@@ -1751,13 +1866,13 @@ document.addEventListener("click",async ev=>{
   case"abrir-proj":S.cur=arg;projSel=true;setFiltroArea(areaPadrao(P()));tab="mapa";sel=null;faseVista=null;persist();break;
   case"fase":faseVista=arg;tab="gest";gestSub="trilha";filtroTr="todas";break;
   case"editar":tab="gest";gestSub=arg;if(arg==="trilha"&&!faseVista)faseVista=p.info.fase;break;
-  case"fase-atual":p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
+  case"fase-atual":registrar(p,{tipo:"dados",campo:"fase",rot:"Fase atual",alvo:"Dados do projeto",de:faseNome(p.info.fase),para:faseNome(arg)});p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
   case"ver-fase":tab="gest";gestSub="trilha";faseVista=arg;filtroTr="todas";render();window.scrollTo({top:0});return;
   case"carga-ab":cargaAberta=cargaAberta===arg?null:arg;break;
   case"abrir-ativ":{const[pid,fid]=arg.split("|");S.cur=pid;projSel=true;tab="gest";gestSub="trilha";faseVista=fid;filtroTr="abertas";render();window.scrollTo({top:0});return}
   case"tr-det":trOpen.has(arg)?trOpen.delete(arg):trOpen.add(arg);break;
-  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",a:AREA_IDS.includes(filtroArea)?filtroArea:"ger",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
-  case"tr-rm":p.trilha[faseVista]=p.trilha[faseVista].filter(x=>x.id!==arg);trOpen.delete(arg);save();break;
+  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",a:AREA_IDS.includes(filtroArea)?filtroArea:"ger",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);registrar(p,{tipo:"trilha",ref:it.id,f:faseVista,a:it.a,alvo:"Nova atividade",campo:"",rot:"Atividade incluída",de:"",para:faseNome(faseVista)});filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
+  case"tr-rm":{const x=(p.trilha[faseVista]||[]).find(y=>y.id===arg);if(x)registrar(p,{tipo:"trilha",ref:x.id,f:faseVista,a:x.a,alvo:(x.cod?x.cod+" ":"")+x.t,campo:"",rot:"Atividade excluída",de:x.st,para:""})}p.trilha[faseVista]=p.trilha[faseVista].filter(x=>x.id!==arg);trOpen.delete(arg);save();break;
   case"open":tab="perg";sel=arg;render();const pn=$("painel");if(pn&&window.innerWidth<=900)pn.scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0});return;
   case"mark":{const i=+arg,e=p.etapas[i];e.ativa=!e.ativa;save();break}
   case"allet":p.etapas.forEach(e=>e.ativa=arg==="1");save();toast(arg==="1"?"Todas as etapas incluídas":"Todas as etapas desmarcadas");break;
@@ -1767,7 +1882,7 @@ document.addEventListener("click",async ev=>{
   case"rm-etapa":p.etapas.splice(+arg,1);sel=null;save();break;
   case"chip":{const e=p.etapas.find(x=>x.id===sel),q=b.dataset.q,v=b.dataset.v;if(b.dataset.tp==="m"){const a=e.r[q]||[];e.r[q]=a.includes(v)?a.filter(x=>x!==v):[...a,v]}else e.r[q]=e.r[q]===v?"":v;save();break}
   case"mic":toggleMic(arg);return;
-  case"rm-doc":p.docs[arg]=null;save();break;
+  case"rm-doc":registrar(p,{tipo:"docs",alvo:DOCS[arg].t,campo:"",rot:"Documento removido",de:(p.docs[arg]||{}).nome||"",para:""});p.docs[arg]=null;save();break;
   case"copy-prompt":{const ok=await copiar(montarPedido());toast(ok?"Pedido copiado. Cole numa conversa nova no Claude.":"Não consegui copiar automaticamente",3500);return}
   case"apply-resp":aplicarTexto(($("respIA")||{}).value);return;
   case"api-run":rodarAPI();return;
@@ -1775,7 +1890,7 @@ document.addEventListener("click",async ev=>{
   case"ia-cancelar":cancelarAuto();render();return;
   case"undo":if(iaUndo){const i=S.projetos.findIndex(x=>x.id===iaUndo.pid);if(i>=0){S.projetos[i]=normaliza(JSON.parse(iaUndo.snap));marcar(S.projetos[i].id)}iaUndo=null;iaMsg={t:"Preenchimento desfeito."};save()}break;
   case"ad-add":{p.aderencia.unshift({id:uid("a"),processo:"",area:AREA_IDS.includes(filtroArea)?filtroArea:"clin",etapa:"geral",status:"A definir",obs:""});filtroAd="todos";save();render();const f=document.querySelector('[data-ad="processo"]');if(f)f.focus();return}
-  case"ad-rm":p.aderencia=p.aderencia.filter(a=>a.id!==arg);save();break;
+  case"ad-rm":{const a=p.aderencia.find(x=>x.id===arg);if(a)registrar(p,{tipo:"aderencia",ref:a.id,a:a.area||"clin",alvo:a.processo||"Item de aderência",campo:"",rot:"Item excluído",de:a.status,para:""})}p.aderencia=p.aderencia.filter(a=>a.id!==arg);save();break;
   case"copy":{const ok=await copiar($(arg).value);toast(ok?"Copiado":"Selecione e use Ctrl+C");return}
   case"dl-docx":baixar(buildDocx(relatorio()),nomeArq("projeto de implantação","docx"));return;
   case"print":imprimir();return;
@@ -1788,15 +1903,17 @@ document.addEventListener("click",async ev=>{
   case"proj-dup":return;
   case"proj-ocultar":{if(!podeGerir()){toast("Somente o gestor pode ocultar projetos");return}const alvo=P();
    confirmar({titulo:"Ocultar projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> deixará de aparecer para toda a equipe (painel, menu e indicadores). Nenhum dado é apagado: o gestor pode reexibi-lo a qualquer momento no Painel gerencial.`,ok:"Ocultar projeto"},
-    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};alvo.upd=Date.now();marcar(alvo.id);if(!mostrarOcultos){const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel";projSel=false}sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
+    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};registrar(alvo,{tipo:"dados",campo:"",rot:"Projeto ocultado",alvo:"Projeto",de:"",para:""});alvo.upd=Date.now();marcar(alvo.id);if(!mostrarOcultos){const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel";projSel=false}sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
   case"proj-reexibir":{if(!podeGerir())return;const alvo=S.projetos.find(x=>x.id===arg);if(!alvo)return;
-   confirmar({titulo:"Reexibir projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> volta a aparecer para a equipe.`,ok:"Reexibir"},()=>{delete alvo.oculto;alvo.upd=Date.now();marcar(alvo.id);persist();render();toast("Projeto reexibido")});return}
+   confirmar({titulo:"Reexibir projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> volta a aparecer para a equipe.`,ok:"Reexibir"},()=>{delete alvo.oculto;registrar(alvo,{tipo:"dados",campo:"",rot:"Projeto reexibido",alvo:"Projeto",de:"",para:""});alvo.upd=Date.now();marcar(alvo.id);persist();render();toast("Projeto reexibido")});return}
   case"proj-renomear":{if(!podeGerir()){toast("Somente o gestor pode alterar o nome do projeto");return}abrirRenomear();return}
   case"proj-del":if(!podeGerir())return;if(!delArm){delArm=true;break}delArm=false;S.projetos=S.projetos.filter(x=>x.id!==p.id);if(USER){sync.dirty.delete(p.id);sync.del.add(p.id);clearTimeout(sync.timer);sync.timer=setTimeout(enviarNuvem,500)}if(!S.projetos.length){S.projetos.push(novoProjeto());marcar(S.projetos[0].id)}S.cur=S.projetos[0].id;tab="mapa";sel=null;persist();toast("Projeto excluído");break;
  }
  render();
 });
 document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
+ if(d.logf==="busca"){logFiltro.busca=t.value;logFiltro.lim=150;const pos=t.selectionStart;render();const n=document.querySelector('[data-logf="busca"]');if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}return}
+ if(t.tagName==="SELECT"||t.type==="date"||t.type==="checkbox")return; /* listas, datas e caixas são tratadas no "change" (com registro no histórico) */
  if(d.bind){const ks=d.bind.split(".");let o=p;for(let i=0;i<ks.length-1;i++)o=o[ks[i]];o[ks[ks.length-1]]=t.value;if(d.bind==="nome"){const op=document.querySelector(`#selProj option[value="${p.id}"]`);if(op)op.textContent=t.value}save()}
  else if(d.et&&d.et!=="setor"){const e=p.etapas.find(x=>x.id===sel);e[d.et]=t.value;save();if(d.et==="tit"){const h=document.querySelector("#painel h2");if(h)h.textContent=t.value}}
  else if(d.tr&&d.tr!=="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(x){x[d.tr]=t.value;save()}}
@@ -1806,26 +1923,38 @@ document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
  else if(d.cfg){cfg[d.cfg]=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify(cfg))}catch(e){}const bt=document.querySelector('[data-act="api-run"]');if(bt&&!iaBusy)bt.disabled=!cfg.key}
 });
 document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
+ if(d.logf&&d.logf!=="busca"){logFiltro[d.logf]=t.value;logFiltro.lim=150;render();return}
+ if((t.tagName==="TEXTAREA"||(t.tagName==="INPUT"&&(t.type==="text"||t.type==="")))&&valorOrig.has(t)){const de=valorOrig.get(t);valorOrig.set(t,t.value);
+  if(d.tr&&d.tr!=="rwId"){const r=acharAtiv(p,d.id);if(r)logAtiv(p,r.x,r.f,d.tr,de,t.value)}
+  else if(d.bind&&d.bind.startsWith("info.")){const k=d.bind.slice(5);registrar(p,{tipo:"dados",campo:k,rot:ROT_INFO[k]||k,alvo:"Dados do projeto",de,para:t.value})}
+  else if(d.bind==="iaTexto")registrar(p,{tipo:"docs",campo:"iaTexto",rot:"Observações para a IA",alvo:"Documentos e IA",de:de?"(texto)":"—",para:t.value?"(texto atualizado)":"—"});
+  else if(d.ad){const a=p.aderencia.find(x=>x.id===d.id);if(a)registrar(p,{tipo:"aderencia",ref:a.id,a:a.area||"clin",alvo:a.processo||"Item de aderência",campo:d.ad,rot:{processo:"Processo",obs:"Observação"}[d.ad]||d.ad,de,para:t.value})}
+  else if(d.aud==="obs")registrar(p,{tipo:"auditoria",ref:d.k,alvo:"Item de auditoria "+d.k,campo:"obs",rot:"Observações",de,para:t.value});
+  else if(d.audi)registrar(p,{tipo:"auditoria",alvo:"Parecer da auditoria",campo:d.audi,rot:d.audi,de,para:t.value});
+  if(d.tr||d.bind||d.ad||d.aud||d.audi){p.upd=Date.now();marcar(p.id);clearTimeout(saveT);saveT=setTimeout(persist,300)}}
  if(t.id==="selArea"){setFiltroArea(t.value);render();return}
  if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;setFiltroArea(areaPadrao(P()));sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
  if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
  if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
- if(d.bind&&t.tagName==="SELECT"||d.bind&&t.type==="date"){render();return}
+ if(d.bind&&(t.tagName==="SELECT"||t.type==="date")){const ks=d.bind.split(".");let o=p;for(let i=0;i<ks.length-1;i++)o=o[ks[i]];const k=ks[ks.length-1],de=o[k];o[k]=t.value;
+  if(d.bind.startsWith("info."))registrar(p,{tipo:"dados",campo:k,rot:ROT_INFO[k]||k,alvo:"Dados do projeto",de:valLog(k,de),para:valLog(k,t.value)});save();render();return}
  if(d.et==="setor"){p.etapas.find(x=>x.id===sel).setor=t.value;save();render();return}
- if(d.ad&&t.tagName==="SELECT"){const a=p.aderencia.find(x=>x.id===d.id);if(a){a[d.ad]=t.value;save();render()}return}
+ if(d.ad&&t.tagName==="SELECT"){const a=p.aderencia.find(x=>x.id===d.id);if(a){const de=a[d.ad];a[d.ad]=t.value;registrar(p,{tipo:"aderencia",ref:a.id,a:a.area||"clin",alvo:a.processo||"Item de aderência",campo:d.ad,rot:{status:"Status",etapa:"Etapa",area:"Área"}[d.ad]||d.ad,de:d.ad==="area"?valLog("a",de):de,para:d.ad==="area"?valLog("a",t.value):t.value});save();render()}return}
  if(d.actChange==="filtro"){filtroAd=t.value;render()}
  if(d.actChange==="filtroTr"){filtroTr=t.value;render();return}
  if(d.actChange==="farea"){setFiltroArea(t.value);render();return}
- if(d.escopo){if(!podeGerir())return;const e=new Set(p.escopo);t.checked?e.add(d.escopo):e.delete(d.escopo);e.add("ger");p.escopo=AREA_IDS.filter(x=>e.has(x));save();render();toast(t.checked?`${areaDe(d.escopo).l} incluída no escopo`:`${areaDe(d.escopo).l} fora do escopo (atividades ocultas, nada foi apagado)`,3000);return}
- if(d.arearesp){if(!podeGerir())return;if(t.value)p.areaResp[d.arearesp]=t.value;else delete p.areaResp[d.arearesp];save();render();return}
- if(d.membro){const m=new Set(p.membros||[]);t.checked?m.add(d.membro):m.delete(d.membro);p.membros=[...m];save();render();return}
+ if(d.escopo){if(!podeGerir())return;const e=new Set(p.escopo);t.checked?e.add(d.escopo):e.delete(d.escopo);e.add("ger");p.escopo=AREA_IDS.filter(x=>e.has(x));registrar(p,{tipo:"escopo",a:d.escopo,alvo:"Escopo do projeto",campo:"escopo",rot:areaDe(d.escopo).l,de:t.checked?"fora do escopo":"no escopo",para:t.checked?"no escopo":"fora do escopo"});save();render();toast(t.checked?`${areaDe(d.escopo).l} incluída no escopo`:`${areaDe(d.escopo).l} fora do escopo (atividades ocultas, nada foi apagado)`,3000);return}
+ if(d.arearesp){if(!podeGerir())return;registrar(p,{tipo:"escopo",a:d.arearesp,alvo:"Responsável da área "+areaDe(d.arearesp).l,campo:"areaResp",rot:"Responsável da área",de:nomeU(pessoaPorId(p.areaResp[d.arearesp]))||"—",para:nomeU(pessoaPorId(t.value))||"—"});if(t.value)p.areaResp[d.arearesp]=t.value;else delete p.areaResp[d.arearesp];save();render();return}
+ if(d.membro){const m=new Set(p.membros||[]);t.checked?m.add(d.membro):m.delete(d.membro);registrar(p,{tipo:"equipe",alvo:"Equipe do projeto",campo:"membros",rot:nomeU(pessoaPorId(d.membro)),de:t.checked?"sem acesso":"com acesso",para:t.checked?"com acesso":"sem acesso"});p.membros=[...m];save();render();return}
  if(d.papel&&SB){const id=d.papel,v=t.value;SB.from("perfis").update({papel:v}).eq("id",id).then(({error})=>{if(error){toast("Não foi possível alterar: "+msgErro(error));carregarEquipe().then(render)}else{const u=pessoaPorId(id);if(u)u.papel=v;toast("Papel atualizado");render()}});return}
- if(d.tr==="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;if(t.value!=="__livre"){x.rwId=t.value;x.rw=t.value?nomeU(pessoaPorId(t.value)):""}save();render();return}
- if(d.tr&&faseVista&&(t.tagName==="SELECT"||t.type==="date")){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;x[d.tr]=t.value;
+ if(d.tr==="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;if(t.value!=="__livre"){logAtiv(p,x,faseVista,"rwId",x.rw||"",t.value?nomeU(pessoaPorId(t.value)):"");x.rwId=t.value;x.rw=t.value?nomeU(pessoaPorId(t.value)):""}save();render();return}
+ if(d.tr&&faseVista&&(t.tagName==="SELECT"||t.type==="date")){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;logAtiv(p,x,faseVista,d.tr,x[d.tr],t.value);x[d.tr]=t.value;
+  if(d.tr==="st"&&USER&&x.rwId!==USER.id){const ant=x.rw||"";x.rwId=USER.id;x.rw=quemSou();logAtiv(p,x,faseVista,"rwId",ant,x.rw);toast(`Status atualizado · responsável: ${x.rw}`,2500)}
   if(d.tr==="st"){const st=statusFase(p,faseVista),i=FASES.indexOf(faseVista);if(st.c==="g"&&p.info.fase===faseVista&&i>=0&&i<FASES.length-1){p.info.fase=FASES[i+1];toast(`${faseNome(faseVista)} concluída! Fase atual agora: ${faseNome(FASES[i+1])}`,4000)}}
   save();render();return}
- if(d.aud==="v"){render();return}
- if(d.audi&&t.tagName==="SELECT"){render();return}
+ if(d.aud==="v"){const k=d.k;p.audit[k]=Object.assign({v:"",obs:""},p.audit[k]||{});const de=p.audit[k].v;p.audit[k].v=t.value;let item=k;try{const[gi,ii]=k.slice(1).split("_").map(Number);item=AUDIT[gi][1][ii][0]}catch(e){}
+  registrar(p,{tipo:"auditoria",ref:k,alvo:"Auditoria · "+item,campo:"v",rot:"Validado?",de:de||"—",para:t.value||"—"});save();render();return}
+ if(d.audi&&(t.tagName==="SELECT"||t.type==="date")){const de=p.auditInfo[d.audi];p.auditInfo[d.audi]=t.value;registrar(p,{tipo:"auditoria",alvo:"Parecer da auditoria",campo:d.audi,rot:{parecer:"Parecer final",data:"Data da reunião"}[d.audi]||d.audi,de:valLog(d.audi==="data"?"fim":"",de),para:valLog(d.audi==="data"?"fim":"",t.value)});save();render();return}
 });
 async function importarBackup(f){try{const o=JSON.parse(await f.text());let lista=o.tipo==="ppi-todos"?o.projetos:o.tipo==="ppi-projeto"?[o.projeto]:(o.etapas?[o]:null);if(!lista)throw 0;
  lista.forEach(p=>{normaliza(p);if(USER){p.owner=USER.id;p.membros=[]}if(S.projetos.some(x=>x.id===p.id))p.id=uid("p");S.projetos.push(p);marcar(p.id)});S.cur=lista[lista.length-1].id;projSel=true;persist();tab="mapa";render();toast(`${lista.length} projeto(s) importado(s)`)}
