@@ -428,7 +428,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.16.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.17.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1469,7 +1469,7 @@ function rGest(){const p=P();const f=FASES.includes(faseVista)||faseVista==="gp"
  const sub=`<div class="seg"><button class="${gestSub==="trilha"?"on":""}" data-act="editar" data-arg="trilha">📋 Atividades da trilha</button><button class="${gestSub==="dados"?"on":""}" data-act="editar" data-arg="dados">🏥 Dados, escopo e equipe</button><button class="${gestSub==="hist"?"on":""}" data-act="editar" data-arg="hist">🕓 Histórico</button></div>`;
  if(gestSub==="dados")return sub+rDados();if(gestSub==="hist")return sub+rHistorico(p);
  const A=segAtual(p),ar=A?A.id:null;
- const steps=TRILHA.map(x=>{const st=statusFase(p,x.id,ar),[num,nome]=CURTO[x.id]||["",x.t];const vazio=!st.tot&&ar&&!trL(p,x.id).some(y=>y.a===ar);
+ const steps=TRILHA.map(x=>{const st=statusFase(p,x.id,ar),[num,nome]=CURTO[x.id]||["",x.t];const vis_=trL(p,x.id).filter(y=>!(y.naMod&&y.st==="NÃO APLICAR")&&(!ar||y.a===ar));const vazio=!vis_.length;
   return `<button class="step s-${st.c} ${f===x.id?"on":""} ${x.id==="gp"?"gp":""} ${vazio?"vz":""}" data-act="fase" data-arg="${x.id}" title="${esc(x.t)} · ${vazio?"sem atividades desta área":st.l+(st.c!=="n"?" "+st.pc+"%":"")}">
    <span class="sc">${st.c==="g"?"✓":num}</span><span class="sn">${nome}</span><span class="sp">${vazio?"sem ativ.":st.c==="n"?"—":st.pc+"%"}</span>${p.info.fase===x.id?`<span class="sa">atual</span>`:""}</button>`}).join("");
  return sub+segBar(p)+`<div class="stepper">${steps}</div>`+rFase(p,f)}
@@ -1509,7 +1509,8 @@ function rHistorico(p){const A=segAtual(p);const tudo=(p.log||[]).slice().revers
  ${L.length>logFiltro.lim?`<div class="dlrow"><button data-act="log-mais">Mostrar mais (${L.length-logFiltro.lim})</button></div>`:""}</div>`}
 function motivoNA(x){if(x.naMod){const m=modDe(x.naMod);return "Módulo não contratado: "+(m?m.l:x.naMod)}const l=String(x.obs||"").split("\n").find(l=>/^IA:/.test(l));return l?l.replace(/^IA:\s*/,""):""}
 function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
- const LA=trL(p,f).filter(x=>!A||x.a===A.id),st=statusFase(p,f,A?A.id:null);
+ const LT=trL(p,f).filter(x=>!A||x.a===A.id),ocultas=LT.filter(x=>x.naMod&&x.st==="NÃO APLICAR").length;
+ const LA=LT.filter(x=>!(x.naMod&&x.st==="NÃO APLICAR")),st=statusFase(p,f,A?A.id:null);
  const filtros=[["todas","Todas",LA.length],["abertas","Em aberto",LA.filter(x=>x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR").length],["pendente","Pendente cliente",LA.filter(x=>x.st==="PENDENTE CLIENTE").length],["atrasadas","Atrasadas",LA.filter(atrasada).length],["concluidas","Concluídas",LA.filter(x=>x.st==="CONCLUÍDO").length],["naoaplica","🚫 Não se aplica",LA.filter(x=>x.st==="NÃO APLICAR").length]];
  if(!filtros.some(([v])=>v===filtroTr))filtroTr="todas";
  const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":filtroTr==="concluidas"?x.st==="CONCLUÍDO":filtroTr==="naoaplica"?x.st==="NÃO APLICAR":atrasada(x)));
@@ -1540,7 +1541,7 @@ function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
   <div class="pbar ${st.c}" style="margin:10px 0 12px"><i style="width:${st.pc}%"></i></div>
   <div class="tfil">${filtros.map(([v,l,n])=>`<button class="${filtroTr===v?"on":""}" data-act="ftr" data-arg="${v}">${l} <small>${n}</small></button>`).join("")}</div>
   ${nenhuma}${body}
-  <div class="dlrow"><button class="sm" data-act="tr-add">+ Incluir atividade${A?" em "+esc(A.l):""}</button></div></div>`}
+  <div class="dlrow"><button class="sm" data-act="tr-add">+ Incluir atividade${A?" em "+esc(A.l):""}</button>${ocultas?`<span class="hint" style="margin:0 0 0 auto">${ocultas} atividade${ocultas>1?"s":""} de módulos não contratados não ${ocultas>1?"são exibidas":"é exibida"}</span>`:""}</div></div>`}
 function rEquipeProjeto(p){if(!USER||!EQUIPE.length)return"";const dono=pessoaPorId(p.owner)||(p.owner===USER.id?MEU:null);
  const outros=EQUIPE.filter(u=>u.id!==p.owner);
  return `<div class="panel"><h2>Equipe do projeto</h2><p class="hint" style="font-size:13px">Quem pode ver e editar este projeto. Gestores têm acesso a todos os projetos.</p>
