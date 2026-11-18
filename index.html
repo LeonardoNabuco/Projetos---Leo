@@ -425,7 +425,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.13.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.14.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1129,7 +1129,8 @@ async function importarDoc(file,kind){
                  2) chave de API pessoal guardada neste navegador; 3) modo manual (copiar e colar no Claude). */
 let iaMsg=null,iaUndo=null,iaBusy=false,iaProg=0,iaPid=null,iaNuvemFalta=false,iaAuto=null;
 const IA_FUNC="analisar-documentos",IA_ESPERA=20;
-function iaModo(){if(USER&&SB&&nuvemAtiva()&&!iaNuvemFalta)return"nuvem";if(cfg.key)return"chave";return null}
+const IA_AUTO_ATIVA=false;/* ligar quando a função "analisar-documentos" estiver instalada no Supabase */
+function iaModo(){if(!IA_AUTO_ATIVA)return null;if(USER&&SB&&nuvemAtiva()&&!iaNuvemFalta)return"nuvem";if(cfg.key)return"chave";return null}
 const iaModoNome=m=>({nuvem:"IA da equipe (servidor)",chave:"chave de API deste navegador"}[m]||"");
 function montarPedido(p=P()){
  const catalogo=ETAPAS.map(e=>({etapa_id:e.id,etapa:e.t,perguntas:e.qs.map(q=>({pergunta_id:q.id,pergunta:q.q,escolha:q.tp==="m"?"varias":"uma",opcoes:q.o.map(o=>ov(o).v)}))}));
@@ -1402,10 +1403,10 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
  const dadosOk=["cliente","tipo","esp","start"].filter(k=>I[k]).length;
  let trT=0,trOk=0;TRILHA.forEach(f=>{const st=statusFase(p,f.id);trT+=st.tot;trOk+=st.ok});const trPc=trT?Math.round(trOk/trT*100):0;
  let prox="";if(!T.docs)prox=`<div class="next">👉 <span>Próximo passo: importar o projeto técnico, o mapeamento de fluxo e o levantamento de aderência.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos</button></div>`;
- else if(!p.iaAnalise)prox=`<div class="next">👉 <span>Próximo passo: rodar a análise primária dos documentos com IA.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos e IA</button></div>`;
+ 
  const dado=(l,v)=>`<div class="dv"><div class="dl">${l}</div><div class="dd">${v?esc(v):'<span class="vazio">—</span>'}</div></div>`;
  const c1=Object.keys(DOCS).map(k=>{const d=p.docs[k];return node({ic:DOCS[k].ic,t:DOCS[k].t,s:d?"✓ "+esc(d.nome):"Não importado",cls:d?"ok":"pend",act:"tab",arg:"docs"})}).join("")
-  +node({ic:"✨",t:"Análise primária com IA",s:p.iaAnalise?"✓ Feita em "+fmtData(p.iaAnalise.data.slice(0,10)):T.docs?"Pronta para rodar":"Importe os documentos primeiro",cls:p.iaAnalise?"ok":"pend",act:"tab",arg:"docs"});
+  +node({ic:"✨",t:"Pré-preenchimento com IA",s:p.iaAnalise?"✓ Aplicado em "+fmtData(p.iaAnalise.data.slice(0,10)):"Opcional",cls:p.iaAnalise?"ok":"",act:"tab",arg:"docs"});
  const c2=node({ic:"🏥",t:"Dados do projeto",s:`${dadosOk} de 4 campos principais`,pct:dadosOk/4*100,cls:dadosOk===4?"ok":"pend",act:"editar",arg:"dados"})
   +node({ic:"🧭",t:"Trilha de implantação",s:`${trOk} de ${trT} atividades · ${trPc}%`,pct:trPc,cls:trPc===100?"ok":"pend",act:"editar",arg:"trilha"})
   +node({ic:"💲",t:"Tabela de preço",s:"Em breve",cls:"soon"});
@@ -1649,29 +1650,19 @@ function rDocs(){const p=P();
   return `<div class="dzw">${zona(k)}${!d&&dp&&dp.texto&&!lendo?`<button class="sm dzlink" data-act="doc-vincular" data-arg="${k}">📎 Está no mesmo documento do ${esc(DOCS[par].t.toLowerCase())}</button>`:""}</div>`};
  const algum=Object.values(p.docs).some(Boolean),modo=iaModo(),nDocs=Object.values(p.docs).filter(docOk).length;
  const meu=iaMsg&&(!iaMsg.pid||iaMsg.pid===p.id);
- let estado;
- if(iaBusy&&iaPid===p.id)estado=`<div class="iast run"><span class="spin" style="width:22px;height:22px;color:var(--acc)"></span><div><b>Analisando os documentos com IA…</b><div class="hint" style="margin:0" id="iaProg">${iaProgTxt()}</div><div class="hint" style="margin:0">Leva de 1 a 3 minutos. Pode continuar usando o app; o resultado entra sozinho neste projeto.</div></div></div>`;
- else if(iaBusy)estado=`<div class="iast"><span class="spin"></span> Há uma análise em andamento em outro projeto. Aguarde terminar.</div>`;
- else if(iaAuto&&iaAuto.pid===p.id)estado=`<div class="iast wait"><div class="cdn" id="iaCd">${iaAuto.s}</div><div><b>A análise automática vai começar em instantes</b><div class="hint" style="margin:0">Importe os demais documentos agora (${nDocs} de 3 importados) ou comece já.</div></div><div class="iabt"><button class="pri" data-act="ia-agora">✨ Analisar agora</button><button data-act="ia-cancelar">Cancelar</button></div></div>`;
- else if(p.iaAnalise)estado=`<div class="iast ok"><div class="okic">✓</div><div><b>Análise primária feita em ${fmtData(p.iaAnalise.data.slice(0,10))}${p.iaAnalise.por?" por "+esc(p.iaAnalise.por):""}</b><div class="hint" style="margin:0">Documentos: ${esc((p.iaAnalise.docs||[]).join(", ")||"—")} · ${esc(p.iaAnalise.modo||"")}</div></div><div class="iabt"><button data-act="ia-agora" ${algum&&modo?"":"disabled"}>↻ Analisar de novo</button></div></div>`;
- else estado=`<div class="iast"><div class="okic" style="background:#eef2f7;color:var(--mut)">✨</div><div><b>${algum?"Documentos prontos para a análise":"Importe os documentos acima"}</b><div class="hint" style="margin:0">${modo?"A análise roda sozinha ao importar. Se preferir, comece manualmente.":"A análise automática ainda não está ativada (veja abaixo). Use o modo manual."}</div></div><div class="iabt"><button class="pri" data-act="ia-agora" ${algum&&modo?"":"disabled"}>✨ Analisar documentos agora</button></div></div>`;
- return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência: a IA lê os três juntos e já deixa preenchidos os dados do projeto, o escopo por área, a trilha (marcando o que não se aplica), o fluxo e a aderência. Assim cada técnico atua só no que for necessário.</p>
+ const estado=p.iaAnalise?`<div class="iast ok"><div class="okic">✓</div><div><b>Análise com IA aplicada em ${fmtData(p.iaAnalise.data.slice(0,10))}${p.iaAnalise.por?" por "+esc(p.iaAnalise.por):""}</b><div class="hint" style="margin:0">Documentos: ${esc((p.iaAnalise.docs||[]).join(", ")||"—")}</div></div></div>`:"";
+ return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência. Ao importar o projeto técnico, o app lê os módulos contratados e já marca como "não aplicar" tudo o que não faz parte da implantação, para que cada técnico atue só no que for necessário.</p>
  <div class="drops">${zonaW("tec")}${zonaW("fluxo")}${zonaW("ader")}</div><p class="hint" style="margin:6px 0 0">Mapeamento de fluxo e levantamento de aderência no mesmo arquivo? Importe uma vez e use o botão 📎 no outro quadro.</p></div>
- <div class="panel"><h2>2. Análise primária com IA <span class="iamode ${modo?"on":""}">${modo?"● Automática · "+iaModoNome(modo):"○ Automática não ativada"}</span></h2>
+ <div class="panel"><h2>2. Pré-preenchimento com IA <span class="hint" style="margin:0;font-weight:400">· opcional</span></h2>
+ <p class="hint" style="font-size:13px">Os módulos contratados já são lidos automaticamente do projeto técnico. Se quiser, o Claude também pré-preenche os dados do projeto, o fluxo, a aderência e as observações da trilha a partir dos documentos.</p>
  ${estado}
- ${meu?`<div class="msg ${iaMsg.err?"err":""}" style="margin-top:12px">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
- <details ${p.iaTexto?"open":""} style="margin:14px 0 4px"><summary>Acrescentar observações do gestor para a análise (opcional)</summary><div style="display:flex;justify-content:flex-end;margin:6px 0">${micBtn("ia")}</div><textarea data-bind="iaTexto" data-mickey="ia" placeholder="O que o cliente contou e não está nos documentos, áreas que não fazem parte do contrato...">${esc(p.iaTexto)}</textarea><div class="partial" id="partial"></div></details>
- <details style="margin:8px 0" ${!modo&&algum?"open":""}><summary>Modo manual · copiar e colar no Claude (sem custo extra)</summary>
-  <ol class="steps"><li><button class="pri sm" data-act="copy-prompt" ${algum||p.iaTexto?"":"disabled"}>📋 Copiar pedido para o Claude</button></li>
+ ${meu&&(iaMsg.err?!/análise automática|IA da equipe|Failed to fetch/i.test(iaMsg.t):true)?`<div class="msg ${iaMsg.err?"err":""}" style="margin-top:12px">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
+ <ol class="steps"><li><button class="pri sm" data-act="copy-prompt" ${algum||p.iaTexto?"":"disabled"}>📋 Copiar pedido para o Claude</button></li>
   <li>Abra uma conversa nova no Claude (<a href="https://claude.ai/new" target="_blank">claude.ai/new</a>) e cole o pedido.</li>
   <li>Copie a resposta inteira do Claude, cole abaixo e clique em Aplicar.</li></ol>
-  <textarea id="respIA" placeholder="Cole aqui a resposta do Claude" style="min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
-  <div class="dlrow"><button class="pri" data-act="apply-resp">Aplicar resposta</button></div></details>
- <details style="margin:8px 0"><summary>Ativação da análise automática</summary>
-  <p class="hint" style="font-size:13px"><b>IA da equipe (recomendado):</b> o gestor instala uma vez a função <code>analisar-documentos</code> no Supabase e cadastra a chave da Anthropic no servidor. A partir daí, todos que entram com login têm a análise automática, sem guardar chave no computador. ${USER?(iaNuvemFalta?"<b style=\"color:var(--warn)\">Situação: função ainda não encontrada no servidor.</b>":"Situação: será verificada na primeira análise."):"Disponível quando o app está conectado à nuvem."}</p>
-  <p class="hint" style="font-size:13px"><b>Chave pessoal (alternativa):</b> chave da API da Anthropic guardada só neste navegador. Cobrança por uso, à parte da assinatura do Claude.</p>
-  <div class="mg2" style="max-width:640px"><div><label class="hint" style="display:block">Chave de API</label><input type="password" data-cfg="key" value="${esc(cfg.key)}" placeholder="sk-ant-..."></div>
-  <div><label class="hint" style="display:block">Modelo</label><input type="text" data-cfg="model" value="${esc(cfg.model)}"></div></div></details>
+ <textarea id="respIA" placeholder="Cole aqui a resposta do Claude" style="min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
+ <div class="dlrow"><button class="pri" data-act="apply-resp">Aplicar resposta</button></div>
+ <details ${p.iaTexto?"open":""} style="margin:12px 0 0"><summary>Acrescentar observações do gestor para a IA (opcional)</summary><div style="display:flex;justify-content:flex-end;margin:6px 0">${micBtn("ia")}</div><textarea data-bind="iaTexto" data-mickey="ia" placeholder="O que o cliente contou e não está nos documentos...">${esc(p.iaTexto)}</textarea><div class="partial" id="partial"></div></details>
  </div>
  ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}
  ${p.sugestoes.length?`<div class="box sug"><h3>Sugestões de melhoria</h3><ul>${p.sugestoes.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
