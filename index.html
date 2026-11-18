@@ -130,6 +130,11 @@ table.cgl{width:100%;border-collapse:collapse;font-size:12px}table.cgl th{text-a
 .mg{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin:14px 10px 6px}
 #selProj{width:100%;margin-bottom:6px;font-weight:600}
 .pbtns{display:flex;gap:4px;margin-bottom:8px}.pbtns button{flex:1 1 0;min-width:0;justify-content:center;padding:4px 3px!important;white-space:nowrap;font-size:11.5px}.pbtns button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ocbox{border:1px dashed #c9d3d9;border-radius:10px;padding:8px;margin:-2px 0 10px;background:#fafbfc}
+.ocb-t{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.oci{display:flex;align-items:center;gap:4px;padding:2px 0}.oci.on .ocn{font-weight:700;color:var(--acc)}
+.ocn{flex:1;min-width:0;border:none;background:transparent;justify-content:flex-start;padding:4px 2px;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-align:left}
+.ocn:hover{text-decoration:underline}.oci .sm{font-size:11px}
 .menubtn{display:none;border:none;font-size:20px;padding:2px 8px}
 main{max-width:none!important;margin:0!important;padding:18px 22px!important}
 .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -329,7 +334,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão 2026-11-18.5</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 2026-11-18.6</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -926,6 +931,7 @@ function render(){
   <div class="mg">Projeto</div>
   <select id="selProj" title="Projeto aberto">${projMenu().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${x.oculto?"🙈 ":""}${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}${x.oculto?" (oculto)":""}</option>`).join("")}</select>
   ${podeGerir()?`<div class="pbtns"><button class="sm" data-act="proj-new" title="Abrir novo projeto">+ Novo</button>${projMenu().length?(P().oculto?`<button class="sm" data-act="proj-reexibir" data-arg="${P().id}" title="Reexibir este projeto">Reexibir</button>`:`<button class="sm" data-act="proj-ocultar" title="Ocultar este projeto">Ocultar</button>`):""}<button class="sm ${mostrarOcultos?"on":""}" data-act="mostrar-ocultos" title="${mostrarOcultos?"Esconder projetos ocultos do menu":"Mostrar projetos ocultos no menu"} (${S.projetos.filter(x=>x.oculto).length} oculto(s))">${mostrarOcultos?"✓ Ocultos":"👁 Ocultos"}</button></div>`:""}
+  ${podeGerir()&&mostrarOcultos?`<div class="ocbox"><div class="ocb-t">Projetos ocultos (${S.projetos.filter(x=>x.oculto).length})</div>${S.projetos.filter(x=>x.oculto).length?S.projetos.filter(x=>x.oculto).map(x=>`<div class="oci ${x.id===p.id?"on":""}"><button class="ocn" data-act="abrir-oculto" data-arg="${x.id}" title="Abrir projeto oculto">🙈 ${esc(x.nome)}</button><button class="sm" data-act="proj-reexibir" data-arg="${x.id}" title="Reexibir">Reexibir</button></div>`).join(""):`<div class="hint" style="margin:2px 0 0">Nenhum projeto oculto.</div>`}</div>`:""}
   ${projMenu().length?`${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
   ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
   ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:`<p class="hint" style="margin:6px 10px">${podeGerir()?"Nenhum projeto visível. Use \"+ Novo\" para abrir um projeto.":"Nenhum projeto disponível. Peça ao gestor para abrir um projeto ou incluir você na equipe."}</p>`}
@@ -1383,6 +1389,7 @@ document.addEventListener("click",async ev=>{
   case"dl-all":baixar(new Blob([JSON.stringify({tipo:"ppi-todos",v:1,projetos:S.projetos},null,1)],{type:"application/json"}),"Projetos de implantação - backup completo.json");return;
   case"imp-json":$("fileJson").click();return;
   case"proj-new":if(!podeGerir()){toast("Somente o gestor pode abrir projetos");return}abrirFormProjeto("novo");return;
+  case"abrir-oculto":if(!podeGerir())return;S.cur=arg;tab="mapa";sel=null;faseVista=null;menuAberto=false;persist();break;
   case"mostrar-ocultos":if(!podeGerir())return;mostrarOcultos=!mostrarOcultos;if(!mostrarOcultos&&P().oculto){const v=projVis();if(v.length)S.cur=v[0].id}break;
   case"proj-dup":return;
   case"proj-ocultar":{if(!podeGerir()){toast("Somente o gestor pode ocultar projetos");return}const alvo=P();
