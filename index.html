@@ -100,19 +100,74 @@ h3.sect{font-size:15px;margin:6px 2px 10px}
 .seg{display:inline-flex;background:#e9edf0;border-radius:10px;padding:3px;margin-bottom:14px}
 .seg button{border:none;background:transparent;border-radius:8px;padding:7px 16px;font-weight:600;color:var(--mut)}
 .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.stepper{display:grid;grid-template-columns:repeat(9,1fr) 90px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 10px 12px;margin-bottom:14px;position:relative;overflow-x:auto;min-width:0}
-.stepper::before{content:"";position:absolute;left:5%;right:calc(90px + 5%);top:33px;height:3px;background:#e3e8eb;z-index:0}
-.step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;padding:0 2px;cursor:pointer;min-width:74px}
+.stepper{display:grid;grid-template-columns:repeat(9,minmax(0,1fr)) minmax(0,1.1fr);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 8px 12px;margin-bottom:14px;position:relative}
+.stepper::before{content:"";position:absolute;left:5%;right:calc(10% + 5%);top:33px;height:3px;background:#e3e8eb;z-index:0}
+.step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;padding:0 2px;cursor:pointer;min-width:0}
 .step:hover .sc{transform:scale(1.08)}
 .step .sc{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);transition:.15s}
 .step.s-r .sc{background:#dc2626}.step.s-y .sc{background:#eab308}.step.s-g .sc{background:#16a34a}.step.s-n .sc{background:#9aa5ad}
+.step.vz{opacity:.45}
 .step.on .sc{box-shadow:0 0 0 3px var(--ink);transform:scale(1.12)}
-.step .sn{font-size:12px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2}
+.step .sn{font-size:12px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;overflow-wrap:anywhere}
 .step.on .sn{text-decoration:underline;text-underline-offset:3px}
 .step .sp{font-size:11px;color:var(--mut)}
 .step .sa{font-size:10px;background:var(--acc);color:#fff;border-radius:8px;padding:0 6px;font-weight:600}
 .step.gp{border-left:1px dashed var(--line);margin-left:6px}
-@media(max-width:1000px){.stepper{grid-template-columns:repeat(10,minmax(74px,1fr))}.stepper::before{display:none}}
+@media(max-width:900px){.stepper{grid-template-columns:repeat(5,minmax(0,1fr));row-gap:14px}.stepper::before{display:none}.step.gp{border-left:none;margin-left:0}}
+/* segmento de atuação */
+.segbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:color-mix(in srgb,var(--ac) 8%,#fff);border:1px solid color-mix(in srgb,var(--ac) 30%,#fff);border-left:6px solid var(--ac);border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.sgl{display:flex;gap:12px;align-items:center;flex:1 1 260px;min-width:0}
+.sgic{width:44px;height:44px;border-radius:12px;background:var(--ac);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.sgk{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);font-weight:700}
+.sgv{font-size:20px;font-weight:800;color:var(--ac);line-height:1.15}
+.sgm{font-size:12px;color:var(--mut)}
+.sgops{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 380px;justify-content:flex-end}
+.sgo{font-size:12px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:600}
+.sgo.on{background:var(--oc);border-color:var(--oc);color:#fff}
+@media(max-width:700px){.sgops{justify-content:flex-start}}
+.sarea{display:flex;align-items:center;gap:6px;border:2px solid var(--ac);background:color-mix(in srgb,var(--ac) 8%,#fff);border-radius:10px;padding:4px 6px;margin-bottom:6px}
+.sarea span{font-size:18px}.sarea select{flex:1;min-width:0;border:none;background:transparent;font-weight:700;color:var(--ac);padding:4px 2px}
+/* atividades da trilha */
+.fhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}.fhead h3{margin:0;font-size:17px}
+.tfil{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tfil button{font-size:12px;padding:5px 11px;border-radius:999px;font-weight:600}.tfil button small{color:var(--mut);font-weight:600;margin-left:2px}
+.tfil button.on{background:var(--ink);color:#fff;border-color:var(--ink)}.tfil button.on small{color:#cbd5e1}
+.agrp{margin-bottom:14px}.agh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--acc);border-bottom:2px solid var(--acc2);padding:4px 2px;margin-bottom:6px}
+.agh small{text-transform:none;letter-spacing:0;font-weight:600;color:var(--mut)}
+.ativ{border:1px solid var(--line);border-left:5px solid #cbd5e1;border-radius:10px;background:#fff;margin-bottom:6px}
+.ativ.st-em{border-left-color:#eab308}.ativ.st-ok{border-left-color:#16a34a;background:#fbfefc}.ativ.st-pc{border-left-color:#dc2626}.ativ.st-na{border-left-color:#e2e8f0;background:#fafbfc}
+.ativ.late{border-color:#fecaca}.ativ.open{box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.arow{display:flex;gap:12px;align-items:center;padding:9px 12px;flex-wrap:wrap}
+.atit{flex:1 1 300px;min-width:0}
+.att{font-weight:600;font-size:14px;line-height:1.3;overflow-wrap:anywhere}.ativ.st-ok .att{color:#64748b}.ativ.st-na .att{color:#94a3b8;text-decoration:line-through}
+.acod{display:inline-block;font-size:11px;font-weight:700;color:var(--mut);background:#f1f5f9;border-radius:6px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.ameta{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:3px;font-size:11px;color:var(--mut)}.ameta .atag{margin:0}
+.acrit{overflow-wrap:anywhere}.alate{color:#b91c1c;font-weight:700}.anote{color:#0369a1}
+.actl{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;flex:0 1 auto}
+.fl{display:flex;flex-direction:column;gap:2px;margin:0}.fl>span{font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.03em}
+.fl select,.fl input{font-size:13px;padding:6px 8px}
+.fl select.ss{width:170px;font-weight:700}.fl select[data-tr="rwId"],.fl input[data-tr="rw"]{width:150px}.fl input[type=date]{width:145px}
+.amais{font-size:12px;padding:6px 10px;white-space:nowrap}
+.adet{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px 14px;padding:12px 14px 14px;border-top:1px dashed var(--line);background:#fafbfc;border-radius:0 0 10px 10px}
+.adet .w2{grid-column:span 2}.adet label{display:block;font-size:11px;font-weight:700;color:var(--mut);margin-bottom:3px}.adet input,.adet select,.adet textarea{width:100%}
+.adel{display:flex;align-items:flex-end;justify-content:flex-end}
+.vflow{max-width:860px}.vstep{display:flex;gap:12px}.vrail{display:flex;flex-direction:column;align-items:center;flex:none;width:34px}
+.vnum{width:34px;height:34px;border-radius:50%;background:var(--sc);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.vline{flex:1;width:3px;background:#e2e8f0;margin:4px 0;min-height:14px}
+.fc.vfc{width:auto;flex:1;min-width:0;border-color:var(--sc);border-left-width:5px;margin-bottom:12px}
+.vset{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--sc);border-radius:999px;padding:1px 8px;margin-bottom:5px}
+.setleg{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 12px;font-size:12px}.setleg span{display:inline-flex;align-items:center;gap:5px}.setleg i{width:10px;height:10px;border-radius:50%;background:var(--sc)}
+table.hmt{table-layout:fixed}table.hmt th:first-child,table.hmt td:first-child{width:18%;overflow-wrap:anywhere}
+@media(max-width:700px){
+ table.rt,table.rt tbody,table.rt tr,table.rt td{display:block;width:100%!important}table.rt thead,table.rt tr:has(>th){display:none}
+ table.rt tr{border-bottom:1px solid var(--line);padding:8px 10px}table.rt td{border:none!important;padding:3px 0!important}
+ table.rt td[data-l]::before{content:attr(data-l);display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mut);letter-spacing:.03em}
+ table.rt tr.trg td{padding:6px 0!important}table.rt td.rtn{display:inline-block;width:auto!important;margin-right:6px}
+ table.hmt{font-size:11px}table.hmt th,table.hmt td{padding:5px 2px!important}table.hmt th{font-size:9px;line-height:1.1;overflow-wrap:anywhere;vertical-align:bottom}
+ .step .sn{font-size:10.5px;overflow-wrap:normal;word-break:normal;hyphens:auto}
+ .segbar{padding:10px}.sgv{font-size:17px}.sgo{font-size:11px;padding:5px 9px}}
+.vazio2{text-align:center;padding:24px;color:var(--ink);border:1px dashed var(--line);border-radius:10px;margin-bottom:12px}
+@media(max-width:700px){.adet .w2{grid-column:auto}.actl{width:100%}.fl{flex:1 1 140px}.fl select.ss,.fl select[data-tr="rwId"],.fl input[data-tr="rw"],.fl input[type=date]{width:100%}.amais{flex:1 1 100%}}
 .eq{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .eqd{background:var(--acc2);border-radius:20px;padding:6px 12px;font-weight:600}.eqd small,.eqm small{color:var(--mut);font-weight:400}
 .eqm{border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}.eqm.on{border-color:var(--acc);background:#f2faf9}
@@ -265,7 +320,7 @@ table.hmt td{padding:8px 6px;border-bottom:1px solid #eef1f3}.hm{text-align:cent
 .mic.on{background:#dc2626;color:#fff;border-color:#dc2626}
 .partial{font-size:12px;color:var(--mut);font-style:italic;min-height:16px;margin-top:4px}
 /* fluxo visual */
-.lanes{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+
 .grid{display:grid;min-width:max-content}
 .lh{position:sticky;left:0;background:#fafbfc;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px;font-weight:600;font-size:13px;display:flex;align-items:center;z-index:1;width:150px}
 .ch{border-bottom:1px solid var(--line);padding:10px;font-size:12px;color:var(--mut);font-weight:600;text-align:center;background:#fafbfc}
@@ -354,7 +409,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 2026-11-18.7</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 2026-11-18.8</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1212,7 +1267,8 @@ function render(){
   <select id="selProj" title="Projeto aberto" class="${projSel?"":"vazio"}">${projSel?"":`<option value="" selected disabled hidden>Selecione um projeto</option>`}${projSel&&projMenu().length?`<option value="">— Selecione um projeto —</option>`:""}${projMenu().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${projSel&&x.id===p.id?"selected":""}>${x.oculto?"🙈 ":""}${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}${x.oculto?" (oculto)":""}</option>`).join("")}</select>
   ${podeGerir()?`<div class="pbtns"><button class="sm" data-act="proj-new" title="Abrir novo projeto">+ Novo</button>${projSel&&projMenu().length?(P().oculto?`<button class="sm" data-act="proj-reexibir" data-arg="${P().id}" title="Reexibir este projeto">Reexibir</button>`:`<button class="sm" data-act="proj-ocultar" title="Ocultar este projeto">Ocultar</button>`):""}<button class="sm ${mostrarOcultos?"on":""}" data-act="mostrar-ocultos" title="${mostrarOcultos?"Esconder projetos ocultos do menu":"Mostrar projetos ocultos no menu"} (${S.projetos.filter(x=>x.oculto).length} oculto(s))">${mostrarOcultos?"✓ Ocultos":"👁 Ocultos"}</button></div>`:""}
   ${podeGerir()&&mostrarOcultos?`<div class="ocbox"><div class="ocb-t">Projetos ocultos (${S.projetos.filter(x=>x.oculto).length})</div>${S.projetos.filter(x=>x.oculto).length?S.projetos.filter(x=>x.oculto).map(x=>`<div class="oci ${x.id===p.id?"on":""}"><button class="ocn" data-act="abrir-oculto" data-arg="${x.id}" title="Abrir projeto oculto">🙈 ${esc(x.nome)}</button><button class="sm" data-act="proj-reexibir" data-arg="${x.id}" title="Reexibir">Reexibir</button></div>`).join(""):`<div class="hint" style="margin:2px 0 0">Nenhum projeto oculto.</div>`}</div>`:""}
-  ${projSel&&projMenu().length?`${it("mapa","🗺","Mapa do projeto")}${it("docs","📄","Documentos e IA",!Object.values(p.docs).some(Boolean)?"!":"")}${it("gest","✏️","Gestão do projeto")}
+  ${projSel&&projMenu().length?`<div class="mg">Área de atuação</div><div class="sarea" style="--ac:${segAtual(p)?segAtual(p).c:"#334155"}"><span>${segAtual(p)?AREA_IC[segAtual(p).id]:"🗂️"}</span><select id="selArea" title="Área em que você está atuando"><option value="todas">Todas as áreas</option>${AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>`<option value="${a.id}" ${filtroArea===a.id?"selected":""}>${esc(a.l)}${minhasAreas(p).includes(a.id)?" ⭐":""}</option>`).join("")}</select></div>
+  <div class="mg">Navegação</div>${it("mapa","🗺","Mapa do projeto")}${it("docs","📄","Documentos e IA",!Object.values(p.docs).some(Boolean)?"!":"")}${it("gest","✏️","Gestão do projeto")}
   ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
   ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:projMenu().length?`<p class="hint" style="margin:6px 10px">Escolha um projeto na lista acima para ver o mapa, os documentos, a gestão e as demais opções.</p>`:`<p class="hint" style="margin:6px 10px">${podeGerir()?"Nenhum projeto visível. Use \"+ Novo\" para abrir um projeto.":"Nenhum projeto disponível. Peça ao gestor para abrir um projeto ou incluir você na equipe."}</p>`}
  </nav>`;
@@ -1276,13 +1332,26 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
   return `<button class="acard" style="--ac:${a.c}" data-act="ver-area" data-arg="${a.id}"><div class="an"><i></i>${esc(a.l)}</div><div class="ap">${pc}%</div><div class="pbar ${c}"><i style="width:${pc}%"></i></div><div class="cnt">${o} de ${t} concluídas${pe?` · <span style="color:#b91c1c">${pe} pend. cliente</span>`:""}</div><div class="cnt">${r?"👤 "+esc(nomeU(r)):'<span style="color:var(--mut)">Sem responsável da área</span>'}</div></button>`}).join("")}</div>
  <h3 class="sect">Mapa do projeto</h3>
  <div class="map">${col(1,"Entrada",c1)}${col(2,"Projeto",c2)}${col(3,"Fluxo clínico",c3)}${col(4,"Análise",c4)}${col(5,"Entregas",c5)}</div>`}
+/* ===== Segmento de atuação (área) · sempre visível para quem está trabalhando ===== */
+const AREA_IC={ger:"⚙️",clin:"🩺",fat:"🧾",fin:"💰",sup:"📦",lab:"🔬"};
+const segAtual=p=>filtroArea!=="todas"&&p.escopo.includes(filtroArea)?areaDe(filtroArea):null;
+function areaPadrao(p){const m=minhasAreas(p).filter(a=>p.escopo.includes(a));if(m.length)return m[0];if(filtroArea!=="todas"&&p.escopo.includes(filtroArea))return filtroArea;return "todas"}
+function segBar(p,ctx){const A=segAtual(p),mA=minhasAreas(p);
+ const ops=[["todas","🗂️","Todas as áreas","#334155"],...AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>[a.id,AREA_IC[a.id],a.l,a.c])];
+ return `<div class="segbar" style="--ac:${A?A.c:"#334155"}">
+  <div class="sgl"><div class="sgic">${A?AREA_IC[A.id]:"🗂️"}</div><div><div class="sgk">${ctx||"Você está atuando em"}</div><div class="sgv">${A?esc(A.l):"Todas as áreas"}</div>${A&&mA.includes(A.id)?`<div class="sgm">⭐ Você é o responsável por esta área</div>`:!A?`<div class="sgm">Visão completa do projeto. Escolha uma área para trabalhar só nela.</div>`:""}</div></div>
+  <div class="sgops">${ops.map(([id,ic,l,c])=>`<button class="sgo ${filtroArea===id||(id==="todas"&&!A)?"on":""}" style="--oc:${c}" data-act="farea" data-arg="${id}">${ic} ${esc(l)}${mA.includes(id)?" ⭐":""}</button>`).join("")}</div></div>`}
+
+/* ===== Gestão do projeto ===== */
+const ST_IC={"A REALIZAR":"○","EM ANDAMENTO":"◐","CONCLUÍDO":"✓","PENDENTE CLIENTE":"⏸","NÃO APLICAR":"–"};
 function rGest(){const p=P();const f=FASES.includes(faseVista)||faseVista==="gp"?faseVista:p.info.fase;faseVista=f;
- const sub=`<div class="seg"><button class="${gestSub==="dados"?"on":""}" data-act="editar" data-arg="dados">Dados do projeto</button><button class="${gestSub==="trilha"?"on":""}" data-act="editar" data-arg="trilha">Trilha de implantação</button></div>`;
+ const sub=`<div class="seg"><button class="${gestSub!=="dados"?"on":""}" data-act="editar" data-arg="trilha">📋 Atividades da trilha</button><button class="${gestSub==="dados"?"on":""}" data-act="editar" data-arg="dados">🏥 Dados, escopo e equipe</button></div>`;
  if(gestSub==="dados")return sub+rDados();
- const steps=TRILHA.map(x=>{const st=statusFase(p,x.id),[num,nome]=CURTO[x.id]||["",x.t];
-  return `<button class="step s-${st.c} ${f===x.id?"on":""} ${x.id==="gp"?"gp":""}" data-act="fase" data-arg="${x.id}" title="${esc(x.t)} · ${st.l}${st.c!=="n"?" "+st.pc+"%":""}">
-   <span class="sc">${st.c==="g"?"✓":num}</span><span class="sn">${nome}</span><span class="sp">${st.c==="n"?"—":st.pc+"%"}</span>${p.info.fase===x.id?`<span class="sa">atual</span>`:""}</button>`}).join("");
- return sub+`<div class="stepper">${steps}</div>`+rFase(p,f)}
+ const A=segAtual(p),ar=A?A.id:null;
+ const steps=TRILHA.map(x=>{const st=statusFase(p,x.id,ar),[num,nome]=CURTO[x.id]||["",x.t];const vazio=!st.tot&&ar&&!trL(p,x.id).some(y=>y.a===ar);
+  return `<button class="step s-${st.c} ${f===x.id?"on":""} ${x.id==="gp"?"gp":""} ${vazio?"vz":""}" data-act="fase" data-arg="${x.id}" title="${esc(x.t)} · ${vazio?"sem atividades desta área":st.l+(st.c!=="n"?" "+st.pc+"%":"")}">
+   <span class="sc">${st.c==="g"?"✓":num}</span><span class="sn">${nome}</span><span class="sp">${vazio?"sem ativ.":st.c==="n"?"—":st.pc+"%"}</span>${p.info.fase===x.id?`<span class="sa">atual</span>`:""}</button>`}).join("");
+ return sub+segBar(p)+`<div class="stepper">${steps}</div>`+rFase(p,f)}
 const hojeISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 const atrasada=x=>x.fim&&x.fim<hojeISO()&&x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR";
 function statusFase(p,f,area){const L=trL(p,f).filter(x=>x.st!=="NÃO APLICAR"&&(!area||x.a===area)),ok=L.filter(x=>x.st==="CONCLUÍDO").length,tot=L.length,pc=tot?Math.round(ok/tot*100):0;
@@ -1297,38 +1366,43 @@ function selResp(x){
  if(!EQUIPE.length)return `<input type="text" data-tr="rw" data-id="${x.id}" value="${esc(x.rw)}" placeholder="Nome">`;
  const u=respDe(x),livre=!u&&x.rw;
  return `<select data-tr="rwId" data-id="${x.id}"><option value="">—</option>${livre?`<option value="__livre" selected>${esc(x.rw)} (texto)</option>`:""}${EQUIPE.map(m=>`<option value="${m.id}" ${u&&u.id===m.id?"selected":""}>${esc(nomeU(m))}</option>`).join("")}</select>`}
-function rFase(p,f){const L=trL(p,f),ehFase=FASES.includes(f);
- const esc_=AREAS.filter(a=>p.escopo.includes(a.id));if(filtroArea!=="todas"&&filtroArea!=="minhas"&&!esc_.some(a=>a.id===filtroArea))setFiltroArea("todas");
- const mA=minhasAreas(p);if(filtroArea==="minhas"&&!mA.length)setFiltroArea("todas");
- const naArea=x=>filtroArea==="todas"||(filtroArea==="minhas"?mA.includes(x.a):x.a===filtroArea);
- const st=statusFase(p,f,filtroArea!=="todas"&&filtroArea!=="minhas"?filtroArea:null);
- const LA=L.filter(naArea);
- const chips=`<div class="achips"><span class="hint" style="margin:0">Área:</span><button class="achip ${filtroArea==="todas"?"on":""}" data-act="farea" data-arg="todas">Todas <small>${L.length}</small></button>${mA.length?`<button class="achip ${filtroArea==="minhas"?"on":""}" data-act="farea" data-arg="minhas">⭐ Minhas áreas <small>${L.filter(x=>mA.includes(x.a)).length}</small></button>`:""}${esc_.map(a=>{const n=L.filter(x=>x.a===a.id).length;return n?`<button class="achip ${filtroArea===a.id?"on":""}" data-act="farea" data-arg="${a.id}" style="--ac:${a.c}"><i></i>${esc(a.l)} <small>${n}</small></button>`:""}).join("")}</div>`;
- const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":atrasada(x)));
+function rFase(p,f){const A=segAtual(p),ehFase=FASES.includes(f);
+ const LA=trL(p,f).filter(x=>!A||x.a===A.id),st=statusFase(p,f,A?A.id:null);
+ const filtros=[["todas","Todas",LA.length],["abertas","Em aberto",LA.filter(x=>x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR").length],["pendente","Pendente cliente",LA.filter(x=>x.st==="PENDENTE CLIENTE").length],["atrasadas","Atrasadas",LA.filter(atrasada).length],["concluidas","Concluídas",LA.filter(x=>x.st==="CONCLUÍDO").length]];
+ if(!filtros.some(([v])=>v===filtroTr))filtroTr="todas";
+ const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":filtroTr==="concluidas"?x.st==="CONCLUÍDO":atrasada(x)));
  const grupos=[...new Set(vis.map(x=>x.g))];
- let rows="";grupos.forEach(g=>{rows+=`<tr class="trg"><td colspan="8">${esc(g)}</td></tr>`;
-  vis.filter(x=>x.g===g).forEach(x=>{const op=trOpen.has(x.id),tem=x.obs||x.rw||x.ru||x.link;
-   rows+=`<tr class="${atrasada(x)?"late":""} ${x.st==="NÃO APLICAR"?"na":""}"><td class="cod">${esc(x.cod||"+")}</td>
-   <td><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}">${filtroArea==="todas"||filtroArea==="minhas"?areaTag(x.a):""}${x.crit&&!op?`<div class="crit">✓ ${esc(x.crit)}</div>`:""}</td>
-   <td><select data-tr="st" data-id="${x.id}" class="ss ss-${stSlug(x.st)}">${ST_TR.map(o=>`<option ${x.st===o?"selected":""}>${o}</option>`).join("")}</select></td>
-   <td><input type="date" data-tr="ini" data-id="${x.id}" value="${esc(x.ini)}"></td><td><input type="date" data-tr="fim" data-id="${x.id}" value="${esc(x.fim)}"></td>
-   <td>${selResp(x)}</td>
-   <td><select data-tr="val" data-id="${x.id}">${VAL_TR.map(o=>`<option value="${o}" ${x.val===o?"selected":""}>${o||"—"}</option>`).join("")}</select></td>
-   <td><button class="sm" data-act="tr-det" data-arg="${x.id}" title="Detalhes">${op?"▴":"▾"}${tem&&!op?" •":""}</button></td></tr>`;
-   if(op)rows+=`<tr class="det"><td></td><td colspan="7"><div class="detg">
+ const card=x=>{const op=trOpen.has(x.id),u=respDe(x),late=atrasada(x),tem=x.obs||x.ru||x.link;
+  return `<div class="ativ st-${stSlug(x.st)} ${late?"late":""} ${op?"open":""}">
+   <div class="arow">
+    <div class="atit"><div class="att">${x.cod?`<span class="acod">${esc(x.cod)}</span>`:""}${esc(x.t)||'<i style="color:var(--mut)">Atividade sem descrição</i>'}</div>
+     <div class="ameta">${!A?areaTag(x.a):""}${x.crit?`<span class="acrit">✓ ${esc(x.crit)}</span>`:""}${late?`<span class="alate">⏰ atrasada</span>`:""}${tem&&!op?`<span class="anote">📝 tem anotações</span>`:""}</div></div>
+    <div class="actl">
+     <label class="fl"><span>Status</span><select data-tr="st" data-id="${x.id}" class="ss ss-${stSlug(x.st)}">${ST_TR.map(o=>`<option value="${o}" ${x.st===o?"selected":""}>${ST_IC[o]} ${o.charAt(0)+o.slice(1).toLowerCase()}</option>`).join("")}</select></label>
+     <label class="fl"><span>Responsável</span>${selResp(x)}</label>
+     <label class="fl"><span>Prazo</span><input type="date" data-tr="fim" data-id="${x.id}" value="${esc(x.fim)}"></label>
+     <button class="amais" data-act="tr-det" data-arg="${x.id}" title="${op?"Fechar detalhes":"Mais detalhes"}">${op?"Fechar ▴":"Detalhes ▾"}</button></div></div>
+   ${op?`<div class="adet">
+    <div class="w2"><label>Descrição da atividade</label><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}"></div>
+    <div><label>Início previsto</label><input type="date" data-tr="ini" data-id="${x.id}" value="${esc(x.ini)}"></div>
+    <div><label>Validação do cliente</label><select data-tr="val" data-id="${x.id}">${VAL_TR.map(o=>`<option value="${o}" ${x.val===o?"selected":""}>${o||"—"}</option>`).join("")}</select></div>
+    <div class="w2"><label>Observações / próximos passos</label><textarea data-tr="obs" data-id="${x.id}" rows="3">${esc(x.obs)}</textarea></div>
     <div class="w2"><label>Critério de aceite</label><textarea data-tr="crit" data-id="${x.id}" rows="2">${esc(x.crit)}</textarea></div>
-    <div class="w2"><label>Observações / próximos passos</label><textarea data-tr="obs" data-id="${x.id}" rows="2">${esc(x.obs)}</textarea></div>
     <div><label>Responsável / referência na unidade</label><input type="text" data-tr="ru" data-id="${x.id}" value="${esc(x.ru)}"></div>
     <div><label>Link de documentos (vídeos, RAPs...)</label><input type="text" data-tr="link" data-id="${x.id}" value="${esc(x.link)}"></div>
-    <div><label>Área de atuação</label><select data-tr="a" data-id="${x.id}">${AREAS.map(a=>`<option value="${a.id}" ${x.a===a.id?"selected":""}>${esc(a.l)}</option>`).join("")}</select></div>
-    <div style="align-self:end"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div></div></td></tr>`})});
- return `<div class="fpanel"><h3>Andamento · ${esc(faseNome(f))} <span class="hint" style="margin:0">${st.ok} de ${st.tot} concluídas${LA.length-st.tot>0?` · ${LA.length-st.tot} não aplicáveis`:""}</span>
-  ${ehFase?(p.info.fase===f?`<span class="tag d" style="margin:0">Fase atual</span>`:`<button class="sm pri" data-act="fase-atual" data-arg="${f}">Definir como fase atual</button>`):""}
-  <span style="margin-left:auto;display:flex;gap:6px;align-items:center"><select data-act-change="filtroTr">${[["todas","Todas as atividades"],["abertas","Só em aberto"],["pendente","Pendente cliente"],["atrasadas","Atrasadas"]].map(([v,l])=>`<option value="${v}" ${filtroTr===v?"selected":""}>${l}</option>`).join("")}</select>
-</span></h3>
-  ${chips}<div class="pbar ${st.c}" style="margin:10px 0 10px"><i style="width:${st.pc}%"></i></div>
-  ${vis.length?`<div style="overflow-x:auto"><table class="tr"><thead><tr><th style="width:56px">Cód.</th><th>Atividade</th><th style="width:160px">Status</th><th style="width:140px">Início previsto</th><th style="width:140px">Fim previsto</th><th style="width:170px">Responsável Wisetech</th><th style="width:120px">Validação cliente</th><th style="width:44px"></th></tr></thead><tbody>${rows}</tbody></table></div>`:`<p class="hint">Nenhuma atividade neste filtro.</p>`}
-  <div class="dlrow"><button class="sm" data-act="tr-add">+ Incluir atividade</button></div></div>`}
+    <div><label>Área de atuação</label><select data-tr="a" data-id="${x.id}">${AREAS.map(a=>`<option value="${a.id}" ${x.a===a.id?"selected":""}>${AREA_IC[a.id]} ${esc(a.l)}</option>`).join("")}</select></div>
+    <div class="adel"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div></div>`:""}</div>`};
+ let body="";grupos.forEach(g=>{const its=vis.filter(x=>x.g===g),todos=LA.filter(x=>x.g===g),ok=todos.filter(x=>x.st==="CONCLUÍDO").length,ap=todos.filter(x=>x.st!=="NÃO APLICAR").length;
+  body+=`<div class="agrp"><div class="agh"><span>${esc(g)}</span><small>${ok} de ${ap} concluídas</small></div>${its.map(card).join("")}</div>`});
+ const nenhuma=!LA.length?`<div class="vazio2"><div style="font-size:28px">${A?AREA_IC[A.id]:"🗂️"}</div><b>Nenhuma atividade ${A?"de "+esc(A.l)+" ":""}nesta fase.</b><div class="hint">Escolha outra fase acima${A?" ou outra área":""}.</div></div>`:!vis.length?`<div class="vazio2"><b>Nenhuma atividade neste filtro.</b></div>`:"";
+ return `<div class="fpanel">
+  <div class="fhead"><div><h3>${esc(faseNome(f))}${p.info.fase===f?` <span class="tag d" style="margin:0 0 0 6px;vertical-align:middle">Fase atual</span>`:""}</h3>
+   <div class="hint" style="margin:2px 0 0">${A?`<b style="color:${A.c}">${AREA_IC[A.id]} ${esc(A.l)}</b> · `:""}${st.ok} de ${st.tot} concluídas${LA.length-st.tot>0?` · ${LA.length-st.tot} não aplicáveis`:""}</div></div>
+   ${ehFase&&p.info.fase!==f?`<button class="sm" data-act="fase-atual" data-arg="${f}">Definir como fase atual</button>`:""}</div>
+  <div class="pbar ${st.c}" style="margin:10px 0 12px"><i style="width:${st.pc}%"></i></div>
+  <div class="tfil">${filtros.map(([v,l,n])=>`<button class="${filtroTr===v?"on":""}" data-act="ftr" data-arg="${v}">${l} <small>${n}</small></button>`).join("")}</div>
+  ${nenhuma}${body}
+  <div class="dlrow"><button class="sm" data-act="tr-add">+ Incluir atividade${A?" em "+esc(A.l):""}</button></div></div>`}
 function rEquipeProjeto(p){if(!USER||!EQUIPE.length)return"";const dono=pessoaPorId(p.owner)||(p.owner===USER.id?MEU:null);
  const outros=EQUIPE.filter(u=>u.id!==p.owner);
  return `<div class="panel"><h2>Equipe do projeto</h2><p class="hint" style="font-size:13px">Quem pode ver e editar este projeto. Gestores têm acesso a todos os projetos.</p>
@@ -1473,22 +1547,24 @@ function rPerg(){const p=P();
   const ids=p.etapas.filter(x=>x.ativa||x.id===sel).map(x=>x.id),k=ids.indexOf(sel);
   q+=`<div class="foot">${k>0?`<button data-act="open" data-arg="${ids[k-1]}">← Anterior</button>`:"<span></span>"}${k<ids.length-1?`<button class="pri" data-act="open" data-arg="${ids[k+1]}">Próxima →</button>`:`<button class="pri" data-act="tab" data-arg="visual">Ver fluxo →</button>`}</div>`}
  return `<div class="split"><div class="side">${h}</div><div class="panel" id="painel">${q}</div></div>`}
+const COR_SET=["#0f766e","#1d4ed8","#7c3aed","#b45309","#be185d","#0369a1","#4d7c0f","#475569"];
 function rVisual(){const p=P(),et=ativas(p);if(!et.length)return `<div class="panel">Nenhuma etapa incluída no fluxo.</div>`;
  const setores=[...SETORES.filter(s=>et.some(e=>e.setor===s)),...[...new Set(et.map(e=>e.setor))].filter(s=>!SETORES.includes(s))];
+ const cor=s=>COR_SET[Math.max(0,setores.indexOf(s))%COR_SET.length];
  const gp=id=>p.aderencia.filter(a=>a.etapa===id&&a.status&&a.status!=="Aderente").length;
- let h=`<div class="legend"><span>Colunas = etapas, linhas = setores. Clique num cartão para editar.</span><span class="tag d">◆ decisão</span><span class="tag a">⚠ atenção</span><span class="tag g">gap de aderência</span></div><div class="lanes"><div class="grid" style="grid-template-columns:150px repeat(${et.length},244px)"><div class="lh">Setor \\ Etapa</div>`;
- et.forEach((e,i)=>h+=`<div class="ch">${i+1}</div>`);
- setores.forEach(s=>{h+=`<div class="lh">${esc(s)}</div>`;et.forEach((e,i)=>{h+=`<div class="cell">`;if(e.setor===s){const r=resumo(e),ps=passos(e),d=decisoes(e),a=alertas(e),g=gp(e.id);
-  h+=`<div class="fc" data-act="open" data-arg="${e.id}"><h4>${i+1}. ${esc(e.tit)}</h4><ul>${r.map(x=>`<li><b>${esc(x.l)}:</b> ${esc(x.v)}</li>`).join("")}${ps.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${!r.length&&!ps.length?`<div class="hint">Ainda sem respostas</div>`:""}${d.map(x=>`<span class="tag d">◆ ${esc(x)}</span>`).join("")}${a.length?`<span class="tag a">⚠ ${a.length}</span>`:""}${g?`<span class="tag g">${g} gap${g>1?"s":""}</span>`:""}</div>${i<et.length-1?`<span class="arrow">→</span>`:""}`}h+=`</div>`})});
- return h+`</div></div>`}
+ let h=`<div class="legend"><span>O atendimento segue de cima para baixo. A etiqueta colorida mostra o setor responsável por cada etapa. Clique num cartão para editar.</span><span class="tag d">◆ decisão</span><span class="tag a">⚠ atenção</span><span class="tag g">gap de aderência</span></div>
+ <div class="setleg">${setores.map(s=>`<span style="--sc:${cor(s)}"><i></i>${esc(s)}</span>`).join("")}</div><div class="vflow">`;
+ et.forEach((e,i)=>{const r=resumo(e),ps=passos(e),d=decisoes(e),a=alertas(e),g=gp(e.id),c=cor(e.setor);
+  h+=`<div class="vstep" style="--sc:${c}"><div class="vrail"><div class="vnum">${i+1}</div>${i<et.length-1?`<div class="vline"></div>`:""}</div>
+   <div class="fc vfc" data-act="open" data-arg="${e.id}"><div class="vset">${esc(e.setor)}</div><h4>${esc(e.tit)}</h4><ul>${r.map(x=>`<li><b>${esc(x.l)}:</b> ${esc(x.v)}</li>`).join("")}${ps.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${!r.length&&!ps.length?`<div class="hint">Ainda sem respostas</div>`:""}${d.map(x=>`<span class="tag d">◆ ${esc(x)}</span>`).join("")}${a.length?`<span class="tag a">⚠ ${a.length}</span>`:""}${g?`<span class="tag g">${g} gap${g>1?"s":""}</span>`:""}</div></div>`});
+ return h+`</div>`}
 function rAder(){const p=P();const ets=[["geral","Geral"],...p.etapas.map(e=>[e.id,e.tit])];
- const lista=p.aderencia.filter(a=>filtroArea==="todas"||filtroArea==="minhas"||(a.area||"clin")===filtroArea).filter(a=>filtroAd==="todos"||(filtroAd==="gaps"?a.status!=="Aderente":a.status===filtroAd));
+ const SA=segAtual(p);const lista=p.aderencia.filter(a=>!SA||(a.area||"clin")===SA.id).filter(a=>filtroAd==="todos"||(filtroAd==="gaps"?a.status!=="Aderente":a.status===filtroAd));
  const cont=STATUS_AD.map(s=>`${s}: <b>${p.aderencia.filter(a=>a.status===s).length}</b>`).join(" · ");
- return `<div class="panel"><h2>Levantamento de aderência</h2><p class="hint" style="font-size:13px">Processos do cliente e o quanto o sistema atende. A IA preenche a partir do levantamento; aqui você ajusta, inclui e acompanha os gaps.</p>
+ return `${segBar(p,"Área em análise")}<div class="panel"><h2>Levantamento de aderência</h2><p class="hint" style="font-size:13px">Processos do cliente e o quanto o sistema atende. A IA preenche a partir do levantamento; aqui você ajusta, inclui e acompanha os gaps.</p>
  <div class="tbar"><select data-act-change="filtro">${[["todos","Todos os itens"],["gaps","Só gaps (não aderentes)"],...STATUS_AD.map(s=>[s,s])].map(([v,l])=>`<option value="${v}" ${filtroAd===v?"selected":""}>${l}</option>`).join("")}</select>
- <select data-act-change="farea">${[["todas","Todas as áreas"],...AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>[a.id,a.l])].map(([v,l])=>`<option value="${v}" ${filtroArea===v?"selected":""}>${esc(l)}</option>`).join("")}</select>
  <button class="pri" data-act="ad-add">+ Incluir item</button><span class="hint" style="margin:0">${cont}</span></div>
- ${lista.length?`<table class="ad"><thead><tr><th style="width:30%">Processo</th><th style="width:14%">Área</th><th style="width:16%">Etapa</th><th style="width:15%">Status</th><th>Observação</th><th style="width:36px"></th></tr></thead><tbody>
+ ${lista.length?`<table class="ad rt"><thead><tr><th style="width:30%">Processo</th><th style="width:14%">Área</th><th style="width:16%">Etapa</th><th style="width:15%">Status</th><th>Observação</th><th style="width:36px"></th></tr></thead><tbody>
  ${lista.map(a=>`<tr><td><textarea data-ad="processo" data-id="${a.id}" rows="1">${esc(a.processo)}</textarea></td>
   <td><select data-ad="area" data-id="${a.id}">${AREAS.map(x=>`<option value="${x.id}" ${(a.area||"clin")===x.id?"selected":""}>${esc(x.l)}</option>`).join("")}</select></td>
   <td><select data-ad="etapa" data-id="${a.id}">${ets.map(([v,l])=>`<option value="${v}" ${a.etapa===v?"selected":""}>${esc(l)}</option>`).join("")}</select></td>
@@ -1498,9 +1574,9 @@ function resumoAud(p=P()){let tot=0,sim=0,par=0,nao=0,nsa=0,vazio=0;AUDIT.forEac
 function rAud(){const p=P(),A=p.auditInfo,R=resumoAud(p);let n=0;
  const vcls=v=>v==="SIM"?"va-SIM":v==="PARCIAL"?"va-PARCIAL":v==="NÃO"?"va-NÃO":v==="NÃO SE APLICA"?"va-NSA":"";
  let rows="";AUDIT.forEach(([g,its],gi)=>{rows+=`<tr class="trg"><td colspan="5">${esc(g)}</td></tr>`;its.forEach(([item,crit],ii)=>{n++;const k=audKey(gi,ii),a=p.audit[k]||{};
-  rows+=`<tr><td style="color:var(--mut);font-weight:600">${n}</td><td><b>${esc(item)}</b></td><td style="color:var(--mut)">${esc(crit)}</td>
-  <td><select data-aud="v" data-k="${k}" class="${vcls(a.v)}">${VAL_AUD.map(o=>`<option value="${o}" ${(a.v||"")===o?"selected":""}>${o||"—"}</option>`).join("")}</select></td>
-  <td><textarea data-aud="obs" data-k="${k}" rows="1">${esc(a.obs)}</textarea></td></tr>`})});
+  rows+=`<tr><td style="color:var(--mut);font-weight:600" class="rtn">${n}</td><td><b>${esc(item)}</b></td><td style="color:var(--mut)" data-l="Critério de aceite">${esc(crit)}</td>
+  <td data-l="Validado?"><select data-aud="v" data-k="${k}" class="${vcls(a.v)}">${VAL_AUD.map(o=>`<option value="${o}" ${(a.v||"")===o?"selected":""}>${o||"—"}</option>`).join("")}</select></td>
+  <td data-l="Observações"><textarea data-aud="obs" data-k="${k}" rows="1">${esc(a.obs)}</textarea></td></tr>`})});
  return `<div class="cards">
  <div class="kpi"><div class="n" style="color:#0f7c74">${R.pc}%</div><div class="l">validado (${R.sim} de ${R.tot} itens aplicáveis)</div></div>
  <div class="kpi"><div class="n" style="color:#92400e">${R.par}</div><div class="l">parciais</div></div>
@@ -1515,7 +1591,7 @@ function rAud(){const p=P(),A=p.auditInfo,R=resumoAud(p);let n=0;
   <div class="full"><label>Participantes da reunião de validação · cliente</label><input type="text" data-audi="partCli" value="${esc(A.partCli)}"></div>
   <div class="full"><label>Participantes da reunião de validação · Wisetech</label><input type="text" data-audi="partWt" value="${esc(A.partWt)}"></div>
   <div class="full"><label>Observações do parecer</label><textarea data-audi="obs">${esc(A.obs)}</textarea></div></div></div>
- <div class="panel" style="padding:0;overflow-x:auto"><table class="au"><thead><tr><th style="width:44px">Nº</th><th style="width:24%">Item de verificação</th><th>Critério de aceite</th><th style="width:150px">Validado?</th><th style="width:24%">Observações</th></tr></thead><tbody>${rows}</tbody></table></div>`}
+ <div class="panel" style="padding:0"><table class="au rt"><thead><tr><th style="width:44px">Nº</th><th style="width:24%">Item de verificação</th><th>Critério de aceite</th><th style="width:150px">Validado?</th><th style="width:24%">Observações</th></tr></thead><tbody>${rows}</tbody></table></div>`}
 function addDias(n){const d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function cargaEquipe(){const hoje=hojeISO(),em7=addDias(7),em30=addDias(30);
  const reg=u=>({u,proj:[],ab:[],em:0,ar:0,atr:0,pc:0,v7:0,starts:[]});
@@ -1562,7 +1638,7 @@ function rCargaSemanal(C){const seg=d=>{const x=new Date(d);const k=(x.getDay()+
  const pessoas=[...C.pessoas,...(C.sem.ab.length?[C.sem]:[])];let max=1;
  const M=pessoas.map(x=>{const atr=x.ab.filter(y=>atrasada(y.a)).length,sd=x.ab.filter(y=>!y.a.fim).length;const c=sem.map(w=>x.ab.filter(y=>y.a.fim&&!atrasada(y.a)&&y.a.fim>=iso(w.a)&&y.a.fim<=iso(w.b)).length);c.forEach(v=>max=Math.max(max,v));return{x,atr,sd,c}});
  const cel=(v,cls)=>`<td class="hm ${cls||""}" style="${v&&!cls?`background:rgba(15,124,116,${0.12+0.78*v/max});color:${v/max>0.55?"#fff":"inherit"}`:""}">${v||""}</td>`;
- return `<div style="overflow-x:auto"><table class="hmt"><thead><tr><th>Pessoa</th><th class="hm">Atrasadas</th>${sem.map((w,i)=>`<th class="hm">${i===0?"Esta semana":String(w.a.getDate()).padStart(2,"0")+"/"+String(w.a.getMonth()+1).padStart(2,"0")}</th>`).join("")}<th class="hm">Sem prazo</th></tr></thead>
+ return `<div><table class="hmt"><thead><tr><th>Pessoa</th><th class="hm">Atrasadas</th>${sem.map((w,i)=>`<th class="hm">${i===0?"Esta semana":String(w.a.getDate()).padStart(2,"0")+"/"+String(w.a.getMonth()+1).padStart(2,"0")}</th>`).join("")}<th class="hm">Sem prazo</th></tr></thead>
  <tbody>${M.map(r=>`<tr><td><b>${esc(nomeU(r.x.u)||r.x.u.nome)}</b></td>${cel(r.atr,r.atr?"late":"")}${r.c.map(v=>cel(v)).join("")}<td class="hm nd">${r.sd||""}</td></tr>`).join("")}</tbody></table></div>
  <p class="hint">Atividades em aberto da trilha pelo fim previsto. Quanto mais escuro, mais entregas na semana.</p>`}
 function rPainel(){const C=cargaEquipe(),hoje=hojeISO(),em30=addDias(30);
@@ -1576,7 +1652,7 @@ function rPainel(){const C=cargaEquipe(),hoje=hojeISO(),em30=addDias(30);
    let h=`<div class="pb ${ab?"open":""}" data-act="carga-ab" data-arg="${id}"><div class="pn"><b>${esc(nomeU(x.u)||x.u.nome)}</b><span>${x.u.id&&!String(x.u.id).startsWith("txt:")?`${x.proj.length} projeto${x.proj.length===1?"":"s"}`:""}</span></div>
     <div class="pbar2">${seg(x.atr,"#dc2626","Atrasadas")}${seg(x.pc,"#f59e0b","Pendente cliente")}${seg(x.em,"#eab308","Em andamento")}${seg(x.ar,"#b8c4cc","A realizar")}</div><div class="pt">${x.ab.length}</div></div>`;
    if(ab){const L=x.ab.slice().sort((a,b)=>(atrasada(b.a)-atrasada(a.a))||String(a.a.fim||"9").localeCompare(String(b.a.fim||"9")));
-    h+=`<div class="pdet" style="overflow-x:auto">${L.length?`<table class="cgl"><tr><th>Projeto</th><th>Fase</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th></th></tr>${L.slice(0,60).map(({p,f,a})=>`<tr class="${atrasada(a)?"late":""}"><td>${esc(p.nome)}</td><td>${esc((CURTO[f]||["",f])[1])}</td><td>${esc((a.cod?a.cod+" · ":"")+a.t)}</td><td><span class="ss ss-${stSlug(a.st)}" style="padding:2px 6px;border-radius:6px;font-size:11px">${esc(a.st)}</span></td><td>${a.fim?fmtData(a.fim)+(atrasada(a)?" ⚠":""):"—"}</td><td><button class="sm" data-act="abrir-ativ" data-arg="${p.id}|${f}">Abrir</button></td></tr>`).join("")}</table>${L.length>60?`<p class="hint">Mostrando 60 de ${L.length}.</p>`:""}`:`<p class="hint">Nenhuma atividade em aberto.</p>`}</div>`}
+    h+=`<div class="pdet">${L.length?`<table class="cgl rt"><tr><th>Projeto</th><th>Fase</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th></th></tr>${L.slice(0,60).map(({p,f,a})=>`<tr class="${atrasada(a)?"late":""}"><td>${esc(p.nome)}</td><td>${esc((CURTO[f]||["",f])[1])}</td><td>${esc((a.cod?a.cod+" · ":"")+a.t)}</td><td><span class="ss ss-${stSlug(a.st)}" style="padding:2px 6px;border-radius:6px;font-size:11px">${esc(a.st)}</span></td><td>${a.fim?fmtData(a.fim)+(atrasada(a)?" ⚠":""):"—"}</td><td><button class="sm" data-act="abrir-ativ" data-arg="${p.id}|${f}">Abrir</button></td></tr>`).join("")}</table>${L.length>60?`<p class="hint">Mostrando 60 de ${L.length}.</p>`:""}`:`<p class="hint">Nenhuma atividade em aberto.</p>`}</div>`}
    return h}).join(""):`<p class="hint">Nenhuma atividade com responsável ainda. Defina o "Responsável Wisetech" nas atividades da trilha.</p>`;
  const titulo=ehGestor()||!USER?"Painel gerencial":"Meu painel";
  return `<div class="ph"><div><h2 style="margin:0">${titulo}</h2><div class="hint" style="margin-top:2px">${ehGestor()?"Todos os projetos e a carga de cada pessoa da equipe":USER?"Seus projetos e suas atividades":"Projetos deste computador"} · ${fmtData(hoje)}</div></div></div>
@@ -1593,9 +1669,9 @@ function rPainel(){const C=cargaEquipe(),hoje=hojeISO(),em30=addDias(30);
  <div class="panel"><div class="ptitle"><h3>Cronograma dos projetos (Gantt)</h3><span class="hint" style="margin:0">Clique em ▸ para abrir as fases · no nome para abrir o projeto</span></div>${rGantt()}</div>
  <div class="panel"><div class="ptitle"><h3>Carga semanal · próximas 8 semanas</h3></div>${rCargaSemanal(C)}</div>
  ${podeGerir()&&S.projetos.some(x=>x.oculto)?`<div class="panel"><h3 style="margin:0 0 4px">Projetos ocultos</h3><p class="hint" style="font-size:13px;margin-top:0">Não aparecem para a equipe nem nos indicadores. Nenhum dado foi apagado.</p>
- <table class="cgl"><tr><th>Projeto</th><th>Ocultado em</th><th>Por</th><th></th></tr>${S.projetos.filter(x=>x.oculto).map(x=>`<tr><td><b>${esc(x.nome)}</b></td><td>${x.oculto.data?fmtData(x.oculto.data.slice(0,10)):"—"}</td><td>${esc(x.oculto.por||"—")}</td><td><button class="sm" data-act="proj-reexibir" data-arg="${x.id}">Reexibir</button></td></tr>`).join("")}</table></div>`:""}
+ <table class="cgl rt"><tr><th>Projeto</th><th>Ocultado em</th><th>Por</th><th></th></tr>${S.projetos.filter(x=>x.oculto).map(x=>`<tr><td><b>${esc(x.nome)}</b></td><td>${x.oculto.data?fmtData(x.oculto.data.slice(0,10)):"—"}</td><td>${esc(x.oculto.por||"—")}</td><td><button class="sm" data-act="proj-reexibir" data-arg="${x.id}">Reexibir</button></td></tr>`).join("")}</table></div>`:""}
  ${ehGestor()?`<div class="panel"><h3 style="margin:0 0 4px">Equipe</h3><p class="hint" style="font-size:13px;margin-top:0">Todos que criaram conta no app. Gestores veem e editam todos os projetos.</p>
- <table class="cgl"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`:""}`}
+ <table class="cgl rt"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`:""}`}
 function rCarga(){if(!ehGestor())return"";const C=cargaEquipe(),hoje=hojeISO();
  const maxAb=Math.max(1,...C.pessoas.map(x=>x.ab.length));
  const linha=(x,i)=>{const ab=cargaAberta===(x.u.id||"__sem");const nivel=x.atr?"r":x.ab.length>maxAb*0.66?"y":"g";
@@ -1605,7 +1681,7 @@ function rCarga(){if(!ehGestor())return"";const C=cargaEquipe(),hoje=hojeISO();
    <td>${x.starts.length?x.starts.map(p=>`${esc(p.nome)} (${fmtData(p.info.start)})`).join("<br>"):"—"}</td><td>${ab?"▴":"▾"}</td></tr>`;
   if(ab){const L=x.ab.slice().sort((a,b)=>(atrasada(b.a)-atrasada(a.a))||String(a.a.fim||"9").localeCompare(String(b.a.fim||"9")));
    h+=`<tr class="det"><td colspan="9">${x.u.id&&x.proj.length?`<div class="hint" style="margin:0 0 6px"><b>Projetos:</b> ${x.proj.map(p=>`${esc(p.nome)} <span class="tag d" style="margin:0 6px 0 2px">${esc((CURTO[p.info.fase]||["",""])[1])}</span>`).join(" ")}</div>`:""}
-   ${L.length?`<table class="cgl"><tr><th>Projeto</th><th>Fase</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th></th></tr>${L.slice(0,80).map(({p,f,a})=>`<tr class="${atrasada(a)?"late":""}"><td>${esc(p.nome)}</td><td>${esc((CURTO[f]||["",f])[1])}</td><td>${esc((a.cod?a.cod+" · ":"")+a.t)}</td><td><span class="ss ss-${stSlug(a.st)}" style="padding:2px 6px;border-radius:6px;font-size:11px">${esc(a.st)}</span></td><td>${a.fim?fmtData(a.fim)+(atrasada(a)?" ⚠":""):"—"}</td><td><button class="sm" data-act="abrir-ativ" data-arg="${p.id}|${f}">Abrir</button></td></tr>`).join("")}</table>${L.length>80?`<p class="hint">Mostrando 80 de ${L.length}.</p>`:""}`:`<p class="hint">Nenhuma atividade em aberto.</p>`}</td></tr>`}
+   ${L.length?`<table class="cgl rt"><tr><th>Projeto</th><th>Fase</th><th>Atividade</th><th>Status</th><th>Fim previsto</th><th></th></tr>${L.slice(0,80).map(({p,f,a})=>`<tr class="${atrasada(a)?"late":""}"><td>${esc(p.nome)}</td><td>${esc((CURTO[f]||["",f])[1])}</td><td>${esc((a.cod?a.cod+" · ":"")+a.t)}</td><td><span class="ss ss-${stSlug(a.st)}" style="padding:2px 6px;border-radius:6px;font-size:11px">${esc(a.st)}</span></td><td>${a.fim?fmtData(a.fim)+(atrasada(a)?" ⚠":""):"—"}</td><td><button class="sm" data-act="abrir-ativ" data-arg="${p.id}|${f}">Abrir</button></td></tr>`).join("")}</table>${L.length>80?`<p class="hint">Mostrando 80 de ${L.length}.</p>`:""}`:`<p class="hint">Nenhuma atividade em aberto.</p>`}</td></tr>`}
   return h};
  const tot=C.pessoas.reduce((a,x)=>({ab:a.ab+x.ab.length,atr:a.atr+x.atr,pc:a.pc+x.pc}),{ab:0,atr:0,pc:0});
  return `<div class="cards">
@@ -1613,11 +1689,11 @@ function rCarga(){if(!ehGestor())return"";const C=cargaEquipe(),hoje=hojeISO();
   <div class="kpi"><div class="n">${tot.ab}</div><div class="l">atividades em aberto com responsável</div></div>
   <div class="kpi"><div class="n" style="color:#b91c1c">${tot.atr}</div><div class="l">atrasadas</div></div>
   <div class="kpi"><div class="n" style="color:#66757f">${C.sem.ab.length}</div><div class="l">atividades em aberto sem responsável</div></div></div>
- <div class="panel" style="padding:0;overflow-x:auto"><table class="cgt"><thead><tr><th>Pessoa</th><th>Projetos</th><th style="width:22%">Em aberto</th><th>Em andamento</th><th>Atrasadas</th><th>Pend. cliente</th><th>Vencem em 7 dias</th><th>Starts nos próximos 30 dias</th><th></th></tr></thead>
+ <div class="panel" style="padding:0"><table class="cgt rt"><thead><tr><th>Pessoa</th><th>Projetos</th><th style="width:22%">Em aberto</th><th>Em andamento</th><th>Atrasadas</th><th>Pend. cliente</th><th>Vencem em 7 dias</th><th>Starts nos próximos 30 dias</th><th></th></tr></thead>
  <tbody>${C.pessoas.map(linha).join("")}${C.sem.ab.length?linha(C.sem):""}</tbody></table></div>
  <p class="hint">A carga considera as atividades da trilha que não estão concluídas nem marcadas como "não aplicar", pelo responsável Wisetech de cada uma. Clique numa pessoa para ver as atividades.</p>
  <div class="panel"><h2>Equipe</h2><p class="hint" style="font-size:13px">Todos que criaram conta no app. Gestores veem e editam todos os projetos.</p>
- <table class="cgl"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`}
+ <table class="cgl rt"><tr><th>Nome</th><th>E-mail</th><th style="width:180px">Papel</th></tr>${EQUIPE.map(u=>`<tr><td>${esc(nomeU(u))}</td><td>${esc(u.email||"")}</td><td>${u.id===USER.id?`<b>${u.papel==="gestor"?"Gestor":"Técnico"}</b> (você)`:`<select data-papel="${u.id}"><option value="tecnico" ${u.papel!=="gestor"?"selected":""}>Técnico</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>`}</td></tr>`).join("")}</table></div>`}
 function rAten(){const p=P();let h=`<div class="alist">`,algo=false;
  const pt=pendenciasTrilha(p);
  if(pt.length){algo=true;h+=`<div class="grp"><h3>Pendências da trilha de implantação</h3><ul>${pt.map(({f,x})=>`<li><a href="#" data-act="ver-fase" data-arg="${f}" style="color:inherit"><b style="color:${x.st==="PENDENTE CLIENTE"?"#b91c1c":"#b45309"}">${x.st==="PENDENTE CLIENTE"?"Pendente cliente":"Atrasada"}</b> · ${esc(x.cod?x.cod+" ":"")}${esc(x.t)} <span class="hint">(${esc(faseNome(f))}${x.fim?" · fim previsto "+fmtData(x.fim):""}${x.ru?" · "+esc(x.ru):""})</span></a></li>`).join("")}</ul></div>`}
@@ -1665,13 +1741,14 @@ document.addEventListener("click",async ev=>{
  switch(act){
   case"tab":tab=arg;menuAberto=false;break;
   case"farea":setFiltroArea(arg);break;
+  case"ftr":filtroTr=arg;break;
   case"ver-area":setFiltroArea(arg);tab="gest";gestSub="trilha";window.scrollTo({top:0});break;
   case"area-aplicar":{if(!podeGerir())return;const uidR=p.areaResp[arg],u=pessoaPorId(uidR);if(!u)return;let n=0;
    TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.a===arg&&!x.rwId&&!String(x.rw||"").trim()&&x.st!=="NÃO APLICAR"&&x.st!=="CONCLUÍDO"){x.rwId=u.id;x.rw=nomeU(u);n++}}));
    save();toast(n?`${n} atividade(s) de ${areaDe(arg).l} atribuídas a ${nomeU(u)}`:"Todas as atividades desta área já têm responsável",3500);break}
   case"menu":menuAberto=!menuAberto;break;
   case"gantt-ab":ganttAberto.has(arg)?ganttAberto.delete(arg):ganttAberto.add(arg);break;
-  case"abrir-proj":S.cur=arg;projSel=true;tab="mapa";sel=null;faseVista=null;persist();break;
+  case"abrir-proj":S.cur=arg;projSel=true;setFiltroArea(areaPadrao(P()));tab="mapa";sel=null;faseVista=null;persist();break;
   case"fase":faseVista=arg;tab="gest";gestSub="trilha";filtroTr="todas";break;
   case"editar":tab="gest";gestSub=arg;if(arg==="trilha"&&!faseVista)faseVista=p.info.fase;break;
   case"fase-atual":p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
@@ -1729,7 +1806,8 @@ document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
  else if(d.cfg){cfg[d.cfg]=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify(cfg))}catch(e){}const bt=document.querySelector('[data-act="api-run"]');if(bt&&!iaBusy)bt.disabled=!cfg.key}
 });
 document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
- if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
+ if(t.id==="selArea"){setFiltroArea(t.value);render();return}
+ if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;setFiltroArea(areaPadrao(P()));sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
  if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
  if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
  if(d.bind&&t.tagName==="SELECT"||d.bind&&t.type==="date"){render();return}
