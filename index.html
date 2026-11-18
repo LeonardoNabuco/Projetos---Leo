@@ -128,7 +128,27 @@ table.cgl{width:100%;border-collapse:collapse;font-size:12px}table.cgl th{text-a
 .mi:hover{background:var(--bg)}.mi.on{background:var(--acc2);color:var(--acc);font-weight:700}
 .mic2{width:20px;text-align:center}.ml{flex:1;text-align:left}
 .mg{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin:14px 10px 6px}
-#selProj{width:100%;margin-bottom:6px;font-weight:600}
+#selProj{width:100%;margin-bottom:6px;font-weight:600}.atag{display:inline-block;font-size:10px;font-weight:700;color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,#fff);border:1px solid color-mix(in srgb,var(--ac) 30%,#fff);border-radius:999px;padding:0 7px;margin:3px 6px 0 0;line-height:16px}
+.achips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 0}
+.achip{--ac:#0f766e;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;display:inline-flex;align-items:center;gap:6px}
+.achip i{width:8px;height:8px;border-radius:50%;background:var(--ac);display:inline-block}.achip small{color:var(--mut);font-weight:600}
+.achip.on{background:var(--ac);border-color:var(--ac);color:#fff}.achip.on i{background:#fff}.achip.on small{color:#fff;opacity:.85}
+.areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.acard{text-align:left;background:#fff;border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.acard{align-items:stretch;justify-content:flex-start}.acard .cnt{font-size:12px;color:var(--mut)}.acard .pbar{margin:2px 0}
+.acard:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}.acard .an{font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px}.acard .an i{width:9px;height:9px;border-radius:50%;background:var(--ac)}
+.acard .ap{font-size:22px;font-weight:800;color:var(--ac)}
+.escg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.escl{border:1px solid var(--line);border-left:4px solid #cbd5e1;border-radius:10px;padding:10px 12px;background:#fafbfc}.escl.on{border-left-color:var(--ac);background:#fff}
+.escn{display:flex;align-items:center;gap:8px;cursor:pointer}.escn i{width:9px;height:9px;border-radius:50%;background:var(--ac)}.escn small{margin-left:auto;color:var(--mut)}
+.escd{font-size:12px;color:var(--mut);margin:4px 0 8px}.escr{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.escr select{flex:1;min-width:150px}
+.iast{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fafbfc;flex-wrap:wrap}
+.iast.run{background:#f0fdfa;border-color:#99f6e4}.iast.wait{background:#fffbeb;border-color:#fde68a}.iast.ok{background:#f0fdf4;border-color:#bbf7d0}
+.iast>div:nth-child(2){flex:1;min-width:220px}.iabt{display:flex;gap:6px}
+.okic{width:34px;height:34px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.cdn{width:40px;height:40px;border-radius:50%;background:#f59e0b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.iamode{font-size:11px;font-weight:600;color:var(--mut);margin-left:8px;vertical-align:middle;border:1px solid var(--line);border-radius:999px;padding:2px 8px}.iamode.on{color:#047857;border-color:#a7f3d0;background:#ecfdf5}
+#selProj.vazio{color:var(--mut);font-weight:500;border-style:dashed}
 .pbtns{display:flex;gap:4px;margin-bottom:8px}.pbtns button{flex:1 1 0;min-width:0;justify-content:center;padding:4px 3px!important;white-space:nowrap;font-size:11.5px}.pbtns button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .ocbox{border:1px dashed #c9d3d9;border-radius:10px;padding:8px;margin:-2px 0 10px;background:#fafbfc}
 .ocb-t{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
@@ -334,7 +354,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 2026-11-18.6</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 2026-11-18.7</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -353,145 +373,348 @@ const C_CAD="Cadastrados e funcionando no sistema.";
 const C_TREIN="Documento com conteúdo ministrado/ementa, lista de presença e tarefas encaminhadas.";
 const C_SIM="Prints e relatórios das atividades feitas no sistema na simulação da rotina.";
 const C_LEV="Levantamento de fluxo e análise de aderência registrados.";
+/* Áreas de atuação: cada atividade pertence a uma área; cada técnico atua na sua */
+const AREAS=[
+ {id:"ger",l:"Geral / Gestão",c:"#475569",fixa:true,d:"Kick-off, configurações gerais, acessos, integrações gerais e gestão"},
+ {id:"clin",l:"Atendimento clínico",c:"#0f766e",d:"Call center, recepção, consultório, prontuário, laudos, CRM e vacinas"},
+ {id:"fat",l:"Faturamento",c:"#7c3aed",d:"Convênios, contratos, tabelas TISS, guias, glosas e autorizações"},
+ {id:"fin",l:"Financeiro",c:"#b45309",d:"Contas, categorias, cartões, impostos, centros de custos, nota fiscal e repasse"},
+ {id:"sup",l:"Suprimentos",c:"#be185d",d:"Estoque, armazenagem, fornecedores, compras e inventário"},
+ {id:"lab",l:"Laboratório",c:"#1d4ed8",d:"Coleta, área técnica (KLIS), amostras, apoios, interfaces e portal de resultados"}];
+const AREA_IDS=AREAS.map(a=>a.id);
+const areaDe=id=>AREAS.find(a=>a.id===id)||AREAS[0];
+const C_LAB="Cadastrados, vinculados e funcionando no fluxo do laboratório.";
 const TRILHA=[
  {id:"f0",t:"Fase 0 · Kick-off",fase:true,g:[["Abertura do projeto",[
   ["1.0","Realizar alinhamento interno (equipe do projeto com o comercial)"],
   ["1.1","Realizar reunião de kick-off","Reunião realizada com patrocinador e responsáveis do cliente; ata registrada."],
   ["1.2","Formalização da abertura do projeto","Abertura do projeto formalizada com o cliente."],
   ["1.3","Análise básica dos recursos liberados Klingo","Módulos contratados identificados e habilitados."],
-  ["1.5","Análise do projeto técnico","Escopo, unidades e integrações do projeto técnico confirmados."]]]]},
+  ["1.4","Análise básica dos recursos liberados KLIS","Módulos do KLIS contratados identificados e habilitados.","lab"],
+  ["1.5","Análise do projeto técnico","Escopo, unidades e integrações do projeto técnico confirmados."]],"ger"]]},
  {id:"f1",t:"Fase 1 · Levantamento de fluxo x Aderência",fase:true,g:[["Levantamento",[
-  ["2.1","Preenchimento do questionário de levantamento de fluxo [tarefa do cliente]","Questionário respondido e devolvido pelo cliente."],
-  ["2.2","Reunião para levantamento de fluxo e análise de aderência (equipe TI)"],
-  ["2.3","Aspectos gerais da unidade",C_LEV],
+  ["2.1","Preenchimento do questionário de levantamento de fluxo [tarefa do cliente]","Questionário respondido e devolvido pelo cliente.","ger"],
+  ["2.2","Reunião para levantamento de fluxo e análise de aderência (equipe TI)",null,"ger"],
+  ["2.3","Aspectos gerais da unidade",C_LEV,"ger"],
   ["2.4","Call Center (com gestor da área)",C_LEV],
   ["2.5","Recepção (com a coordenação da área)",C_LEV],
+  ["2.6","Sala de coleta (com o coordenador da área)",C_LEV,"lab"],
+  ["2.7","Área técnica (com a coordenação da área)",C_LEV,"lab"],
   ["2.8","Clínica / Consultório (com a coordenação da área)",C_LEV],
+  ["2.9","Rotina de vacinas",C_LEV],
+  ["2.10","Faturamento",C_LEV,"fat"],
+  ["2.11","Financeiro",C_LEV,"fin"],
+  ["2.12","Suprimentos",C_LEV,"sup"],
   ["2.13","Relação de modelos de anamnese, laudos, formulários, atestados e relatórios utilizados (enviados pela unidade em Word/PDF)","Todos os modelos recebidos em Word/PDF."],
-  ["2.14","Validação do relatório de mapeamento de aderência","Relatório de mapeamento de aderência validado pelo cliente."]]]]},
+  ["2.14","Validação do relatório de mapeamento de aderência","Relatório de mapeamento de aderência validado pelo cliente.","ger"]],"clin"]]},
  {id:"f2a",t:"Fase 2 · Preparação de base",fase:true,g:[
   ["Banco de dados do cliente",[
-   ["3.1","Solicitação do banco de dados ao cliente para envio ao Klingo – 1ª importação (dados do paciente)"],
-   ["3.2","Tabela de usuários (colaboradores)"],["3.3","Tabela de prestadores"],["3.4","Profissionais solicitantes"],
+   ["3.1","Solicitação do banco de dados ao cliente para envio ao Klingo – 1ª importação (dados do paciente)",null,"ger"],
+   ["3.2","Tabela de usuários (colaboradores)",null,"ger"],["3.3","Tabela de prestadores"],["3.4","Profissionais solicitantes"],
    ["3.5","Tabela de valores particular","Valores conferidos por plano e modalidade."],
-   ["3.6","Tabelas de valores de convênios (cadastro pelo cliente)","Valores conferidos por plano e modalidade."]]],
-  ["Capacitação do cliente para cadastros",[["3.7","Treinamento de cadastros de tabelas de preços"],["3.8","Treinamento de cadastros de restrições"]]],
+   ["3.6","Tabelas de valores de convênios (cadastro pelo cliente)","Valores conferidos por plano e modalidade.","fat"],
+   ["3.6.34","Tabela de procedimentos (exames)","Procedimentos recebidos com descrição, classificação e código TUSS."],
+   ["3.6.35","Restrições de convênios","Restrições recebidas por operadora e plano.","fat"],
+   ["3.6.45","Planilha de códigos e descrição dos exames a interfacear por equipamento","Planilha recebida e conferida com a área técnica.","lab"],
+   ["3.6.37","Tabela de materiais",null,"sup"],["3.6.38","Tabela de locais de armazenagem",null,"sup"],["3.6.39","Tabela de fornecedores",null,"sup"],
+   ["3.6.40","Tabela de contas de bancos",null,"fin"],["3.6.41","Tabela de categorias financeiras",null,"fin"],
+   ["3.6.43","Tabela de cadastros de cartões",null,"fin"],["3.6.44","Tabela de cadastros de impostos",null,"fin"]],"clin"],
+  ["Capacitação do cliente para cadastros",[["3.7","Treinamento de cadastros de tabelas de preços",null,"fat"],["3.8","Treinamento de cadastros de restrições",null,"fat"],
+   ["3.9","Treinamento de cadastros de laudos",null,"clin"]],"fat"],
   ["Migração",[
    ["3.10","Recebimento do backup dos pacientes e evoluções e envio ao Klingo","Último backup do cliente enviado à equipe Klingo para importação."],
-   ["3.11","Base concluída (migrada)","Registros de pacientes migrados e conferidos; histórico clínico preservado e íntegro."]]]]},
+   ["3.11","Base concluída (migrada)","Registros de pacientes migrados e conferidos; histórico clínico preservado e íntegro."]],"ger"]]},
  {id:"f2b",t:"Fase 2 · Configurações da base",fase:true,g:[
   ["Principal",[
-   ["4.3","Cadastro de unidades","Todas as unidades cadastradas com CNPJ e endereço."],
+   ["4.2","Cadastro do laboratório na clínica","Laboratório cadastrado e vinculado às unidades.","lab"],
+   ["4.3","Cadastro de unidades","Todas as unidades cadastradas com CNPJ e endereço.","ger"],
+   ["4.4","Cadastro de centros de custos","Centros criados e vinculados à unidade e aos procedimentos/contas.","fin"],
    ["4.5","Cadastro das recepções","Recepção ativa, usuários vinculados, fluxo validado."],
    ["","Locais de atendimento por unidade","Locais cadastrados e vinculados às agendas e prestadores."],
    ["4.6","Definir uso de totem"],["4.7","Definir uso de painel de chamada"],
    ["4.8","Configurações do totem","Totem configurado; check-in via CPF/QR Code funcionando; comprovante impresso/digital validado."],
    ["4.9","Configurações do painel","Tela configurada; integração com recepção; chamadas exibidas corretamente."],
    ["4.11","Especialidades","Todas as especialidades cadastradas e vinculadas aos prestadores/unidades."],
-   ["4.12","Prestadores","Login testado; especialidades, restrições, instruções e assinatura digital configuradas."]]],
+   ["4.12","Prestadores","Login testado; especialidades, restrições, instruções e assinatura digital configuradas."]],"clin"],
   ["Procedimentos",[
    ["5","Procedimentos","Cadastrados com descrição, classificação, código TUSS e restrições."],
    ["5.1","Pacote de sessões","Quantidade, periodicidade e valores validados."],
    ["5.2","Combo de procedimentos","Combos criados e vinculados corretamente."],
+   ["5.3","Componentes","Componentes devidamente configurados no sistema."],
    ["5.3","Valores particular","Valores cadastrados e refletindo na recepção."],
    ["5.4","Instruções particular","Regras cadastradas no sistema."],
+   ["5.5","Formas de pagamento (adiantamento, cartões, PIX, pagamento pendente)","Formas cadastradas e funcionando no fluxo da recepção.","fin"],
+   ["5.6","Regras de rateio (repasse, participações e comissões)","Percentuais configurados, aplicados e testados.","fin"],
    ["5.7","Sinalizador de atendimento","Regras aplicadas e visíveis na agenda."],
    ["5.8","Profissionais solicitantes","Cadastro e vinculação funcionando."],
-   ["5.12","Recursos"]]],
+   ["5.9","Hospitais / centros cirúrgicos (externos)","Locais cadastrados e vinculados a procedimentos cirúrgicos."],
+   ["5.10","Terceiros",C_CAD,"lab"],["5.11","Terceiros (de-paras)",C_CAD,"lab"],
+   ["5.12","Recursos"]],"clin"],
   ["Call Center",[
    ["6.1","Agenda","Agendas ativas para todos os prestadores: tipo (hora marcada / ordem de chegada), horários, tempo de atendimento, procedimentos, local e filtros de operadoras validados."],
    ["6.2","Motivos de bloqueio de agenda","Cadastrados e aplicados."],
    ["6.3","Feriados","Lista cadastrada, inclusive feriados municipais."],
    ["6.4","Teto de atendimento","Regras aplicadas."],
-   ["","Agendas compartilhadas","Visualização e regras validadas."]]],
+   ["","Agendas compartilhadas","Visualização e regras validadas."],
+   ["31.1","Converter orçamento para unidade diferente"],["31.2","Não imprimir orçamento sem salvar"]],"clin"],
   ["Recepção",[
    ["7.1","Motivos de cancelamento de procedimento","Cadastrados com sucesso."],
+   ["7.2","Alçadas de desconto","Cadastrados com sucesso."],
+   ["27.2","Alterar data do atendimento na recepção"],
    ["27.3","Alterar profissional por especialidade"],["27.4","Atender procedimentos sem agenda"],
    ["27.5","Atendimento com data futura na recepção"],["27.6","CPF não obrigatório"],
+   ["27.7","Enviar espelho de atendimento por e-mail ao paciente"],
+   ["27.11","Habilitar recálculo de itens (particulares) na recepção"],
+   ["27.13","Ocultar o valor do espelho de atendimento"],
+   ["27.15","Retirar obrigatoriedade dos campos do SUS (CNS e raça) no cadastro"],
    ["27.16","Retirar senha no totem (check-in sem agendamento)"],
-   ["30.1","Cadastro de pré-atendimento com vinculação da senha (totem)"]]],
+   ["30.1","Cadastro de pré-atendimento com vinculação da senha (totem)"]],"clin"],
   ["Prontuário",[
    ["9.1","Modelos de prontuário","Todos os modelos enviados pelo cliente configurados (consulta por especialidade e pré-atendimento)."],
    ["9.2","Alérgenos",C_CAD],["9.3","Medicamentos (prescrição no consultório)",C_CAD],["9.4","Kits de medicamento",C_CAD],
+   ["9.5","Protocolos de infusão",C_CAD],
    ["9.6","Grupo de procedimentos",C_CAD],["9.7","Procedimentos (requisição no consultório)",C_CAD],["9.8","Kits de procedimentos",C_CAD],
    ["9.9","Modelos de documentos (atestado, receita, requisição, relatório)",C_CAD],["9.10","Frases padrão",C_CAD],
    ["","Instruções para pacientes","Cadastradas e disponibilizadas para o responsável validar."],
    ["10.2","Fila de procedimentos",C_CAD],
-   ["10.3","Cabeçalhos específicos (consulta, atestado, receita, requisição, espelho de atendimento)",C_CAD]]],
+   ["10.3","Cabeçalhos específicos (consulta, atestado, receita, requisição, espelho de atendimento)",C_CAD]],"clin"],
+  ["Laudos",[
+   ["9.11","Laudos / procedimentos (modelos de laudo de exames)",C_CAD],
+   ["10","Status de laudos / procedimentos","Configurados e refletindo o fluxo real sem inconsistências."],
+   ["10.1","Fila de laudos",C_CAD],["10.4","Ocorrências em laudos",C_CAD]],"clin"],
   ["Consultório",[
    ["28.1","Altura da logo nas impressões"],["28.2","Caixa alta para nomes de medicamentos e exames"],
    ["28.3","Habilitar recurso de pausar atendimento"],["28.4","Não permitir chamar paciente sem concluir guia"],
-   ["29","Tamanho de fonte padrão nas impressões"]]],
+   ["29","Tamanho de fonte padrão nas impressões"]],"clin"],
+  ["CRM",[
+   ["12.1","Fila de leads",C_CAD],["12.2","Status de captação de requisição",C_CAD],["12.3","Status de retorno programado",C_CAD],
+   ["12.4","Programa de cuidado coordenado",C_CAD],["12.5","Status de cuidado coordenado",C_CAD],
+   ["12.6","Status de contato com profissional solicitante",C_CAD]],"clin"],
+  ["Vacinas",[["","Cadastros da rotina de vacinas",C_CAD],["","Validação dos cadastros de vacinas","Cadastros validados com a coordenação da área."]],"clin"],
   ["Acessos e cadastro do paciente",[
    ["13.1","Usuários","Usuários com módulos, permissões, login e senha funcionando."],["13.2","Permissões",C_CAD],
    ["13.4","Restrições de horário de acesso",C_CAD],["13.5","Autorizar máquina (acesso externo)",C_CAD],
    ["13.7","Duplicidade de pacientes",C_CAD],["13.8","Campos obrigatórios do paciente",C_CAD],["13.9","Campos customizados",C_CAD],
-   ["13.10","Anexos requeridos"],["13.19","Cores para tempo de espera"]]],
+   ["13.10","Anexos requeridos"],["13.19","Cores para tempo de espera",null,"clin"]],"ger"],
+  ["Outras configurações gerais",[
+   ["13.3","Atalhos"],["13.6","Outras configurações"],["13.11","Layout de etiquetas"],
+   ["13.12","Layout de importações"],["13.13","Layout de exportações"],["13.16","Tipos de arquivo"],
+   ["14.1","Tarefas: status de tarefas"],["14.2","Tarefas: prioridade de tarefas"],["14.3","Tarefas: grupo de atendimento de tarefas"],
+   ["16.10","Importação de cadastros gerais"],["46.4","Testar performance da solução do sistema"]],"ger"],
+  ["Importações para atendimento",[
+   ["16.7","Cadastros para atendimento"],["16.12","Preços para marcações"],
+   ["16.8","Procedimentos x tabelas de preços",null,"fat"],["16.9","Preços x operadoras",null,"fat"],["16.11","Arquivo TISS legado",null,"fat"]],"clin"],
   ["Mensagens e integrações",[
-   ["15.1","Envio de mensagem"],["15.2","Envio programado de mensagem (confirmação / lembrete)"],
-   ["16.1","Enquetes (NPS)","Formulários configurados; envios testados; respostas registradas."],
-   ["37","Mensageria","Comunicação ativa entre o Klingo e o sistema de mensageria do cliente."],
-   ["37.1","Avaliar viabilidade de integrações clínicas (telemedicina, assinatura digital, IA)"]]]]},
+   ["15.1","Envio de mensagem",null,"ger"],["15.2","Envio programado de mensagem (confirmação / lembrete)",null,"ger"],
+   ["16.1","Enquetes (NPS)","Formulários configurados; envios testados; respostas registradas.","ger"],
+   ["37","Mensageria","Comunicação ativa entre o Klingo e o sistema de mensageria do cliente.","ger"],
+   ["37.1","Avaliar viabilidade de integrações clínicas (telemedicina, assinatura digital, IA)"],
+   ["37.2","Integração com o PACS do cliente","Recepção e envio de imagens funcionando com sucesso."],
+   ["13.17","Configurações PACS",C_CAD]],"clin"],
+  ["Faturamento",[
+   ["8.1","Tabelas de procedimentos, medicamentos e materiais","Tabelas com procedimentos, materiais e medicamentos com valores corretos cadastrados."],
+   ["8.2","Operadoras / empresas","Cadastro completo das operadoras (registro ANS, planos, elegibilidade)."],
+   ["8.3","Contratos","Contratos cadastrados com as devidas informações (planos, instruções, restrições, reduções)."],
+   ["8.4","Restrições gerais","Restrições gerais configuradas."],
+   ["8.5","Unidades de medida",C_CAD],
+   ["8.6","Simpro","Arquivo zero e arquivo atualizado Simpro importados no sistema."],
+   ["8.7","Brasíndice","Arquivo zero e arquivo atualizado Brasíndice importados no sistema."],
+   ["8.8","Medicamentos",C_CAD],["8.9","Materiais",C_CAD],["8.10","Taxas","Tabelas de taxas e valores cadastradas."],["8.11","Kits",C_CAD],
+   ["8.12","Motivos de pendências de guias","Motivos configurados no sistema."],
+   ["8.13","Motivos de glosa de operadora","Motivos configurados no sistema."],
+   ["8.14","SUS – autorizadores",C_CAD],["8.15","Status de fluxo de fatura",C_CAD],
+   ["","Guias de cobrança e faturas","Guias emitidas e geração de faturas testada."],
+   ["","Serviços online (webservice das operadoras)","Webservice ativo após teste em ambiente de homologação."],
+   ["33.2","Unificar guias SP/SADT autorizadas (quando a operadora exigir)"],
+   ["35.6","Permitir alterar a data da guia no faturamento"]],"fat"],
+  ["Financeiro",[
+   ["","Categorias financeiras (entradas e saídas) e vínculo aos convênios/particular","Categorias configuradas e vinculadas; fluxo de caixa e DRE refletindo as informações do cliente."],
+   ["","Contas (corrente, caixa, vale), data e saldo inicial","Contas cadastradas com data e saldo inicial."],
+   ["","Cartões de crédito e débito: bandeiras, prazos, taxas e conta de recebimento","Bandeiras, prazos e taxas configurados; simulação de cobrança aprovada."],
+   ["","PIX","Chave configurada; validação de pagamento efetuada."],
+   ["","Impostos (retenção)","Impostos cadastrados e configurados."],
+   ["36.5","Modelos de distribuição por centro de custos",C_CAD],
+   ["13.14","Layout de cartão de crédito",C_CAD],["13.15","Layout de arquivo de retorno (CSV)",C_CAD],["13.18","Configurações de pagamento",C_CAD],
+   ["27.12","Não permitir fechamento particular com pagamento em aberto"],["27.14","Permitir alterar a data do pagamento na recepção"],
+   ["29.2","Lançamento do pagamento particular no financeiro (regra de geração)"],
+   ["38.12","Nota fiscal (sede)","Série, token e regime configurados; emissão testada com sucesso."],
+   ["38.13","Integração de NF-e por unidade (prefeitura / SEFAZ)","Integração com a prefeitura funcionando em cada unidade emissora."]],"fin"],
+  ["Suprimentos",[
+   ["36.1","Gestão de estoque definida",C_CAD],["16.2","Locais de armazenagem",C_CAD],
+   ["36.2","Itens de estoque (medicamentos e materiais) migrados ou cadastrados, com validade e lote",C_CAD],
+   ["36.3","Grupos",C_CAD],["36.5","Kits",C_CAD],["","Fornecedores",C_CAD],
+   ["16.3","Status de solicitações",C_CAD],["16.4","Status de ordens de compra",C_CAD],["16.5","Tipos de movimentação",C_CAD],
+   ["16.6","Validações",C_CAD],["","Inventário inicial",C_CAD]],"sup"],
+  ["Laboratório (Klingo)",[
+   ["11.1","Material de amostra","Materiais cadastrados e associados aos exames."],
+   ["11.2","Status de rastreabilidade de amostra","Amostra rastreável em todas as etapas sem perda de informação."],
+   ["11.3","Tipo de ocorrências",C_LAB],
+   ["11.4","Região de coleta domiciliar","Regiões cadastradas e vinculadas às coletas."],
+   ["11.5","Sinônimos","Sinônimos permitem a busca e identificação correta dos exames."],
+   ["11.6","Roteamento de etiquetas",C_LAB],
+   ["11.7","Apoiados","Exames apoiados vinculados aos laboratórios de apoio."],
+   ["11.8","Portal: abas",C_LAB],
+   ["27.8","Exibir a data de entrega no espelho, mesmo com exames pendentes"],
+   ["27.9","Exibir prazo de entrega do exame no espelho de atendimento"],
+   ["27.10","Finalizar atendimento de pacientes de laboratório com todos os exames"],
+   ["30.2","Gerar login/senha do portal de resultados a partir do atendimento"],
+   ["33.1","Etiquetas de laboratório (servidor de impressão – EPL)"],
+   ["34.1","Exibir na coleta apenas pacientes já integrados"]],"lab"],
+  ["KLIS – Exames",[
+   ["17.1","Bancadas","Bancadas configuradas e vinculadas aos fluxos de exames."],
+   ["17.2","Grupo de exames","Grupos organizados e associados aos exames."],
+   ["17.3","Exames","Exames completos, funcionais e sem inconsistências."],
+   ["17.4","Equipamentos","Equipamentos cadastrados e integrados aos exames."],
+   ["17.5","Folhas de trabalho","Folhas geradas corretamente conforme a configuração dos exames."],
+   ["17.6","Tipo de bactérias",C_LAB],["17.7","Bactérias",C_LAB],["17.8","Sensibilidade (antibiograma)",C_LAB],
+   ["17.9","Observações","Observações configuradas e exibidas nos laudos."],["17.10","Preparos",C_LAB],
+   ["17.11","Campos",C_LAB],["17.12","Tabelas de correlação","Correspondência correta entre sistemas."]],"lab"],
+  ["KLIS – Apoio, amostra e layouts",[
+   ["18.1","Apoios","Apoios configurados e operacionais."],["18.2","De-para","Conversões de-para funcionando entre os sistemas integrados."],["18.3","Preços de apoio",C_LAB],
+   ["19.1","Materiais (amostra)","Materiais disponíveis e vinculados."],["19.2","Racks","Racks configurados para a organização das amostras."],
+   ["19.3","Tipos de malote",C_LAB],["19.4","Roteamento de amostras","Roteamento automatizado e ocorrendo corretamente."],
+   ["20.1","Layout de etiqueta","Etiquetas geradas com todas as informações necessárias."],
+   ["20.2","Máscara de laudo","Resultados exibidos conforme o padrão definido, sem erros de formatação."],
+   ["20.3","Cabeçalhos","Cabeçalhos padronizados e consistentes nos documentos."]],"lab"],
+  ["KLIS – Status, automações e acessos",[
+   ["21.1","Tipos de ocorrências",C_LAB],["21.2","Status de exame",C_LAB],["21.3","Status de amostra","Status acompanham o ciclo da amostra."],
+   ["22.1","Notas",C_LAB],["22.2","Avaliação automática","Avaliação automática conforme as regras configuradas."],
+   ["23.1","Filtros",C_LAB],["23.2","Usuários (KLIS)","Usuários acessando conforme o perfil definido."],["23.3","Permissões (KLIS)",C_LAB],
+   ["24.1","Processos",C_LAB],["25.1","Locais de atendimento (KLIS)",C_LAB],["25.2","Convênios (KLIS)",C_LAB],["25.3","Adição de prazo",C_LAB]],"lab"],
+  ["Portal de resultados",[
+   ["26.1","Regras para ocultar resultados",C_LAB],["26.2","Perfil de planilha de exames para apoiados",C_LAB],["26.3","Apoiados (portal)",C_LAB],
+   ["35.1","Mensagem para pacientes com pagamento pendente no portal",null,"fin"],
+   ["35.2","Não exibir marcação no portal do paciente",null,"clin"],
+   ["35.3","Não permitir acessar resultado no portal com pagamento pendente"],
+   ["35.4","Visualizar resultados no portal do paciente","Paciente visualiza os resultados liberados no portal."]],"lab"],
+  ["Integrações do laboratório",[
+   ["37.3","B2B com laboratórios de apoio","Troca de dados operacional validada entre a unidade e o laboratório de apoio."],
+   ["38.1","Integração com laboratório de apoio (DB, Álvaro, Pardini etc.)","Troca de dados operacional validada entre a unidade e o laboratório de apoio."],
+   ["39.1","Interfaceamento de equipamentos","Comunicação estável e bidirecional entre o equipamento e KLIS/Klingo, com envio e retorno automático de dados."]],"lab"]]},
  {id:"f3",t:"Fase 3 · Validação de cadastros",fase:true,g:[["Validação",[
-  ["40.1","Realizar treinamento de validações de cadastros"],
+  ["40.1","Realizar treinamento de validações de cadastros",null,"ger"],
   ["40.2","1º Validar cadastros do Call Center (agenda, bloqueios, feriados, teto)"],
   ["40.3","2º Validar cadastros da Recepção (depende da validação do Call Center)"],
+  ["40.4","Validar cadastros da coleta (depende da validação da Recepção)",null,"lab"],
+  ["40.5","Validar cadastros da área técnica (depende da validação da coleta)",null,"lab"],
   ["40.6","3º Validar cadastros da área clínica / consultório (depende do Call Center e da Recepção)"],
-  ["","Realizar ajustes necessários identificados com o cliente junto à equipe técnica"],
-  ["40.10","Cadastros validados pelo cliente com a equipe técnica"],
-  ["","Homologar cadastros"],["","Homologar integrações"],
-  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado."]]]]},
+  ["40.7","Validar cadastros do faturamento (depende da validação da Recepção)",null,"fat"],
+  ["40.8","Validar cadastros do financeiro",null,"fin"],
+  ["40.9","Validar cadastros de suprimentos (pode ser concomitante)",null,"sup"],
+  ["","Realizar ajustes necessários identificados com o cliente junto à equipe técnica",null,"ger"],
+  ["40.10","Cadastros validados pelo cliente com a equipe técnica",null,"ger"],
+  ["","Homologar cadastros",null,"ger"],["","Homologar integrações",null,"ger"],
+  ["","Homologar interfaces de equipamentos",null,"lab"],
+  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado.","ger"]],"clin"]]},
  {id:"f4",t:"Fase 4 · Treinamento",fase:true,g:[["Treinamentos operacionais",[
-  ["42.1","Solicitar base teste para os treinamentos operacionais (a partir da base homologada)"],
+  ["42.1","Solicitar base teste para os treinamentos operacionais (a partir da base homologada)",null,"ger"],
   ["42.4","Treinamento do módulo Call Center",C_TREIN],["42.5","Treinamento do módulo Recepção",C_TREIN],
   ["42.6","Treinamento do módulo Consultório",C_TREIN],["42.7","Treinamento do módulo Assistência",C_TREIN],
-  ["43.7","Treinamento do módulo Relatórios",C_TREIN],
-  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado."]]]]},
+  ["","Treinamento do módulo Laudos",C_TREIN],
+  ["42.8","Treinamento do módulo Equipe Técnica (laboratório)",C_TREIN,"lab"],
+  ["42.9","Treinamento do módulo Internação",C_TREIN],["42.10","Treinamento do módulo Centro Cirúrgico",C_TREIN],
+  ["42.11","Treinamento do módulo Infusão",C_TREIN],["42.12","Treinamento do módulo Vacinas",C_TREIN],
+  ["42.13","Treinamento do módulo Pesquisa Clínica",C_TREIN],
+  ["43.7","Treinamento do módulo Relatórios",C_TREIN,"ger"],
+  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado.","ger"]],"clin"],
+  ["Treinamentos administrativos",[
+   ["43.1","Treinamento do módulo Repasse",C_TREIN,"fin"],["43.2","Treinamento do módulo Faturamento",C_TREIN,"fat"],
+   ["43.3","Treinamento do módulo Financeiro",C_TREIN,"fin"],["43.4","Treinamento do módulo Suprimentos",C_TREIN,"sup"],
+   ["43.5","Treinamento do módulo Escala",C_TREIN,"clin"],["43.6","Treinamento do módulo Autorizações",C_TREIN,"fat"],
+   ["43.9","Treinamento do módulo Contabilidade",C_TREIN,"fin"]],"fin"]]},
  {id:"f5",t:"Fase 5 · Simulação",fase:true,g:[
-  ["Migração",[["44.1","Migração – cadastro de pacientes e histórico clínico (avaliação com envolvidos)"]]],
+  ["Migração",[["44.1","Migração – cadastro de pacientes e histórico clínico (avaliação com envolvidos)"]],"ger"],
   ["Operação Call Center",[
    ["44.4","Marcação para atendimento na unidade (paciente TESTE)",C_SIM],["","Reagendar e cancelar marcação",C_SIM],
-   ["44.5","Orçamento convertido em agendamento",C_SIM],["44.6","Orçamento convertido em atendimento",C_SIM]]],
+   ["44.3","Marcação de agenda domiciliar (coleta domiciliar)",C_SIM,"lab"],
+   ["44.5","Orçamento convertido em agendamento",C_SIM],["44.6","Orçamento convertido em atendimento",C_SIM]],"clin"],
   ["Operação Recepção",[
    ["44.8","Totem: check-in sem agenda gerando 2 senhas por botão"],["44.9","Painel de chamada de paciente (vídeo e voz)"],
    ["44.10","Chamar paciente e realizar o atendimento particular"],["44.20","Atendimento por convênio com cadastro completo e guia SP/SADT"],
-   ["44.13","Impressão dos termos"],["44.14","Impressão dos atestados"]]],
+   ["44.11","Quitar o atendimento e integrar o paciente ao KLIS",C_SIM,"lab"],
+   ["44.12","Impressão do comprovante de coleta",null,"lab"],["44.15","Impressão das etiquetas",null,"lab"],
+   ["44.13","Impressão dos termos"],["44.14","Impressão dos atestados"]],"clin"],
+  ["Operação Sala de coleta",[
+   ["44.17","Chamar senha para entrega de material e registrar o recebimento",C_SIM],
+   ["44.18","Chamar senha para coleta e identificar a amostra",C_SIM],
+   ["44.19","Validar outros fluxos da sala de coleta",C_SIM]],"lab"],
   ["Operação Consultório",[
    ["44.21","Chamar paciente pelo consultório e registrar a evolução","Evolução registrada e finalizada."],
    ["","Prescrição e documentos clínicos","Prescrição funcionando; documentos impressos corretamente."],
    ["44.22","Avaliar se os pedidos de exames estão ocorrendo corretamente"],
-   ["44.23","Avaliar se os resultados de exames estão chegando corretamente"]]],
+   ["44.23","Avaliar se os resultados de exames estão chegando corretamente"],
+   ["","Laudos finalizados, liberados e visualizados",C_SIM],
+   ["44.24","Rotina de vacina validada",C_SIM]],"clin"],
+  ["Operação Área técnica",[
+   ["44.25","Realizar triagem de amostras",C_SIM],["44.26","Gerar folha de trabalho, validar por folha e imprimir",C_SIM],
+   ["44.27","Localizar atendimento pelo número e lançar resultados",C_SIM],["44.28","Recoleta com diligenciamento",C_SIM],
+   ["44.29","Avaliar apoios disponíveis para envio",C_SIM],["44.30","Impressão de laudos para validação (cabeçalho e layout)",C_SIM],
+   ["44.31","Avaliar portal de resultados e disponibilidade de acesso",C_SIM],["44.32","Avaliar liberação automática e regras especiais",C_SIM],
+   ["44.33","Avaliar permissões de usuários do KLIS",C_SIM],["44.34","Avaliar interfaceamentos (simular envio e recebimento)",C_SIM],
+   ["44.35","Avaliar os relatórios da rotina da área técnica",C_SIM]],"lab"],
+  ["Operação Faturamento",[
+   ["44.37","Buscar as guias do convênio e gerar o lote/fatura",C_SIM],
+   ["44.38","Imprimir espelhos de fatura e validar os campos necessários",C_SIM],
+   ["44.39","Avaliar rotina de pendenciamento de guias para tratamento interno",C_SIM],
+   ["44.40","Avaliar os relatórios da rotina do faturamento",C_SIM]],"fat"],
+  ["Operação Financeiro",[
+   ["44.42","Fechamento de caixa e prestação de contas para o financeiro",C_SIM],
+   ["44.43","Lançamentos de previsões de contas a pagar",C_SIM],["44.44","Fluxo de conciliação das contas",C_SIM]],"fin"],
+  ["Operação Suprimentos",[
+   ["44.46","Inventário de implantação de saldos",C_SIM],["44.47","Movimentações de itens de estoque (entradas e saídas)",C_SIM],
+   ["44.48","Fluxo de compras (solicitações e ordens de compra)",C_SIM]],"sup"],
   ["Homologação para o Start",[
-   ["44.49","Confirmar homologação ao Start"],["44.50","Todas as impressões foram validadas?"],
-   ["44.51","Todos os modelos de documentos foram validados?"],
-   ["44.52","Todos os totens configurados com suas impressões para as respectivas unidades?"],
-   ["44.53","Todos os painéis ajustados para as respectivas unidades?"],["44.55","Realizar auditoria pré-Start"],
+   ["44.49","Confirmar homologação ao Start"],["44.50","Todas as impressões foram validadas?",null,"clin"],
+   ["44.51","Todos os modelos de documentos foram validados?",null,"clin"],
+   ["44.52","Todos os totens configurados com suas impressões para as respectivas unidades?",null,"clin"],
+   ["44.53","Todos os painéis ajustados para as respectivas unidades?",null,"clin"],
+   ["44.54","Todas as interfaces foram validadas?",null,"lab"],["44.55","Realizar auditoria pré-Start"],
    ["44.56","Cadastro de pacientes – registros migrados e conferidos (2ª importação)?","Registros migrados e conferidos."],
    ["44.57","Histórico clínico preservado e íntegro?","Histórico clínico preservado e íntegro."],
    ["44.58","Quantidade de licenças com que pretende iniciar o Start","Número de licenças que serão utilizadas em produção definido."],
    ["44.59","Confirmação das pessoas-chave (predecessora ao Start)","Líderes de área, gestor de sistema e de projeto definidos."],
-   ["44.60","Validar documento de autorização de Start"],["44.61","Documento validado pelo líder técnico e cliente"]]]]},
+   ["44.60","Validar documento de autorização de Start"],["44.61","Documento validado pelo líder técnico e cliente"]],"ger"]]},
  {id:"f6",t:"Fase 6 · Start",fase:true,g:[["Operação assistida",[
   ["45.1","Operação Call Center"],["45.2","Operação Recepção"],["45.3","Operação Consultório"],
-  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado."]]]]},
+  ["","Operação Rotina de vacina"],
+  ["45.4","Operação Área técnica",null,"lab"],["45.6","Operação Faturamento",null,"fat"],
+  ["45.5","Operação Financeiro",null,"fin"],["45.7","Operação Suprimentos",null,"sup"],
+  ["","Aplicar checklist de auditoria para validação da etapa","Checklist de auditoria aplicado e registrado.","ger"]],"clin"]]},
  {id:"f7",t:"Fase 7 · Passagem para o suporte",fase:true,g:[["Inspeção técnica",[
   ["46.1","Realizar acompanhamento pós-Start"],["46.2","Apoiar na organização das agendas técnicas junto aos técnicos"],
   ["46.3","Checar entregas do projeto – liderança técnica (auditoria técnica)"],
   ["46.4","Apresentar relatórios gerenciais – resultados da produção no primeiro mês"],
+  ["","Testar a performance da solução do sistema"],
   ["46.5","Elaborar relatório de inspeção técnica"],
-  ["","Enviar termo de encerramento do projeto para encaminhamento ao suporte Klingo"]]]]},
+  ["46.6","Apoiar na alocação de recursos, guarda e preenchimento das documentações"],
+  ["","Enviar termo de encerramento do projeto para encaminhamento ao suporte Klingo"]],"ger"]]},
  {id:"gp",t:"Gestão do projeto",fase:false,g:[["Gestão",[
   ["47.1","Gerenciar todas as fases do projeto"],["47.2","Realizar acompanhamento dos indicadores"],
   ["47.3","Acompanhar os documentos de projeto (auditoria gerencial)"],["47.4","Realizar reuniões de acompanhamento do projeto"],
   ["47.5","Elaborar e enviar repasses gerais do status do projeto (unindo os repasses semanais dos técnicos)"],
   ["47.6","Gerenciar as demandas de desenvolvimento (integrações e customizações)"],
   ["47.9","Gerenciar a comunicação com o cliente (patrocinador e responsável técnico)"],
-  ["47.10","Diligenciar o processo de passagem para o suporte"],["47.11","Termo de encerramento validado pelo cliente"]]]]}
+  ["47.10","Diligenciar o processo de passagem para o suporte"],["47.11","Termo de encerramento validado pelo cliente"]],"ger"]]}
 ];
 const CURTO={f0:["0","Kick-off"],f1:["1","Levantamento"],f2a:["2A","Preparação"],f2b:["2B","Configurações"],f3:["3","Validação"],f4:["4","Treinamento"],f5:["5","Simulação"],f6:["6","Start"],f7:["7","Suporte"],gp:["G","Gestão"]};
 const FASES=TRILHA.filter(f=>f.fase).map(f=>f.id);
 const faseNome=id=>(TRILHA.find(f=>f.id===id)||{t:id}).t;
-function trilhaPadrao(){const o={};TRILHA.forEach(f=>{o[f.id]=[];f.g.forEach(([g,its])=>its.forEach(([cod,t,crit])=>o[f.id].push({id:uid("t"),cod,g,t,crit:crit||"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""})))});return o}
+const normT=s=>String(s||"").trim().toLowerCase();
+const tplItens=f=>{const out=[];(TRILHA.find(x=>x.id===f)||{g:[]}).g.forEach(([g,its,ga])=>its.forEach(([cod,t,crit,a])=>out.push({cod,g,t,crit:crit||"",a:a||ga||"ger",tk:cod+"|"+t})));return out};
+const novoItem=m=>({id:uid("t"),cod:m.cod,g:m.g,t:m.t,crit:m.crit,a:m.a,tk:m.tk,st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""});
+function trilhaPadrao(){const o={};TRILHA.forEach(f=>{o[f.id]=tplItens(f.id).map(novoItem)});return o}
+/* migra trilhas antigas (só clínico) para a trilha completa por área, sem perder o que já foi registrado */
+function migraTrilha(p){if(p.trilhaV>=2)return;
+ TRILHA.forEach(f=>{const tp=tplItens(f.id),L=p.trilha[f.id]||[],usados=new Set(),out=[];
+  const porCod={};tp.forEach(m=>{if(m.cod)porCod[m.cod]=(porCod[m.cod]||0)+1});
+  tp.forEach(m=>{let x=L.find(y=>!usados.has(y.id)&&(y.tk===m.tk||(normT(y.cod)===normT(m.cod)&&normT(y.t)===normT(m.t))));
+   if(!x&&m.cod&&porCod[m.cod]===1)x=L.find(y=>!usados.has(y.id)&&!y.tk&&y.cod===m.cod);
+   if(x){usados.add(x.id);x.tk=m.tk;x.a=m.a;out.push(x)}else out.push(novoItem(m))});
+  L.forEach(y=>{if(!usados.has(y.id)){if(!AREA_IDS.includes(y.a))y.a="ger";out.push(y)}});
+  p.trilha[f.id]=out});
+ p.trilhaV=2}
+const emEscopo=(p,x)=>!x.a||x.a==="ger"||(p.escopo||[]).includes(x.a);
+const trL=(p,f)=>(p.trilha[f]||[]).filter(x=>emEscopo(p,x));
 
 /* ============ CHECKLIST DE AUDITORIA (critérios de aceite · escopo clínico) ============ */
 const VAL_AUD=["","SIM","PARCIAL","NÃO","NÃO SE APLICA"];
@@ -631,9 +854,10 @@ function novoProjeto(nome){return{id:uid("p"),owner:(typeof USER!=="undefined"&&
  info:{cliente:"",sede:"",unidades:"",tipo:"",esp:"",gestor:"",responsavel:"",lider:"",tecnicos:"",gerente:"",fase:"f0",kickoff:"",start:"",obs:""},
  docs:{tec:null,fluxo:null,ader:null},iaTexto:"",
  etapas:ETAPAS.map(e=>({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:true,r:{},passos:"",nota:""})),
- aderencia:[],tecnico:[],sugestoes:[],trilha:trilhaPadrao(),audit:{},auditInfo:{parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""}}}
-function normaliza(p){const n=novoProjeto();for(const k in n)if(p[k]===undefined)p[k]=n[k];p.info=Object.assign(n.info,p.info||{});p.docs=Object.assign({tec:null,fluxo:null,ader:null},p.docs||{});
+ aderencia:[],tecnico:[],sugestoes:[],trilha:trilhaPadrao(),trilhaV:2,escopo:AREA_IDS.slice(),areaResp:{},audit:{},auditInfo:{parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""}}}
+function normaliza(p){if(p.escopo===undefined)p.escopo=p.trilha?["ger","clin"]:AREA_IDS.slice();if(p.trilha&&p.trilhaV===undefined)p.trilhaV=1;const n=novoProjeto();for(const k in n)if(p[k]===undefined)p[k]=n[k];p.info=Object.assign(n.info,p.info||{});p.docs=Object.assign({tec:null,fluxo:null,ader:null},p.docs||{});
  delete p.fases;if(!p.trilha)p.trilha=trilhaPadrao();{const pad=trilhaPadrao();TRILHA.forEach(f=>{if(!Array.isArray(p.trilha[f.id]))p.trilha[f.id]=pad[f.id]})}
+ migraTrilha(p);if(!p.escopo.includes("ger"))p.escopo.unshift("ger");if(!p.areaResp||typeof p.areaResp!=="object")p.areaResp={};
  if(!p.audit)p.audit={};p.auditInfo=Object.assign({parecer:"",auditor:"",data:"",respCliente:"",partCli:"",partWt:"",obs:""},p.auditInfo||{});
  {const mapa={"Levantamento":"f1","Parametrização":"f2b","Treinamento":"f4","Start":"f6","Pós-Start":"f7"};if(!FASES.includes(p.info.fase))p.info.fase=mapa[p.info.fase]||"f0"}
  ETAPAS.forEach(e=>{if(!p.etapas.some(x=>x.id===e.id))p.etapas.push({id:e.id,tit:e.t,setor:SETORES[e.s],ativa:false,r:{},passos:"",nota:""})});return p}
@@ -742,49 +966,68 @@ async function importarDoc(file,kind){
  try{let t=(await extrairTexto(file)).replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();if(!t)throw new Error("vazio");
   const cort=t.length>70000;if(cort)t=t.slice(0,70000);
   p.docs[kind]={nome:file.name,texto:t,cort,data:new Date().toLocaleDateString("pt-BR")};save();
-  toast(`${DOCS[kind].t} importado`);
+  toast(`${DOCS[kind].t} importado`);lendo=null;agendarIA(p);
  }catch(e){const m=e&&e.message;
   iaMsg={err:true,t:m==="formato"?"Formato não suportado. Use Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, CSV ou TXT.":m==="vazio"?"Não encontrei texto nesse arquivo. Se for PDF escaneado (imagem), não dá para ler.":m==="net"?"Para ler PDF e Excel antigo (.xls) o app precisa de internet no momento da importação. Conecte-se e tente de novo, ou salve o arquivo como .xlsx / .docx.":"Não consegui ler esse arquivo. Tente salvar em outro formato (.docx ou .xlsx)."}}
  lendo=null;render();
 }
 
 /* ============ IA ============ */
-let iaMsg=null,iaUndo=null,iaBusy=false;
+/* Análise primária automática: ao importar os documentos, a IA lê tudo e já deixa o projeto pré-preenchido
+   (dados, escopo por área, trilha com o que não se aplica, fluxo, aderência), para o técnico atuar só no necessário.
+   Ordem de uso: 1) IA da equipe (função "analisar-documentos" no Supabase, chave guardada no servidor);
+                 2) chave de API pessoal guardada neste navegador; 3) modo manual (copiar e colar no Claude). */
+let iaMsg=null,iaUndo=null,iaBusy=false,iaProg=0,iaPid=null,iaNuvemFalta=false,iaAuto=null;
+const IA_FUNC="analisar-documentos",IA_ESPERA=20;
+function iaModo(){if(USER&&SB&&nuvemAtiva()&&!iaNuvemFalta)return"nuvem";if(cfg.key)return"chave";return null}
+const iaModoNome=m=>({nuvem:"IA da equipe (servidor)",chave:"chave de API deste navegador"}[m]||"");
 function montarPedido(p=P()){
  const catalogo=ETAPAS.map(e=>({etapa_id:e.id,etapa:e.t,perguntas:e.qs.map(q=>({pergunta_id:q.id,pergunta:q.q,escolha:q.tp==="m"?"varias":"uma",opcoes:q.o.map(o=>ov(o).v)}))}));
  const doc=k=>p.docs[k]&&p.docs[k].texto?`\n=== ${DOCS[k].t.toUpperCase()} ("${p.docs[k].nome}") ===\n${p.docs[k].texto}\n`:"";
- return `Você ajuda um implantador do sistema de gestão de saúde Klingo a montar o projeto de implantação de um cliente. Nesta versão o foco é o FLUXO CLÍNICO de atendimento (agenda, confirmação, recepção, triagem, consultório, procedimentos, saída e retorno). Ignore assuntos financeiros, faturamento, caixa, glosas e laboratório.
+ const trilha=[];TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.st==="A REALIZAR")trilha.push(`${x.id} | ${x.a} | ${(CURTO[f.id]||[""])[1]} | ${x.g} | ${x.t}`)}));
+ return `Você ajuda a equipe de implantação do sistema de gestão de saúde Klingo (e do KLIS, sistema de laboratório) a montar o projeto de implantação de um cliente. Faça a ANÁLISE PRIMÁRIA dos documentos: o objetivo é deixar o projeto pré-preenchido para que cada técnico atue somente no que for necessário na sua área.
+
+ÁREAS DE ATUAÇÃO (ids): ${AREAS.map(a=>`${a.id} = ${a.l} (${a.d})`).join("; ")}.
 
 DOCUMENTOS DO CLIENTE:
 ${doc("tec")}${doc("fluxo")}${doc("ader")}
-${p.iaTexto?`\n=== OBSERVAÇÕES DO IMPLANTADOR ===\n${p.iaTexto}\n`:""}
+${p.iaTexto?`\n=== OBSERVAÇÕES DO GESTOR / IMPLANTADOR ===\n${p.iaTexto}\n`:""}
 === O QUE JÁ ESTÁ PREENCHIDO NO APP ===
 ${txtProjeto(p)}
+Escopo atual: ${p.escopo.join(", ")}
 
-=== CATÁLOGO DE PERGUNTAS (use exatamente estes ids e os textos exatos das opções) ===
+=== CATÁLOGO DE PERGUNTAS DO FLUXO CLÍNICO (use exatamente estes ids e os textos exatos das opções) ===
 ${JSON.stringify(catalogo)}
 
-TAREFA:
-1. Percorra TODAS as etapas e perguntas. Marque uma opção sempre que os documentos indicarem a resposta, mesmo com outras palavras (correspondência pelo sentido). Só deixe sem resposta o que realmente não aparece. Na resposta use o texto exato da opção: para "uma", um texto; para "varias", uma lista.
-2. "passos": por etapa, frases curtas com o que os documentos dizem e não cabe nas opções (no máximo 6 por etapa). Nada relevante deve ser descartado.
-3. "etapas_nao_aplicaveis": etapa_id que claramente não existem neste cliente.
-4. "aderencia": itens do levantamento de aderência ligados ao atendimento clínico (ignore financeiro, faturamento e laboratório). Cada item: processo (frase curta), etapa_id (um dos ids acima ou "geral"), status (um de ${JSON.stringify(STATUS_AD)}) e obs (curta). No máximo 80 itens.
-5. "infos_tecnicas": do projeto técnico, até 12 frases curtas sobre o que importa para o fluxo clínico e a implantação: unidades, especialidades, volume, integrações (PACS, WhatsApp, prescrição, assinatura digital), equipamentos (painel de senhas, totem, biometria), escopo e datas.
-6. "sugestoes": 3 a 6 melhorias práticas para o fluxo clínico deste cliente, usando os recursos do Klingo. Para o início da operação no sistema use a palavra "Start", nunca "Go-Live".
-7. "projeto": dados do cliente se aparecerem. tipo deve ser um de ${JSON.stringify(TIPOS)} ou "". data_start no formato AAAA-MM-DD ou "".
+=== ATIVIDADES DA TRILHA AINDA "A REALIZAR" (id | área | fase | grupo | atividade) ===
+${trilha.join("\n")}
 
-Responda SOMENTE com um JSON válido, sem texto antes ou depois, neste formato:
-{"projeto":{"cliente":"","unidades":"","tipo":"","especialidades":"","data_start":""},"respostas":{"etapa_id":{"pergunta_id":"opção ou [opções]"}},"passos":{"etapa_id":["passo"]},"etapas_nao_aplicaveis":[],"aderencia":[{"processo":"","etapa_id":"","status":"","obs":""}],"infos_tecnicas":[""],"sugestoes":[""]}`;
+TAREFA:
+1. "projeto": dados do cliente que aparecerem. tipo deve ser um de ${JSON.stringify(TIPOS)} ou "". Datas no formato AAAA-MM-DD ou "". gestor_sistema = pessoa do cliente responsável pelo sistema.
+2. "escopo": ids das áreas contratadas/necessárias segundo os documentos (sempre inclua "ger"). Ex.: sem laboratório próprio e sem KLIS → não inclua "lab". Se os documentos não permitirem concluir sobre uma área, mantenha-a.
+3. "trilha_nao_aplicar": atividades da lista acima que CLARAMENTE não se aplicam a este cliente (ex.: totem não será usado, não há vacinas, não há PACS, não há internação), com motivo curto. Não liste atividades de áreas que você já deixou fora do escopo. Na dúvida, não inclua.
+4. "trilha_obs": até 30 atividades em que os documentos trazem informação útil para quem vai executar (quantidades, nomes de sistemas, unidades, convênios, equipamentos, prazos). obs curta.
+5. "respostas": percorra TODAS as etapas e perguntas do fluxo clínico. Marque uma opção sempre que os documentos indicarem a resposta, mesmo com outras palavras. Só deixe sem resposta o que realmente não aparece. Para "uma", um texto; para "varias", uma lista.
+6. "passos": por etapa do fluxo, frases curtas com o que os documentos dizem e não cabe nas opções (no máximo 4 por etapa).
+7. "etapas_nao_aplicaveis": etapa_id do fluxo clínico que claramente não existem neste cliente.
+8. "aderencia": itens do levantamento de aderência de TODAS as áreas. Cada item: processo (frase curta), area (um dos ids de área), etapa_id (um dos ids de etapa do fluxo ou "geral"), status (um de ${JSON.stringify(STATUS_AD)}) e obs (curta). No máximo 70 itens.
+9. "infos_tecnicas": do projeto técnico, até 12 frases curtas sobre o que importa para a implantação: unidades, especialidades, volume, módulos contratados, integrações (PACS, mensageria, NF-e, laboratórios de apoio, equipamentos), escopo e datas.
+10. "sugestoes": 3 a 6 melhorias práticas para este cliente usando os recursos do Klingo. Para o início da operação no sistema use a palavra "Start", nunca "Go-Live".
+
+Responda SOMENTE com um JSON válido e compacto, sem texto antes ou depois, neste formato:
+{"projeto":{"cliente":"","sede":"","unidades":"","tipo":"","especialidades":"","gestor_sistema":"","data_kickoff":"","data_start":""},"escopo":["ger"],"trilha_nao_aplicar":[{"id":"","motivo":""}],"trilha_obs":[{"id":"","obs":""}],"respostas":{"etapa_id":{"pergunta_id":"opção ou [opções]"}},"passos":{"etapa_id":["passo"]},"etapas_nao_aplicaveis":[],"aderencia":[{"processo":"","area":"","etapa_id":"","status":"","obs":""}],"infos_tecnicas":[""],"sugestoes":[""]}`;
 }
 function lerJsonIA(txt){let t=String(txt||"").trim().replace(/^```(?:json)?/i,"").replace(/```$/,"");const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("json");return JSON.parse(t.slice(a,b+1))}
 function aplicarIA(p,out){
- const n={r:0,p:0,d:0,a:0};const pj=out.projeto||{},I=p.info;
- if(pj.cliente&&!I.cliente)I.cliente=String(pj.cliente);
- if(pj.unidades&&!I.unidades)I.unidades=String(pj.unidades);
- if(pj.tipo&&TIPOS.includes(pj.tipo)&&!I.tipo)I.tipo=pj.tipo;
- if(pj.especialidades&&!I.esp)I.esp=String(pj.especialidades);
- if(pj.data_start&&/^\d{4}-\d{2}-\d{2}$/.test(pj.data_start)&&!I.start)I.start=pj.data_start;
+ const n={r:0,p:0,d:0,a:0,na:0,ob:0,e:null,dados:0};const pj=out.projeto||{},I=p.info;
+ const set=(k,v,ok=true)=>{if(v&&ok&&!I[k]){I[k]=String(v);n.dados++}};
+ set("cliente",pj.cliente);set("sede",pj.sede);set("unidades",pj.unidades);set("tipo",pj.tipo,TIPOS.includes(pj.tipo));set("esp",pj.especialidades);set("gestor",pj.gestor_sistema);
+ const dt=/^\d{4}-\d{2}-\d{2}$/;set("kickoff",pj.data_kickoff,dt.test(pj.data_kickoff||""));set("start",pj.data_start,dt.test(pj.data_start||""));
  if(I.cliente&&/^(Novo projeto|Meu primeiro projeto)$/.test(p.nome))p.nome=I.cliente;
+ if(Array.isArray(out.escopo)){const e=["ger",...out.escopo.filter(x=>AREA_IDS.includes(x)&&x!=="ger")];if(e.length>1||out.escopo.length){const antes=p.escopo.join();p.escopo=AREA_IDS.filter(x=>e.includes(x));if(antes!==p.escopo.join())n.e=p.escopo}}
+ const achar=id=>{for(const f of TRILHA){const x=(p.trilha[f.id]||[]).find(y=>y.id===id);if(x)return x}return null};
+ (out.trilha_nao_aplicar||[]).forEach(o=>{const x=o&&achar(String(o.id||"").trim());if(x&&x.st==="A REALIZAR"){x.st="NÃO APLICAR";x.obs=(x.obs?x.obs+"\n":"")+"IA: "+String(o.motivo||"não se aplica segundo os documentos");n.na++}});
+ (out.trilha_obs||[]).slice(0,40).forEach(o=>{const x=o&&achar(String(o.id||"").trim());const t=String((o&&o.obs)||"").trim();if(x&&t&&!(x.obs||"").includes(t)){x.obs=(x.obs?x.obs+"\n":"")+"IA: "+t;n.ob++}});
  const R=out.respostas||{};
  Object.keys(R).forEach(eid=>{const t=tpl(eid),e=p.etapas.find(x=>x.id===eid);if(!t||!e)return;
   Object.keys(R[eid]||{}).forEach(qid=>{const q=t.qs.find(x=>x.id===qid);if(!q)return;const ops=q.o.map(o=>ov(o).v);let v=R[eid][qid];
@@ -794,28 +1037,60 @@ function aplicarIA(p,out){
  Object.keys(PS).forEach(eid=>{const e=p.etapas.find(x=>x.id===eid);if(!e||!Array.isArray(PS[eid]))return;const ex=passos(e);const nv=PS[eid].map(s=>String(s).trim()).filter(s=>s&&!ex.includes(s));if(nv.length){e.passos=[...ex,...nv].join("\n");n.p+=nv.length}});
  (out.etapas_nao_aplicaveis||[]).forEach(eid=>{const e=p.etapas.find(x=>x.id===eid);if(e&&e.ativa){e.ativa=false;n.d++}});
  if(Array.isArray(out.aderencia))out.aderencia.forEach(a=>{if(!a||!a.processo)return;const proc=String(a.processo).trim();const st=STATUS_AD.includes(a.status)?a.status:"A definir";
-  const et=p.etapas.some(x=>x.id===a.etapa_id)?a.etapa_id:"geral";const ex=p.aderencia.find(x=>x.processo.toLowerCase()===proc.toLowerCase());
-  if(ex){ex.status=st;if(a.obs)ex.obs=String(a.obs);if(ex.etapa==="geral")ex.etapa=et}else{p.aderencia.push({id:uid("a"),processo:proc,etapa:et,status:st,obs:String(a.obs||"")});n.a++}});
+  const et=p.etapas.some(x=>x.id===a.etapa_id)?a.etapa_id:"geral";const ar=AREA_IDS.includes(a.area)?a.area:"clin";const ex=p.aderencia.find(x=>x.processo.toLowerCase()===proc.toLowerCase());
+  if(ex){ex.status=st;if(a.obs)ex.obs=String(a.obs);if(ex.etapa==="geral")ex.etapa=et;if(!ex.area)ex.area=ar}else{p.aderencia.push({id:uid("a"),processo:proc,area:ar,etapa:et,status:st,obs:String(a.obs||"")});n.a++}});
  if(Array.isArray(out.infos_tecnicas)&&out.infos_tecnicas.filter(Boolean).length)p.tecnico=out.infos_tecnicas.map(String).filter(Boolean).slice(0,20);
  if(Array.isArray(out.sugestoes)&&out.sugestoes.filter(Boolean).length)p.sugestoes=out.sugestoes.map(String).filter(Boolean).slice(0,8);
  return n;
 }
-function aplicarTexto(txt){
- const p=P();let out;try{out=lerJsonIA(txt)}catch(e){iaMsg={err:true,t:"Não reconheci a resposta. Copie a resposta inteira do Claude (o bloco que começa com { e termina com })."};render();return}
- iaUndo={pid:p.id,snap:JSON.stringify(p)};const n=aplicarIA(p,out);save();
- iaMsg={t:`Pronto: ${n.r} resposta(s) marcada(s), ${n.p} passo(s) específico(s), ${n.a} item(ns) de aderência${n.d?`, ${n.d} etapa(s) desligada(s)`:""}. Revise nas abas Fluxo e Aderência.`};
- const ta=$("respIA");if(ta)ta.value="";render();
-}
-async function rodarAPI(){
- if(!cfg.key||iaBusy)return;iaBusy=true;iaMsg=null;render();
- try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-   body:JSON.stringify({model:cfg.model||"claude-sonnet-5-5",max_tokens:16000,messages:[{role:"user",content:montarPedido()}]})});
-  const j=await r.json().catch(()=>({}));
-  if(!r.ok)throw new Error((j.error&&j.error.message)||("Erro "+r.status));
-  const txt=(j.content||[]).filter(c=>c.type==="text").map(c=>c.text).join("");iaBusy=false;aplicarTexto(txt);return;
- }catch(e){iaMsg={err:true,t:"A chamada à API falhou: "+(e.message||e)+". Confira a chave, o modelo e a internet."}}
- iaBusy=false;render();
-}
+function resumoIA(n){const partes=[];
+ if(n.dados)partes.push(`${n.dados} dado(s) do projeto`);
+ if(n.e)partes.push(`escopo: ${n.e.map(x=>areaDe(x).l).join(", ")}`);
+ if(n.na)partes.push(`${n.na} atividade(s) da trilha marcadas como "não aplicar"`);
+ if(n.ob)partes.push(`${n.ob} observação(ões) nas atividades`);
+ partes.push(`${n.r} resposta(s) do fluxo`);if(n.p)partes.push(`${n.p} passo(s) específico(s)`);
+ partes.push(`${n.a} item(ns) de aderência`);if(n.d)partes.push(`${n.d} etapa(s) do fluxo desligada(s)`);
+ return partes.join(" · ")}
+function aplicarTexto(txt,p=P(),origem){
+ let out;try{out=lerJsonIA(txt)}catch(e){iaMsg={err:true,pid:p.id,t:origem?"A IA respondeu, mas a resposta veio incompleta ou fora do formato. Tente \"Analisar de novo\"; se repetir, use o modo manual.":"Não reconheci a resposta. Copie a resposta inteira do Claude (o bloco que começa com { e termina com })."};render();return false}
+ iaUndo={pid:p.id,snap:JSON.stringify(p)};const n=aplicarIA(p,out);
+ p.iaAnalise={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:origem||"manual",docs:Object.keys(DOCS).filter(k=>p.docs[k]).map(k=>p.docs[k].nome)};
+ p.upd=Date.now();marcar(p.id);clearTimeout(saveT);saveT=setTimeout(persist,300);
+ iaMsg={pid:p.id,t:`Análise concluída: ${resumoIA(n)}. Revise em Gestão do projeto (trilha e dados), Fluxo e Aderência.`};
+ const ta=$("respIA");if(ta)ta.value="";render();return true}
+async function lerSSE(resp,onTxt){const rd=resp.body.getReader(),td=new TextDecoder();let buf="",txt="",stop=null;
+ for(;;){const{value,done}=await rd.read();if(done)break;buf+=td.decode(value,{stream:true}).replace(/\r/g,"");let i;
+  while((i=buf.indexOf("\n\n"))>=0){const ev=buf.slice(0,i);buf=buf.slice(i+2);const dl=ev.split("\n").filter(l=>l.startsWith("data:")).map(l=>l.slice(5).trim()).join("");if(!dl)continue;let j;try{j=JSON.parse(dl)}catch(e){continue}
+   if(j.type==="content_block_delta"&&j.delta&&j.delta.type==="text_delta"){txt+=j.delta.text;if(onTxt)onTxt(txt.length)}
+   else if(j.type==="message_delta"&&j.delta&&j.delta.stop_reason)stop=j.delta.stop_reason;
+   else if(j.type==="error")throw new Error((j.error&&j.error.message)||"erro na IA")}}
+ return{txt,stop}}
+async function chamarIA(prompt,onProg){
+ const modo=iaModo();if(!modo)throw Object.assign(new Error("sem_ia"),{cod:"sem_ia"});
+ const body={model:cfg.model||"claude-sonnet-5-5",max_tokens:16000,stream:true,messages:[{role:"user",content:prompt}]};let r;
+ if(modo==="nuvem"){let tk="";try{const{data}=await SB.auth.getSession();tk=data&&data.session&&data.session.access_token||""}catch(e){}
+  r=await fetch(nuvemURL().replace(/\/$/,"")+"/functions/v1/"+IA_FUNC,{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+tk,apikey:nuvemKEY()},body:JSON.stringify(body)});
+  if(r.status===404){iaNuvemFalta=true;if(cfg.key)return chamarIA(prompt,onProg);throw Object.assign(new Error("sem_funcao"),{cod:"sem_funcao"})}}
+ else r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify(body)});
+ if(!r.ok){const j=await r.json().catch(()=>({}));if(j.error==="sem_chave")throw Object.assign(new Error("sem_chave"),{cod:"sem_chave"});
+  throw new Error((j.error&&j.error.message)||j.message||j.msg||(typeof j.error==="string"?j.error:"")||("erro "+r.status))}
+ return lerSSE(r,onProg)}
+function iaProgTxt(){return iaProg?`recebendo a análise… ${Math.round(iaProg/1000)} mil caracteres`:"lendo os documentos…"}
+async function rodarIA(auto){
+ cancelarAuto();const p=P();if(iaBusy)return;
+ if(!Object.values(p.docs).some(d=>d&&d.texto)&&!p.iaTexto){iaMsg={err:true,pid:p.id,t:"Importe pelo menos um documento antes da análise."};render();return}
+ if(!iaModo()){iaMsg={pid:p.id,info:true,t:"A análise automática ainda não está ativada para a equipe. Use o modo manual abaixo (copiar e colar no Claude) ou peça ao gestor para ativar a IA da equipe."};render();return}
+ iaBusy=true;iaProg=0;iaPid=p.id;iaMsg=null;render();const modo=iaModo();
+ try{const{txt,stop}=await chamarIA(montarPedido(p),c=>{iaProg=c;const el=$("iaProg");if(el)el.textContent=iaProgTxt()});
+  iaBusy=false;aplicarTexto(txt,p,iaModoNome(modo)+(auto?" · automática":""));if(stop==="max_tokens"&&iaMsg&&!iaMsg.err)iaMsg.t+=" Obs.: a resposta atingiu o limite de tamanho; parte da análise pode ter ficado de fora.";render();return}
+ catch(e){const c=e.cod;iaMsg={err:true,pid:p.id,t:c==="sem_funcao"?"A IA da equipe ainda não foi ativada no servidor (função \"analisar-documentos\" no Supabase). Enquanto isso, use o modo manual abaixo.":c==="sem_chave"?"A IA da equipe está instalada, mas falta cadastrar a chave da Anthropic no Supabase (segredo ANTHROPIC_API_KEY).":"A análise automática falhou: "+(e.message||e)+". Tente de novo em instantes ou use o modo manual abaixo."}}
+ iaBusy=false;render()}
+/* agenda a análise após a importação: começa na hora com os 3 documentos; com parte deles, espera alguns segundos (dá tempo de importar o resto) */
+function cancelarAuto(){if(iaAuto){clearInterval(iaAuto.t);iaAuto=null}}
+function agendarIA(p){cancelarAuto();if(!iaModo())return;const n=Object.values(p.docs).filter(d=>d&&d.texto).length;
+ if(n>=3){rodarIA(true);return}
+ iaAuto={pid:p.id,s:IA_ESPERA,t:setInterval(()=>{if(!iaAuto)return;iaAuto.s--;const el=$("iaCd");if(el)el.textContent=iaAuto.s;if(iaAuto.s<=0){const pid=iaAuto.pid;cancelarAuto();if(P().id===pid)rodarIA(true)}},1000)};render()}
+const rodarAPI=()=>rodarIA(false);
 
 /* ============ DITADO (navegador) ============ */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recKey=null;
@@ -840,7 +1115,7 @@ function relatorio(p=P()){const I=p.info;
   tec:p.tecnico||[],
   et:ativas(p).map((e,i)=>({n:i+1,id:e.id,tit:e.tit,setor:e.setor,linhas:resumo(e),passos:passos(e),dec:decisoes(e),al:alertas(e),nota:e.nota,pend:pendentes(e).map(q=>q.q)})),
   ader:p.aderencia.map(a=>({...a,etapaNome:nomeEtapa(p,a.etapa)})),sug:p.sugestoes||[],
-  trilha:TRILHA.map(f=>({id:f.id,t:f.t,st:statusFase(p,f.id),itens:p.trilha[f.id]||[]})),pend:pendenciasTrilha(p),
+  trilha:TRILHA.map(f=>({id:f.id,t:f.t,st:statusFase(p,f.id),itens:trL(p,f.id)})),pend:pendenciasTrilha(p),
   aud:AUDIT.map(([g,its],gi)=>({g,itens:its.map(([item,crit],ii)=>({item,crit,...(p.audit[audKey(gi,ii)]||{v:"",obs:""})}))})),audInfo:p.auditInfo,audRes:resumoAud(p)}}
 function txtProjeto(p=P()){const r=relatorio(p);let t=`PROJETO DE IMPLANTAÇÃO KLINGO: ${r.titulo}\n`;r.meta.forEach(([k,v])=>t+=`${k}: ${v}\n`);
  if(r.tec.length){t+=`\nINFORMAÇÕES DO PROJETO TÉCNICO\n`;r.tec.forEach(s=>t+=`   - ${s}\n`)}
@@ -920,6 +1195,11 @@ function imprimir(){const r=relatorio();let h=`<div class="k">PROJETO DE IMPLANT
  $("print").innerHTML=h;setTimeout(()=>window.print(),50)}
 
 /* ============ TELAS ============ */
+let projSel=false;
+let filtroArea="todas";try{filtroArea=localStorage.getItem("ppi_area")||"todas"}catch(e){}
+const setFiltroArea=v=>{filtroArea=v;try{localStorage.setItem("ppi_area",v)}catch(e){}};
+const areaTag=a=>{const A=areaDe(a);return `<span class="atag" style="--ac:${A.c}" title="${esc(A.l)}">${esc(A.l)}</span>`};
+const minhasAreas=p=>USER?Object.keys(p.areaResp||{}).filter(k=>p.areaResp[k]===USER.id):[];/* só mostra as opções do projeto depois que alguém escolhe um projeto na lista */
 let tab="painel",menuAberto=false,ganttAberto=new Set(),gestSub="trilha",faseVista=null,filtroTr="todas",trOpen=new Set(),sel=null,delArm=false,filtroAd="todos";
 function render(){
  const p=P();if(p&&p.oculto===undefined&&S.cur!==p.id)S.cur=p.id;
@@ -929,14 +1209,14 @@ function render(){
  $("side").innerHTML=`<nav class="menu ${menuAberto?"aberto":""}">
   ${it("painel","📊",ehGestor()||!USER?"Painel gerencial":"Meu painel")}
   <div class="mg">Projeto</div>
-  <select id="selProj" title="Projeto aberto">${projMenu().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${x.oculto?"🙈 ":""}${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}${x.oculto?" (oculto)":""}</option>`).join("")}</select>
-  ${podeGerir()?`<div class="pbtns"><button class="sm" data-act="proj-new" title="Abrir novo projeto">+ Novo</button>${projMenu().length?(P().oculto?`<button class="sm" data-act="proj-reexibir" data-arg="${P().id}" title="Reexibir este projeto">Reexibir</button>`:`<button class="sm" data-act="proj-ocultar" title="Ocultar este projeto">Ocultar</button>`):""}<button class="sm ${mostrarOcultos?"on":""}" data-act="mostrar-ocultos" title="${mostrarOcultos?"Esconder projetos ocultos do menu":"Mostrar projetos ocultos no menu"} (${S.projetos.filter(x=>x.oculto).length} oculto(s))">${mostrarOcultos?"✓ Ocultos":"👁 Ocultos"}</button></div>`:""}
+  <select id="selProj" title="Projeto aberto" class="${projSel?"":"vazio"}">${projSel?"":`<option value="" selected disabled hidden>Selecione um projeto</option>`}${projSel&&projMenu().length?`<option value="">— Selecione um projeto —</option>`:""}${projMenu().slice().sort((a,b)=>b.upd-a.upd).map(x=>`<option value="${x.id}" ${projSel&&x.id===p.id?"selected":""}>${x.oculto?"🙈 ":""}${esc(x.nome)}${USER&&x.owner&&x.owner!==USER.id?" · "+esc(nomeU(pessoaPorId(x.owner))||"outro técnico"):""}${x.oculto?" (oculto)":""}</option>`).join("")}</select>
+  ${podeGerir()?`<div class="pbtns"><button class="sm" data-act="proj-new" title="Abrir novo projeto">+ Novo</button>${projSel&&projMenu().length?(P().oculto?`<button class="sm" data-act="proj-reexibir" data-arg="${P().id}" title="Reexibir este projeto">Reexibir</button>`:`<button class="sm" data-act="proj-ocultar" title="Ocultar este projeto">Ocultar</button>`):""}<button class="sm ${mostrarOcultos?"on":""}" data-act="mostrar-ocultos" title="${mostrarOcultos?"Esconder projetos ocultos do menu":"Mostrar projetos ocultos no menu"} (${S.projetos.filter(x=>x.oculto).length} oculto(s))">${mostrarOcultos?"✓ Ocultos":"👁 Ocultos"}</button></div>`:""}
   ${podeGerir()&&mostrarOcultos?`<div class="ocbox"><div class="ocb-t">Projetos ocultos (${S.projetos.filter(x=>x.oculto).length})</div>${S.projetos.filter(x=>x.oculto).length?S.projetos.filter(x=>x.oculto).map(x=>`<div class="oci ${x.id===p.id?"on":""}"><button class="ocn" data-act="abrir-oculto" data-arg="${x.id}" title="Abrir projeto oculto">🙈 ${esc(x.nome)}</button><button class="sm" data-act="proj-reexibir" data-arg="${x.id}" title="Reexibir">Reexibir</button></div>`).join(""):`<div class="hint" style="margin:2px 0 0">Nenhum projeto oculto.</div>`}</div>`:""}
-  ${projMenu().length?`${it("mapa","🗺","Mapa do projeto")}${it("gest","✏️","Gestão do projeto")}${it("docs","📄","Documentos e IA")}
+  ${projSel&&projMenu().length?`${it("mapa","🗺","Mapa do projeto")}${it("docs","📄","Documentos e IA",!Object.values(p.docs).some(Boolean)?"!":"")}${it("gest","✏️","Gestão do projeto")}
   ${it("perg","❓","Fluxo: perguntas")}${it("visual","🔀","Fluxo: visual")}${it("ader","📋","Aderência",T.gaps)}
-  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:`<p class="hint" style="margin:6px 10px">${podeGerir()?"Nenhum projeto visível. Use \"+ Novo\" para abrir um projeto.":"Nenhum projeto disponível. Peça ao gestor para abrir um projeto ou incluir você na equipe."}</p>`}
+  ${it("aud","✅","Auditoria")}${it("aten","⚠️","Pontos de atenção",at)}${it("exp","⬇️","Exportar")}`:projMenu().length?`<p class="hint" style="margin:6px 10px">Escolha um projeto na lista acima para ver o mapa, os documentos, a gestão e as demais opções.</p>`:`<p class="hint" style="margin:6px 10px">${podeGerir()?"Nenhum projeto visível. Use \"+ Novo\" para abrir um projeto.":"Nenhum projeto disponível. Peça ao gestor para abrir um projeto ou incluir você na equipe."}</p>`}
  </nav>`;
- if(tab==="carga"||!projMenu().length)tab="painel";
+ if(tab==="carga"||!projMenu().length||!projSel)tab="painel";
  if(!sel||!p.etapas.some(e=>e.id===sel))sel=(ativas(p)[0]||p.etapas[0]||{}).id;
  $("app").innerHTML=({painel:rPainel,mapa:rMapa,gest:rGest,docs:rDocs,perg:rPerg,visual:rVisual,ader:rAder,aud:rAud,aten:rAten,exp:rExp}[tab]||rPainel)();
  setSt();
@@ -949,10 +1229,10 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
  const dadosOk=["cliente","tipo","esp","start"].filter(k=>I[k]).length;
  let trT=0,trOk=0;TRILHA.forEach(f=>{const st=statusFase(p,f.id);trT+=st.tot;trOk+=st.ok});const trPc=trT?Math.round(trOk/trT*100):0;
  let prox="";if(!T.docs)prox=`<div class="next">👉 <span>Próximo passo: importar o projeto técnico, o mapeamento de fluxo e o levantamento de aderência.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos</button></div>`;
- else if(!T.ok)prox=`<div class="next">👉 <span>Próximo passo: usar a IA para preencher o fluxo a partir dos documentos.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos e IA</button></div>`;
+ else if(!p.iaAnalise)prox=`<div class="next">👉 <span>Próximo passo: rodar a análise primária dos documentos com IA.</span><button class="pri" data-act="tab" data-arg="docs">Ir para Documentos e IA</button></div>`;
  const dado=(l,v)=>`<div class="dv"><div class="dl">${l}</div><div class="dd">${v?esc(v):'<span class="vazio">—</span>'}</div></div>`;
  const c1=Object.keys(DOCS).map(k=>{const d=p.docs[k];return node({ic:DOCS[k].ic,t:DOCS[k].t,s:d?"✓ "+esc(d.nome):"Não importado",cls:d?"ok":"pend",act:"tab",arg:"docs"})}).join("")
-  +node({ic:"✨",t:"Preencher com IA",s:T.docs?"Usar os documentos para preencher o projeto":"Importe os documentos primeiro",cls:T.ok?"ok":"pend",act:"tab",arg:"docs"});
+  +node({ic:"✨",t:"Análise primária com IA",s:p.iaAnalise?"✓ Feita em "+fmtData(p.iaAnalise.data.slice(0,10)):T.docs?"Pronta para rodar":"Importe os documentos primeiro",cls:p.iaAnalise?"ok":"pend",act:"tab",arg:"docs"});
  const c2=node({ic:"🏥",t:"Dados do projeto",s:`${dadosOk} de 4 campos principais`,pct:dadosOk/4*100,cls:dadosOk===4?"ok":"pend",act:"editar",arg:"dados"})
   +node({ic:"🧭",t:"Trilha de implantação",s:`${trOk} de ${trT} atividades · ${trPc}%`,pct:trPc,cls:trPc===100?"ok":"pend",act:"editar",arg:"trilha"})
   +node({ic:"💲",t:"Tabela de preço",s:"Em breve",cls:"soon"});
@@ -990,6 +1270,10 @@ function rMapa(){const p=P(),I=p.info,T=totais(),at=ativas(p),A=resumoAud(p),PT=
   return `<div class="fase clk ${I.fase===f.id?"atual":""}" data-act="ver-fase" data-arg="${f.id}"><div class="fn">${esc(f.t)}${I.fase===f.id?` <span class="fa">atual</span>`:""}</div>
    <span class="st3 ${st.c}"><span class="dot"></span>${st.l}${st.c!=="n"?" · "+st.pc+"%":""}</span>
    <div class="pbar ${st.c}"><i style="width:${st.pc}%"></i></div><div class="cnt">${st.ok} de ${st.tot} concluídas${st.pend?` · <span style="color:#b91c1c">${st.pend} pend. cliente</span>`:""}${st.atr?` · <span style="color:#b45309">${st.atr} atrasada${st.atr>1?"s":""}</span>`:""}</div></div>`}).join("")}</div>
+ <h3 class="sect">Andamento por área <span class="hint" style="margin:0;font-weight:400">· escopo contratado · clique para ver as atividades da área</span></h3>
+ <div class="areas">${AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>{let t=0,o=0,pe=0;TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.a!==a.id||x.st==="NÃO APLICAR")return;t++;if(x.st==="CONCLUÍDO")o++;if(x.st==="PENDENTE CLIENTE")pe++}));
+  const pc=t?Math.round(o/t*100):0,c=!t?"n":o===t?"g":pc>=20?"y":"r",r=pessoaPorId(p.areaResp[a.id]);
+  return `<button class="acard" style="--ac:${a.c}" data-act="ver-area" data-arg="${a.id}"><div class="an"><i></i>${esc(a.l)}</div><div class="ap">${pc}%</div><div class="pbar ${c}"><i style="width:${pc}%"></i></div><div class="cnt">${o} de ${t} concluídas${pe?` · <span style="color:#b91c1c">${pe} pend. cliente</span>`:""}</div><div class="cnt">${r?"👤 "+esc(nomeU(r)):'<span style="color:var(--mut)">Sem responsável da área</span>'}</div></button>`}).join("")}</div>
  <h3 class="sect">Mapa do projeto</h3>
  <div class="map">${col(1,"Entrada",c1)}${col(2,"Projeto",c2)}${col(3,"Fluxo clínico",c3)}${col(4,"Análise",c4)}${col(5,"Entregas",c5)}</div>`}
 function rGest(){const p=P();const f=FASES.includes(faseVista)||faseVista==="gp"?faseVista:p.info.fase;faseVista=f;
@@ -1001,26 +1285,31 @@ function rGest(){const p=P();const f=FASES.includes(faseVista)||faseVista==="gp"
  return sub+`<div class="stepper">${steps}</div>`+rFase(p,f)}
 const hojeISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 const atrasada=x=>x.fim&&x.fim<hojeISO()&&x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR";
-function statusFase(p,f){const L=(p.trilha[f]||[]).filter(x=>x.st!=="NÃO APLICAR"),ok=L.filter(x=>x.st==="CONCLUÍDO").length,tot=L.length,pc=tot?Math.round(ok/tot*100):0;
+function statusFase(p,f,area){const L=trL(p,f).filter(x=>x.st!=="NÃO APLICAR"&&(!area||x.a===area)),ok=L.filter(x=>x.st==="CONCLUÍDO").length,tot=L.length,pc=tot?Math.round(ok/tot*100):0;
  const pend=L.filter(x=>x.st==="PENDENTE CLIENTE").length,atr=L.filter(atrasada).length;
  const c=!tot?"n":ok===tot?"g":pc>=20?"y":"r";return{ok,tot,pc,c,pend,atr,l:{n:"Não se aplica",g:"Concluída",y:"Em andamento",r:"Pendente"}[c]}}
-function pendenciasTrilha(p=P()){const out=[];TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.st==="PENDENTE CLIENTE"||atrasada(x))out.push({f:f.id,x})}));return out}
+function pendenciasTrilha(p=P()){const out=[];TRILHA.forEach(f=>trL(p,f.id).forEach(x=>{if(x.st==="PENDENTE CLIENTE"||atrasada(x))out.push({f:f.id,x})}));return out}
 const stSlug=s=>({"A REALIZAR":"ar","EM ANDAMENTO":"em","CONCLUÍDO":"ok","PENDENTE CLIENTE":"pc","NÃO APLICAR":"na"}[s]||"ar");
 const nomeU=u=>u?(u.nome||(u.email||"").split("@")[0]):"";
 const pessoaPorId=id=>EQUIPE.find(u=>u.id===id);
-const normT=s=>String(s||"").trim().toLowerCase();
 function respDe(x){if(x.rwId){const u=pessoaPorId(x.rwId);if(u)return u}if(x.rw){const n=normT(x.rw);return EQUIPE.find(u=>normT(u.nome)===n||normT(u.email)===n||normT((u.email||"").split("@")[0])===n)||null}return null}
 function selResp(x){
  if(!EQUIPE.length)return `<input type="text" data-tr="rw" data-id="${x.id}" value="${esc(x.rw)}" placeholder="Nome">`;
  const u=respDe(x),livre=!u&&x.rw;
  return `<select data-tr="rwId" data-id="${x.id}"><option value="">—</option>${livre?`<option value="__livre" selected>${esc(x.rw)} (texto)</option>`:""}${EQUIPE.map(m=>`<option value="${m.id}" ${u&&u.id===m.id?"selected":""}>${esc(nomeU(m))}</option>`).join("")}</select>`}
-function rFase(p,f){const L=p.trilha[f]||[],st=statusFase(p,f),ehFase=FASES.includes(f);
- const vis=L.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":atrasada(x)));
+function rFase(p,f){const L=trL(p,f),ehFase=FASES.includes(f);
+ const esc_=AREAS.filter(a=>p.escopo.includes(a.id));if(filtroArea!=="todas"&&filtroArea!=="minhas"&&!esc_.some(a=>a.id===filtroArea))setFiltroArea("todas");
+ const mA=minhasAreas(p);if(filtroArea==="minhas"&&!mA.length)setFiltroArea("todas");
+ const naArea=x=>filtroArea==="todas"||(filtroArea==="minhas"?mA.includes(x.a):x.a===filtroArea);
+ const st=statusFase(p,f,filtroArea!=="todas"&&filtroArea!=="minhas"?filtroArea:null);
+ const LA=L.filter(naArea);
+ const chips=`<div class="achips"><span class="hint" style="margin:0">Área:</span><button class="achip ${filtroArea==="todas"?"on":""}" data-act="farea" data-arg="todas">Todas <small>${L.length}</small></button>${mA.length?`<button class="achip ${filtroArea==="minhas"?"on":""}" data-act="farea" data-arg="minhas">⭐ Minhas áreas <small>${L.filter(x=>mA.includes(x.a)).length}</small></button>`:""}${esc_.map(a=>{const n=L.filter(x=>x.a===a.id).length;return n?`<button class="achip ${filtroArea===a.id?"on":""}" data-act="farea" data-arg="${a.id}" style="--ac:${a.c}"><i></i>${esc(a.l)} <small>${n}</small></button>`:""}).join("")}</div>`;
+ const vis=LA.filter(x=>filtroTr==="todas"||(filtroTr==="abertas"?x.st!=="CONCLUÍDO"&&x.st!=="NÃO APLICAR":filtroTr==="pendente"?x.st==="PENDENTE CLIENTE":atrasada(x)));
  const grupos=[...new Set(vis.map(x=>x.g))];
  let rows="";grupos.forEach(g=>{rows+=`<tr class="trg"><td colspan="8">${esc(g)}</td></tr>`;
   vis.filter(x=>x.g===g).forEach(x=>{const op=trOpen.has(x.id),tem=x.obs||x.rw||x.ru||x.link;
    rows+=`<tr class="${atrasada(x)?"late":""} ${x.st==="NÃO APLICAR"?"na":""}"><td class="cod">${esc(x.cod||"+")}</td>
-   <td><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}">${x.crit&&!op?`<div class="crit">✓ ${esc(x.crit)}</div>`:""}</td>
+   <td><input type="text" data-tr="t" data-id="${x.id}" value="${esc(x.t)}">${filtroArea==="todas"||filtroArea==="minhas"?areaTag(x.a):""}${x.crit&&!op?`<div class="crit">✓ ${esc(x.crit)}</div>`:""}</td>
    <td><select data-tr="st" data-id="${x.id}" class="ss ss-${stSlug(x.st)}">${ST_TR.map(o=>`<option ${x.st===o?"selected":""}>${o}</option>`).join("")}</select></td>
    <td><input type="date" data-tr="ini" data-id="${x.id}" value="${esc(x.ini)}"></td><td><input type="date" data-tr="fim" data-id="${x.id}" value="${esc(x.fim)}"></td>
    <td>${selResp(x)}</td>
@@ -1031,12 +1320,13 @@ function rFase(p,f){const L=p.trilha[f]||[],st=statusFase(p,f),ehFase=FASES.incl
     <div class="w2"><label>Observações / próximos passos</label><textarea data-tr="obs" data-id="${x.id}" rows="2">${esc(x.obs)}</textarea></div>
     <div><label>Responsável / referência na unidade</label><input type="text" data-tr="ru" data-id="${x.id}" value="${esc(x.ru)}"></div>
     <div><label>Link de documentos (vídeos, RAPs...)</label><input type="text" data-tr="link" data-id="${x.id}" value="${esc(x.link)}"></div>
+    <div><label>Área de atuação</label><select data-tr="a" data-id="${x.id}">${AREAS.map(a=>`<option value="${a.id}" ${x.a===a.id?"selected":""}>${esc(a.l)}</option>`).join("")}</select></div>
     <div style="align-self:end"><button class="sm danger" data-act="tr-rm" data-arg="${x.id}">Excluir atividade</button></div></div></td></tr>`})});
- return `<div class="fpanel"><h3>Andamento · ${esc(faseNome(f))} <span class="hint" style="margin:0">${st.ok} de ${st.tot} concluídas${L.length-st.tot?` · ${L.length-st.tot} não aplicáveis`:""}</span>
+ return `<div class="fpanel"><h3>Andamento · ${esc(faseNome(f))} <span class="hint" style="margin:0">${st.ok} de ${st.tot} concluídas${LA.length-st.tot>0?` · ${LA.length-st.tot} não aplicáveis`:""}</span>
   ${ehFase?(p.info.fase===f?`<span class="tag d" style="margin:0">Fase atual</span>`:`<button class="sm pri" data-act="fase-atual" data-arg="${f}">Definir como fase atual</button>`):""}
   <span style="margin-left:auto;display:flex;gap:6px;align-items:center"><select data-act-change="filtroTr">${[["todas","Todas as atividades"],["abertas","Só em aberto"],["pendente","Pendente cliente"],["atrasadas","Atrasadas"]].map(([v,l])=>`<option value="${v}" ${filtroTr===v?"selected":""}>${l}</option>`).join("")}</select>
 </span></h3>
-  <div class="pbar ${st.c}" style="margin:10px 0 10px"><i style="width:${st.pc}%"></i></div>
+  ${chips}<div class="pbar ${st.c}" style="margin:10px 0 10px"><i style="width:${st.pc}%"></i></div>
   ${vis.length?`<div style="overflow-x:auto"><table class="tr"><thead><tr><th style="width:56px">Cód.</th><th>Atividade</th><th style="width:160px">Status</th><th style="width:140px">Início previsto</th><th style="width:140px">Fim previsto</th><th style="width:170px">Responsável Wisetech</th><th style="width:120px">Validação cliente</th><th style="width:44px"></th></tr></thead><tbody>${rows}</tbody></table></div>`:`<p class="hint">Nenhuma atividade neste filtro.</p>`}
   <div class="dlrow"><button class="sm" data-act="tr-add">+ Incluir atividade</button></div></div>`}
 function rEquipeProjeto(p){if(!USER||!EQUIPE.length)return"";const dono=pessoaPorId(p.owner)||(p.owner===USER.id?MEU:null);
@@ -1073,6 +1363,9 @@ function abrirFormProjeto(modo){formModo=modo;const base=modo==="dup"?P():null,I
    <div><label>Sede</label><input type="text" id="np_sede" value="${v(0,I.sede)}"></div>
    <div><label>Filiais / unidades</label><input type="text" id="np_unid" value="${v(0,I.unidades)}"></div>
    <div class="full"><label>Especialidades</label><input type="text" id="np_esp" value="${v(0,I.esp)}" placeholder="Ex.: cardiologia, ortopedia"></div></div>
+  <div class="msec">Escopo contratado</div>
+  <div class="eq" style="margin-top:2px">${AREAS.map(a=>`<label class="eqm on"><input type="checkbox" class="np_area" value="${a.id}" ${a.fixa?"checked disabled":(base?base.escopo.includes(a.id):true)?"checked":""}> ${esc(a.l)}</label>`).join("")}</div>
+  <div class="hint">Se ainda não souber, deixe tudo marcado: a análise dos documentos pela IA sugere o escopo e você ajusta depois em Gestão do projeto › Dados.</div>
   <div class="msec">Cronograma</div>
   <div class="mg2">
    <div><label>Kickoff <b>*</b></label><input type="date" id="np_kick" value="${v(0,modo==="dup"?I.kickoff||hoje:hoje)}"></div>
@@ -1098,15 +1391,23 @@ function salvarFormProjeto(){const g=id=>(($(id)||{}).value||"").trim();const er
  if(err.length){$("np_err").innerHTML=`<div class="merr">${err.map(esc).join("<br>")}</div>`;return}
  let n;if(formModo==="dup"){n=JSON.parse(JSON.stringify(P()));n.id=uid("p");n.criado=Date.now();n.membros=[]}else n=novoProjeto();
  n.nome=g("np_nome");Object.assign(n.info,{cliente:g("np_cliente"),tipo:g("np_tipo"),sede:g("np_sede"),unidades:g("np_unid"),esp:g("np_esp"),kickoff:g("np_kick"),start:g("np_start"),fase:g("np_fase")||"f0",responsavel:g("np_resp"),lider:g("np_lider"),gerente:g("np_ger"),gestor:g("np_gestor")});
+ n.escopo=["ger",...[...document.querySelectorAll(".np_area:checked")].map(x=>x.value).filter(x=>x!=="ger")];
  if(USER){n.owner=g("np_owner")||USER.id;n.membros=[...document.querySelectorAll(".np_mem:checked")].map(x=>x.value).filter(x=>x!==n.owner)}
  n.abertura={data:new Date().toISOString(),por:USER?(nomeU(MEU)||USER.email):"",modo:formModo==="dup"?"duplicado de "+P().nome:"novo"};
- S.projetos.push(n);S.cur=n.id;tab="mapa";sel=null;faseVista=null;iaMsg=null;iaUndo=null;menuAberto=false;fecharModal();save();render();
+ S.projetos.push(n);S.cur=n.id;projSel=true;tab="docs";sel=null;faseVista=null;iaMsg=null;iaUndo=null;menuAberto=false;fecharModal();save();render();
  toast(formModo==="dup"?"Cópia criada":`Projeto "${n.nome}" aberto e salvo`,3500)}
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&$("modal").style.display==="flex")fecharModal();if(ev.key==="Enter"&&$("modal").style.display==="flex"&&ev.target.tagName==="INPUT"&&ev.target.type!=="checkbox"){ev.preventDefault();if(ev.target.id==="rn_nome")salvarRenomear();else if(formModo)salvarFormProjeto()}});
+function rEscopo(p){const g=podeGerir();
+ const linha=a=>{const on=p.escopo.includes(a.id),n=(TRILHA.reduce((t,f)=>t+(p.trilha[f.id]||[]).filter(x=>x.a===a.id).length,0)),r=p.areaResp[a.id]||"";
+  return `<div class="escl ${on?"on":""}" style="--ac:${a.c}"><label class="escn"><input type="checkbox" data-escopo="${a.id}" ${on?"checked":""} ${a.fixa||!g?"disabled":""}><i></i><b>${esc(a.l)}</b><small>${n} atividades</small></label>
+   <div class="escd">${esc(a.d)}</div>
+   <div class="escr">${EQUIPE.length?`<select data-arearesp="${a.id}" ${!g||!on?"disabled":""}><option value="">Responsável da área —</option>${EQUIPE.map(u=>`<option value="${u.id}" ${r===u.id?"selected":""}>${esc(nomeU(u))}</option>`).join("")}</select>${g&&on&&r?`<button class="sm" data-act="area-aplicar" data-arg="${a.id}" title="Preenche o responsável nas atividades desta área que estão sem responsável">Aplicar às atividades sem responsável</button>`:""}`:`<span class="hint" style="margin:0">Responsável por área disponível com login</span>`}</div></div>`};
+ return `<div class="panel"><h2>Escopo do projeto e áreas de atuação</h2><p class="hint" style="font-size:13px">Marque as áreas contratadas. Áreas fora do escopo ficam ocultas na trilha e não contam no andamento (nada é apagado). ${g?"Defina o responsável de cada área para que cada técnico atue na sua parte.":"Somente o gestor altera o escopo e os responsáveis."}</p>
+ <div class="escg">${AREAS.map(linha).join("")}</div></div>`}
 function rDados(){const p=P(),I=p.info;
  const sel_=(k,ops)=>`<select data-bind="info.${k}" style="width:100%"><option value=""></option>${ops.map(o=>`<option ${I[k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
  const txt=(k,ph)=>`<input type="text" data-bind="info.${k}" value="${esc(I[k])}" placeholder="${esc(ph||"")}">`;
- return `${rEquipeProjeto(p)} <div class="panel"><h2>Dados do projeto</h2>
+ return `${rEquipeProjeto(p)} ${rEscopo(p)} <div class="panel"><h2>Dados do projeto</h2>
  <div class="form">
   <div class="full"><label>Nome do projeto</label><div style="display:flex;gap:8px;align-items:center"><input type="text" value="${esc(p.nome)}" disabled style="flex:1;background:#f5f7f8;color:var(--ink);font-weight:600">${podeGerir()?`<button data-act="proj-renomear">✏️ Alterar nome</button>`:`<span class="hint" style="margin:0">Somente o gestor pode alterar o nome</span>`}</div>
    ${(p.renomeacoes||[]).length?`<div class="hint">Histórico: ${p.renomeacoes.map(r=>`"${esc(r.de)}" → "${esc(r.para)}" (${fmtData(r.data.slice(0,10))}${r.por?", "+esc(r.por):""})`).join(" · ")}</div>`:""}</div>
@@ -1126,25 +1427,32 @@ function rDocs(){const p=P();
    <div class="dz-act"><label class="btn sm">Trocar<input type="file" data-doc="${k}" hidden></label><button class="sm" data-act="rm-doc" data-arg="${k}">Remover</button></div></div>`;
   return `<label class="drop ${lendo?"busy":""}" data-drop="${k}">${lendo===k?`<div class="dz-ic"><span class="spin" style="width:24px;height:24px;color:var(--acc)"></span></div><div class="dz-t">Lendo o arquivo…</div>`:`<div class="dz-ic">${K.ic}</div><div class="dz-t">${K.t}</div><div class="hint" style="margin:0">${K.d}</div><div class="hint" style="margin-top:auto">Clique ou arraste o arquivo aqui<br>Word, Excel, PowerPoint, PDF, CSV ou TXT</div>`}
    <input type="file" data-doc="${k}" hidden ${lendo?"disabled":""}></label>`};
- const algum=Object.values(p.docs).some(Boolean);
- return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">São as informações iniciais do projeto. Importe os três; a IA usa todos juntos para preencher o fluxo e a aderência.</p>
+ const algum=Object.values(p.docs).some(Boolean),modo=iaModo(),nDocs=Object.values(p.docs).filter(Boolean).length;
+ const meu=iaMsg&&(!iaMsg.pid||iaMsg.pid===p.id);
+ let estado;
+ if(iaBusy&&iaPid===p.id)estado=`<div class="iast run"><span class="spin" style="width:22px;height:22px;color:var(--acc)"></span><div><b>Analisando os documentos com IA…</b><div class="hint" style="margin:0" id="iaProg">${iaProgTxt()}</div><div class="hint" style="margin:0">Leva de 1 a 3 minutos. Pode continuar usando o app; o resultado entra sozinho neste projeto.</div></div></div>`;
+ else if(iaBusy)estado=`<div class="iast"><span class="spin"></span> Há uma análise em andamento em outro projeto. Aguarde terminar.</div>`;
+ else if(iaAuto&&iaAuto.pid===p.id)estado=`<div class="iast wait"><div class="cdn" id="iaCd">${iaAuto.s}</div><div><b>A análise automática vai começar em instantes</b><div class="hint" style="margin:0">Importe os demais documentos agora (${nDocs} de 3 importados) ou comece já.</div></div><div class="iabt"><button class="pri" data-act="ia-agora">✨ Analisar agora</button><button data-act="ia-cancelar">Cancelar</button></div></div>`;
+ else if(p.iaAnalise)estado=`<div class="iast ok"><div class="okic">✓</div><div><b>Análise primária feita em ${fmtData(p.iaAnalise.data.slice(0,10))}${p.iaAnalise.por?" por "+esc(p.iaAnalise.por):""}</b><div class="hint" style="margin:0">Documentos: ${esc((p.iaAnalise.docs||[]).join(", ")||"—")} · ${esc(p.iaAnalise.modo||"")}</div></div><div class="iabt"><button data-act="ia-agora" ${algum&&modo?"":"disabled"}>↻ Analisar de novo</button></div></div>`;
+ else estado=`<div class="iast"><div class="okic" style="background:#eef2f7;color:var(--mut)">✨</div><div><b>${algum?"Documentos prontos para a análise":"Importe os documentos acima"}</b><div class="hint" style="margin:0">${modo?"A análise roda sozinha ao importar. Se preferir, comece manualmente.":"A análise automática ainda não está ativada (veja abaixo). Use o modo manual."}</div></div><div class="iabt"><button class="pri" data-act="ia-agora" ${algum&&modo?"":"disabled"}>✨ Analisar documentos agora</button></div></div>`;
+ return `<div class="panel"><h2>1. Documentos do cliente</h2><p class="hint" style="font-size:13px">Primeira etapa do projeto. Importe o projeto técnico, o mapeamento de fluxo e o levantamento de aderência: a IA lê os três juntos e já deixa preenchidos os dados do projeto, o escopo por área, a trilha (marcando o que não se aplica), o fluxo e a aderência. Assim cada técnico atua só no que for necessário.</p>
  <div class="drops">${zona("tec")}${zona("fluxo")}${zona("ader")}</div></div>
- ${iaMsg?`<div class="msg ${iaMsg.err?"err":""}">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
- <div class="panel"><h2>2. Preencher o projeto com IA</h2><p class="hint" style="font-size:13px">A IA lê os documentos e marca as respostas do fluxo, os passos específicos, a lista de aderência e as informações técnicas. Você revisa tudo depois.</p>
- <details ${p.iaTexto?"open":""} style="margin:12px 0"><summary>Acrescentar observações suas (opcional)</summary><div style="display:flex;justify-content:flex-end;margin:6px 0">${micBtn("ia")}</div><textarea data-bind="iaTexto" data-mickey="ia" placeholder="O que o cliente contou e não está nos documentos...">${esc(p.iaTexto)}</textarea><div class="partial" id="partial"></div></details>
- <div class="ia-grid">
-  <div class="box" style="border:1px solid var(--line);margin:0"><h3>Opção A · Usando o Claude (sem custo extra)</h3>
-   <ol class="steps"><li><button class="pri sm" data-act="copy-prompt" ${algum||p.iaTexto?"":"disabled"}>📋 Copiar pedido para o Claude</button></li>
-   <li>Abra uma conversa nova no Claude (<a href="https://claude.ai/new" target="_blank">claude.ai/new</a>) e cole o pedido.</li>
-   <li>Copie a resposta inteira do Claude, cole abaixo e clique em Aplicar.</li></ol>
-   <textarea id="respIA" placeholder="Cole aqui a resposta do Claude" style="min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
-   <div class="dlrow"><button class="pri" data-act="apply-resp">Aplicar resposta</button></div></div>
-  <div class="box" style="border:1px solid var(--line);margin:0"><h3>Opção B · Automático com chave de API (opcional)</h3>
-   <p class="hint" style="margin-top:0">Preenche com um clique, sem copiar e colar. Precisa de uma chave da API da Anthropic (paga por uso, à parte da assinatura do Claude). A chave fica guardada só neste computador.</p>
-   <label class="hint" style="display:block">Chave de API</label><input type="password" data-cfg="key" value="${esc(cfg.key)}" placeholder="sk-ant-...">
-   <label class="hint" style="display:block">Modelo</label><input type="text" data-cfg="model" value="${esc(cfg.model)}">
-   <div class="dlrow"><button class="pri" data-act="api-run" ${cfg.key&&!iaBusy&&(algum||p.iaTexto)?"":"disabled"}>${iaBusy?'<span class="spin"></span> Processando…':"⚡ Preencher automaticamente"}</button></div></div>
- </div></div>
+ <div class="panel"><h2>2. Análise primária com IA <span class="iamode ${modo?"on":""}">${modo?"● Automática · "+iaModoNome(modo):"○ Automática não ativada"}</span></h2>
+ ${estado}
+ ${meu?`<div class="msg ${iaMsg.err?"err":""}" style="margin-top:12px">${esc(iaMsg.t)} ${iaUndo&&!iaMsg.err&&iaUndo.pid===p.id?`<button class="sm" data-act="undo">Desfazer</button>`:""}</div>`:""}
+ <details ${p.iaTexto?"open":""} style="margin:14px 0 4px"><summary>Acrescentar observações do gestor para a análise (opcional)</summary><div style="display:flex;justify-content:flex-end;margin:6px 0">${micBtn("ia")}</div><textarea data-bind="iaTexto" data-mickey="ia" placeholder="O que o cliente contou e não está nos documentos, áreas que não fazem parte do contrato...">${esc(p.iaTexto)}</textarea><div class="partial" id="partial"></div></details>
+ <details style="margin:8px 0" ${!modo&&algum?"open":""}><summary>Modo manual · copiar e colar no Claude (sem custo extra)</summary>
+  <ol class="steps"><li><button class="pri sm" data-act="copy-prompt" ${algum||p.iaTexto?"":"disabled"}>📋 Copiar pedido para o Claude</button></li>
+  <li>Abra uma conversa nova no Claude (<a href="https://claude.ai/new" target="_blank">claude.ai/new</a>) e cole o pedido.</li>
+  <li>Copie a resposta inteira do Claude, cole abaixo e clique em Aplicar.</li></ol>
+  <textarea id="respIA" placeholder="Cole aqui a resposta do Claude" style="min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
+  <div class="dlrow"><button class="pri" data-act="apply-resp">Aplicar resposta</button></div></details>
+ <details style="margin:8px 0"><summary>Ativação da análise automática</summary>
+  <p class="hint" style="font-size:13px"><b>IA da equipe (recomendado):</b> o gestor instala uma vez a função <code>analisar-documentos</code> no Supabase e cadastra a chave da Anthropic no servidor. A partir daí, todos que entram com login têm a análise automática, sem guardar chave no computador. ${USER?(iaNuvemFalta?"<b style=\"color:var(--warn)\">Situação: função ainda não encontrada no servidor.</b>":"Situação: será verificada na primeira análise."):"Disponível quando o app está conectado à nuvem."}</p>
+  <p class="hint" style="font-size:13px"><b>Chave pessoal (alternativa):</b> chave da API da Anthropic guardada só neste navegador. Cobrança por uso, à parte da assinatura do Claude.</p>
+  <div class="mg2" style="max-width:640px"><div><label class="hint" style="display:block">Chave de API</label><input type="password" data-cfg="key" value="${esc(cfg.key)}" placeholder="sk-ant-..."></div>
+  <div><label class="hint" style="display:block">Modelo</label><input type="text" data-cfg="model" value="${esc(cfg.model)}"></div></div></details>
+ </div>
  ${p.tecnico.length?`<div class="box tec"><h3>Informações do projeto técnico</h3><ul>${p.tecnico.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}
  ${p.sugestoes.length?`<div class="box sug"><h3>Sugestões de melhoria</h3><ul>${p.sugestoes.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`:""}`}
 function rPerg(){const p=P();
@@ -1174,13 +1482,15 @@ function rVisual(){const p=P(),et=ativas(p);if(!et.length)return `<div class="pa
   h+=`<div class="fc" data-act="open" data-arg="${e.id}"><h4>${i+1}. ${esc(e.tit)}</h4><ul>${r.map(x=>`<li><b>${esc(x.l)}:</b> ${esc(x.v)}</li>`).join("")}${ps.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${!r.length&&!ps.length?`<div class="hint">Ainda sem respostas</div>`:""}${d.map(x=>`<span class="tag d">◆ ${esc(x)}</span>`).join("")}${a.length?`<span class="tag a">⚠ ${a.length}</span>`:""}${g?`<span class="tag g">${g} gap${g>1?"s":""}</span>`:""}</div>${i<et.length-1?`<span class="arrow">→</span>`:""}`}h+=`</div>`})});
  return h+`</div></div>`}
 function rAder(){const p=P();const ets=[["geral","Geral"],...p.etapas.map(e=>[e.id,e.tit])];
- const lista=p.aderencia.filter(a=>filtroAd==="todos"||(filtroAd==="gaps"?a.status!=="Aderente":a.status===filtroAd));
+ const lista=p.aderencia.filter(a=>filtroArea==="todas"||filtroArea==="minhas"||(a.area||"clin")===filtroArea).filter(a=>filtroAd==="todos"||(filtroAd==="gaps"?a.status!=="Aderente":a.status===filtroAd));
  const cont=STATUS_AD.map(s=>`${s}: <b>${p.aderencia.filter(a=>a.status===s).length}</b>`).join(" · ");
  return `<div class="panel"><h2>Levantamento de aderência</h2><p class="hint" style="font-size:13px">Processos do cliente e o quanto o sistema atende. A IA preenche a partir do levantamento; aqui você ajusta, inclui e acompanha os gaps.</p>
  <div class="tbar"><select data-act-change="filtro">${[["todos","Todos os itens"],["gaps","Só gaps (não aderentes)"],...STATUS_AD.map(s=>[s,s])].map(([v,l])=>`<option value="${v}" ${filtroAd===v?"selected":""}>${l}</option>`).join("")}</select>
+ <select data-act-change="farea">${[["todas","Todas as áreas"],...AREAS.filter(a=>p.escopo.includes(a.id)).map(a=>[a.id,a.l])].map(([v,l])=>`<option value="${v}" ${filtroArea===v?"selected":""}>${esc(l)}</option>`).join("")}</select>
  <button class="pri" data-act="ad-add">+ Incluir item</button><span class="hint" style="margin:0">${cont}</span></div>
- ${lista.length?`<table class="ad"><thead><tr><th style="width:34%">Processo</th><th style="width:18%">Etapa</th><th style="width:15%">Status</th><th>Observação</th><th style="width:36px"></th></tr></thead><tbody>
+ ${lista.length?`<table class="ad"><thead><tr><th style="width:30%">Processo</th><th style="width:14%">Área</th><th style="width:16%">Etapa</th><th style="width:15%">Status</th><th>Observação</th><th style="width:36px"></th></tr></thead><tbody>
  ${lista.map(a=>`<tr><td><textarea data-ad="processo" data-id="${a.id}" rows="1">${esc(a.processo)}</textarea></td>
+  <td><select data-ad="area" data-id="${a.id}">${AREAS.map(x=>`<option value="${x.id}" ${(a.area||"clin")===x.id?"selected":""}>${esc(x.l)}</option>`).join("")}</select></td>
   <td><select data-ad="etapa" data-id="${a.id}">${ets.map(([v,l])=>`<option value="${v}" ${a.etapa===v?"selected":""}>${esc(l)}</option>`).join("")}</select></td>
   <td><select data-ad="status" data-id="${a.id}" class="s-${esc(a.status)}">${STATUS_AD.map(s=>`<option ${a.status===s?"selected":""}>${s}</option>`).join("")}</select></td>
   <td><textarea data-ad="obs" data-id="${a.id}" rows="1">${esc(a.obs)}</textarea></td><td><button class="sm danger" data-act="ad-rm" data-arg="${a.id}" title="Excluir">✕</button></td></tr>`).join("")}</tbody></table>`:`<p class="hint">Nenhum item${filtroAd!=="todos"?" neste filtro":""}. Importe o levantamento de aderência e use a IA, ou inclua manualmente.</p>`}</div>`}
@@ -1214,12 +1524,12 @@ function cargaEquipe(){const hoje=hojeISO(),em7=addDias(7),em30=addDias(30);
  const P_=base.map(reg),sem=reg({id:"",nome:"Sem responsável"});
  projVis().forEach(p=>{const membrosP=[p.owner,...(p.membros||[])];
   P_.forEach(x=>{if(membrosP.includes(x.u.id)){x.proj.push(p);if(p.info.start&&p.info.start>=hoje&&p.info.start<=em30)x.starts.push(p)}});
-  TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(a=>{if(a.st==="CONCLUÍDO"||a.st==="NÃO APLICAR")return;const u=respDe(a);let alvo=u?P_.find(x=>x.u.id===u.id):null;if(!alvo&&!EQUIPE.length&&a.rw)alvo=P_.find(x=>x.u.id==="txt:"+normT(a.rw));if(!alvo)alvo=sem;
+  TRILHA.forEach(f=>trL(p,f.id).forEach(a=>{if(a.st==="CONCLUÍDO"||a.st==="NÃO APLICAR")return;const u=respDe(a);let alvo=u?P_.find(x=>x.u.id===u.id):null;if(!alvo&&!EQUIPE.length&&a.rw)alvo=P_.find(x=>x.u.id==="txt:"+normT(a.rw));if(!alvo)alvo=sem;
    alvo.ab.push({p,f:f.id,a});if(atrasada(a))alvo.atr++;else if(a.st==="PENDENTE CLIENTE")alvo.pc++;else if(a.st==="EM ANDAMENTO")alvo.em++;else alvo.ar++;if(!atrasada(a)&&a.fim&&a.fim>=hoje&&a.fim<=em7)alvo.v7++}))});
  return{pessoas:P_,sem}}
 const dt=s=>new Date(s+"T00:00:00");
 const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-function spansProjeto(p){const fases=[];TRILHA.filter(f=>f.fase).forEach(f=>{const L=(p.trilha[f.id]||[]).filter(x=>x.st!=="NÃO APLICAR");let a=null,b=null;
+function spansProjeto(p){const fases=[];TRILHA.filter(f=>f.fase).forEach(f=>{const L=trL(p,f.id).filter(x=>x.st!=="NÃO APLICAR");let a=null,b=null;
   L.forEach(x=>{const i=x.ini||x.fim,e=x.fim||x.ini;if(i&&(!a||i<a))a=i;if(e&&(!b||e>b))b=e});if(a&&b){const st=statusFase(p,f.id);fases.push({f:f.id,a,b,st,late:L.some(atrasada)})}});
  let a=p.info.kickoff||(fases.length?fases.reduce((m,x)=>x.a<m?x.a:m,fases[0].a):""),b=p.info.start||(fases.length?fases.reduce((m,x)=>x.b>m?x.b:m,fases[0].b):"");
  if(a&&b&&b<a)[a,b]=[b,a];return{a,b,fases}}
@@ -1354,17 +1664,22 @@ document.addEventListener("click",async ev=>{
  const p=P();if(act!=="proj-del"&&delArm){delArm=false}
  switch(act){
   case"tab":tab=arg;menuAberto=false;break;
+  case"farea":setFiltroArea(arg);break;
+  case"ver-area":setFiltroArea(arg);tab="gest";gestSub="trilha";window.scrollTo({top:0});break;
+  case"area-aplicar":{if(!podeGerir())return;const uidR=p.areaResp[arg],u=pessoaPorId(uidR);if(!u)return;let n=0;
+   TRILHA.forEach(f=>(p.trilha[f.id]||[]).forEach(x=>{if(x.a===arg&&!x.rwId&&!String(x.rw||"").trim()&&x.st!=="NÃO APLICAR"&&x.st!=="CONCLUÍDO"){x.rwId=u.id;x.rw=nomeU(u);n++}}));
+   save();toast(n?`${n} atividade(s) de ${areaDe(arg).l} atribuídas a ${nomeU(u)}`:"Todas as atividades desta área já têm responsável",3500);break}
   case"menu":menuAberto=!menuAberto;break;
   case"gantt-ab":ganttAberto.has(arg)?ganttAberto.delete(arg):ganttAberto.add(arg);break;
-  case"abrir-proj":S.cur=arg;tab="mapa";sel=null;faseVista=null;persist();break;
+  case"abrir-proj":S.cur=arg;projSel=true;tab="mapa";sel=null;faseVista=null;persist();break;
   case"fase":faseVista=arg;tab="gest";gestSub="trilha";filtroTr="todas";break;
   case"editar":tab="gest";gestSub=arg;if(arg==="trilha"&&!faseVista)faseVista=p.info.fase;break;
   case"fase-atual":p.info.fase=arg;save();toast("Fase atual: "+faseNome(arg));break;
   case"ver-fase":tab="gest";gestSub="trilha";faseVista=arg;filtroTr="todas";render();window.scrollTo({top:0});return;
   case"carga-ab":cargaAberta=cargaAberta===arg?null:arg;break;
-  case"abrir-ativ":{const[pid,fid]=arg.split("|");S.cur=pid;tab="gest";gestSub="trilha";faseVista=fid;filtroTr="abertas";render();window.scrollTo({top:0});return}
+  case"abrir-ativ":{const[pid,fid]=arg.split("|");S.cur=pid;projSel=true;tab="gest";gestSub="trilha";faseVista=fid;filtroTr="abertas";render();window.scrollTo({top:0});return}
   case"tr-det":trOpen.has(arg)?trOpen.delete(arg):trOpen.add(arg);break;
-  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
+  case"tr-add":{const it={id:uid("t"),cod:"",g:"Atividades adicionais",a:AREA_IDS.includes(filtroArea)?filtroArea:"ger",t:"",crit:"",st:"A REALIZAR",ini:"",fim:"",val:"",obs:"",rw:"",ru:"",link:""};p.trilha[faseVista].push(it);filtroTr="todas";save();render();const f=document.querySelector(`[data-tr="t"][data-id="${it.id}"]`);if(f)f.focus();return}
   case"tr-rm":p.trilha[faseVista]=p.trilha[faseVista].filter(x=>x.id!==arg);trOpen.delete(arg);save();break;
   case"open":tab="perg";sel=arg;render();const pn=$("painel");if(pn&&window.innerWidth<=900)pn.scrollIntoView({behavior:"smooth"});else window.scrollTo({top:0});return;
   case"mark":{const i=+arg,e=p.etapas[i];e.ativa=!e.ativa;save();break}
@@ -1379,8 +1694,10 @@ document.addEventListener("click",async ev=>{
   case"copy-prompt":{const ok=await copiar(montarPedido());toast(ok?"Pedido copiado. Cole numa conversa nova no Claude.":"Não consegui copiar automaticamente",3500);return}
   case"apply-resp":aplicarTexto(($("respIA")||{}).value);return;
   case"api-run":rodarAPI();return;
+  case"ia-agora":rodarIA(false);return;
+  case"ia-cancelar":cancelarAuto();render();return;
   case"undo":if(iaUndo){const i=S.projetos.findIndex(x=>x.id===iaUndo.pid);if(i>=0){S.projetos[i]=normaliza(JSON.parse(iaUndo.snap));marcar(S.projetos[i].id)}iaUndo=null;iaMsg={t:"Preenchimento desfeito."};save()}break;
-  case"ad-add":{p.aderencia.unshift({id:uid("a"),processo:"",etapa:"geral",status:"A definir",obs:""});filtroAd="todos";save();render();const f=document.querySelector('[data-ad="processo"]');if(f)f.focus();return}
+  case"ad-add":{p.aderencia.unshift({id:uid("a"),processo:"",area:AREA_IDS.includes(filtroArea)?filtroArea:"clin",etapa:"geral",status:"A definir",obs:""});filtroAd="todos";save();render();const f=document.querySelector('[data-ad="processo"]');if(f)f.focus();return}
   case"ad-rm":p.aderencia=p.aderencia.filter(a=>a.id!==arg);save();break;
   case"copy":{const ok=await copiar($(arg).value);toast(ok?"Copiado":"Selecione e use Ctrl+C");return}
   case"dl-docx":baixar(buildDocx(relatorio()),nomeArq("projeto de implantação","docx"));return;
@@ -1389,12 +1706,12 @@ document.addEventListener("click",async ev=>{
   case"dl-all":baixar(new Blob([JSON.stringify({tipo:"ppi-todos",v:1,projetos:S.projetos},null,1)],{type:"application/json"}),"Projetos de implantação - backup completo.json");return;
   case"imp-json":$("fileJson").click();return;
   case"proj-new":if(!podeGerir()){toast("Somente o gestor pode abrir projetos");return}abrirFormProjeto("novo");return;
-  case"abrir-oculto":if(!podeGerir())return;S.cur=arg;tab="mapa";sel=null;faseVista=null;menuAberto=false;persist();break;
-  case"mostrar-ocultos":if(!podeGerir())return;mostrarOcultos=!mostrarOcultos;if(!mostrarOcultos&&P().oculto){const v=projVis();if(v.length)S.cur=v[0].id}break;
+  case"abrir-oculto":if(!podeGerir())return;S.cur=arg;projSel=true;tab="mapa";sel=null;faseVista=null;menuAberto=false;persist();break;
+  case"mostrar-ocultos":if(!podeGerir())return;mostrarOcultos=!mostrarOcultos;if(!mostrarOcultos&&P().oculto){const v=projVis();if(v.length)S.cur=v[0].id;projSel=false}break;
   case"proj-dup":return;
   case"proj-ocultar":{if(!podeGerir()){toast("Somente o gestor pode ocultar projetos");return}const alvo=P();
    confirmar({titulo:"Ocultar projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> deixará de aparecer para toda a equipe (painel, menu e indicadores). Nenhum dado é apagado: o gestor pode reexibi-lo a qualquer momento no Painel gerencial.`,ok:"Ocultar projeto"},
-    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};alvo.upd=Date.now();marcar(alvo.id);if(!mostrarOcultos){const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel"}sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
+    ()=>{alvo.oculto={por:USER?(nomeU(MEU)||USER.email):"",data:new Date().toISOString()};alvo.upd=Date.now();marcar(alvo.id);if(!mostrarOcultos){const v=projVis();S.cur=v.length?v[0].id:S.cur;tab="painel";projSel=false}sel=null;faseVista=null;persist();render();toast("Projeto ocultado")});return}
   case"proj-reexibir":{if(!podeGerir())return;const alvo=S.projetos.find(x=>x.id===arg);if(!alvo)return;
    confirmar({titulo:"Reexibir projeto?",texto:`O projeto <b>${esc(alvo.nome)}</b> volta a aparecer para a equipe.`,ok:"Reexibir"},()=>{delete alvo.oculto;alvo.upd=Date.now();marcar(alvo.id);persist();render();toast("Projeto reexibido")});return}
   case"proj-renomear":{if(!podeGerir()){toast("Somente o gestor pode alterar o nome do projeto");return}abrirRenomear();return}
@@ -1412,7 +1729,7 @@ document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
  else if(d.cfg){cfg[d.cfg]=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify(cfg))}catch(e){}const bt=document.querySelector('[data-act="api-run"]');if(bt&&!iaBusy)bt.disabled=!cfg.key}
 });
 document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
- if(t.id==="selProj"){S.cur=t.value;sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
+ if(t.id==="selProj"){if(!t.value){projSel=false;tab="painel";menuAberto=false;render();return}projSel=true;S.cur=t.value;sel=null;iaMsg=null;delArm=false;faseVista=null;tab="mapa";menuAberto=false;persist();render();return}
  if(t.id==="fileJson"){const f=t.files&&t.files[0];t.value="";if(f)importarBackup(f);return}
  if(d.doc){const f=t.files&&t.files[0];t.value="";if(f)importarDoc(f,d.doc);return}
  if(d.bind&&t.tagName==="SELECT"||d.bind&&t.type==="date"){render();return}
@@ -1420,6 +1737,9 @@ document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
  if(d.ad&&t.tagName==="SELECT"){const a=p.aderencia.find(x=>x.id===d.id);if(a){a[d.ad]=t.value;save();render()}return}
  if(d.actChange==="filtro"){filtroAd=t.value;render()}
  if(d.actChange==="filtroTr"){filtroTr=t.value;render();return}
+ if(d.actChange==="farea"){setFiltroArea(t.value);render();return}
+ if(d.escopo){if(!podeGerir())return;const e=new Set(p.escopo);t.checked?e.add(d.escopo):e.delete(d.escopo);e.add("ger");p.escopo=AREA_IDS.filter(x=>e.has(x));save();render();toast(t.checked?`${areaDe(d.escopo).l} incluída no escopo`:`${areaDe(d.escopo).l} fora do escopo (atividades ocultas, nada foi apagado)`,3000);return}
+ if(d.arearesp){if(!podeGerir())return;if(t.value)p.areaResp[d.arearesp]=t.value;else delete p.areaResp[d.arearesp];save();render();return}
  if(d.membro){const m=new Set(p.membros||[]);t.checked?m.add(d.membro):m.delete(d.membro);p.membros=[...m];save();render();return}
  if(d.papel&&SB){const id=d.papel,v=t.value;SB.from("perfis").update({papel:v}).eq("id",id).then(({error})=>{if(error){toast("Não foi possível alterar: "+msgErro(error));carregarEquipe().then(render)}else{const u=pessoaPorId(id);if(u)u.papel=v;toast("Papel atualizado");render()}});return}
  if(d.tr==="rwId"&&faseVista){const x=(p.trilha[faseVista]||[]).find(y=>y.id===d.id);if(!x)return;if(t.value!=="__livre"){x.rwId=t.value;x.rw=t.value?nomeU(pessoaPorId(t.value)):""}save();render();return}
@@ -1430,7 +1750,7 @@ document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
  if(d.audi&&t.tagName==="SELECT"){render();return}
 });
 async function importarBackup(f){try{const o=JSON.parse(await f.text());let lista=o.tipo==="ppi-todos"?o.projetos:o.tipo==="ppi-projeto"?[o.projeto]:(o.etapas?[o]:null);if(!lista)throw 0;
- lista.forEach(p=>{normaliza(p);if(USER){p.owner=USER.id;p.membros=[]}if(S.projetos.some(x=>x.id===p.id))p.id=uid("p");S.projetos.push(p);marcar(p.id)});S.cur=lista[lista.length-1].id;persist();tab="mapa";render();toast(`${lista.length} projeto(s) importado(s)`)}
+ lista.forEach(p=>{normaliza(p);if(USER){p.owner=USER.id;p.membros=[]}if(S.projetos.some(x=>x.id===p.id))p.id=uid("p");S.projetos.push(p);marcar(p.id)});S.cur=lista[lista.length-1].id;projSel=true;persist();tab="mapa";render();toast(`${lista.length} projeto(s) importado(s)`)}
  catch(e){toast("Arquivo de backup inválido")}}
 ["dragover","dragenter"].forEach(t=>document.addEventListener(t,ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(z){ev.preventDefault();z.classList.add("over")}}));
 document.addEventListener("dragleave",ev=>{const z=ev.target.closest&&ev.target.closest("[data-drop]");if(z)z.classList.remove("over")});
@@ -1526,7 +1846,7 @@ window.addEventListener("focus",()=>atualizarDaNuvem());
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")atualizarDaNuvem()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&$("login").style.display==="flex"&&ev.target.closest&&ev.target.closest("#login")){ev.preventDefault();acaoLogin()}});
 async function sair(){try{if(sync.dirty.size||sync.del.size)await enviarNuvem()}catch(e){}if(sync.dirty.size&&!confirmSair){confirmSair=true;toast("Há alterações ainda não enviadas. Clique em Sair de novo para sair mesmo assim.",4000);return}
- confirmSair=false;try{await SB.auth.signOut()}catch(e){}USER=null;EQUIPE=[];MEU=null;tab="painel";sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
+ confirmSair=false;try{await SB.auth.signOut()}catch(e){}USER=null;EQUIPE=[];MEU=null;tab="painel";projSel=false;sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
 let confirmSair=false;
 iniciarNuvem();
 </script>
