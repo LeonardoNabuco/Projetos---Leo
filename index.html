@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdnjs.cloudflare.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <title>Projetos de Implantação Klingo</title>
 <style>
 :root{--bg:#f5f7f8;--card:#fff;--ink:#1d2a33;--mut:#66757f;--line:#dfe5e9;--acc:#0f7c74;--acc2:#e3f3f1;--warn:#b45309;--warnbg:#fef3e2;--dec:#5b4bc4;--decbg:#eeebfb;--blue:#2b5a7a;--bluebg:#eef4f8;--red:#b91c1c}
@@ -431,7 +433,7 @@ details>summary{cursor:pointer;font-weight:600}
  <span id="userbox"></span>
 </header>
 <div class="shell"><aside id="side"></aside><main id="app"></main></div>
-<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.19.0 · publicada em 18/11/2026</footer>
+<footer id="versao" style="text-align:center;color:#9aa5ad;font-size:11px;padding:18px 0 26px">Projetos de Implantação · Klingo · Versão beta 0.20.0 · publicada em 18/11/2026</footer>
 <div id="print"></div>
 <div id="login" style="display:none"></div>
 <div id="modal" style="display:none"></div>
@@ -1099,7 +1101,9 @@ function normaliza(p){if(p.escopo===undefined)p.escopo=p.trilha?["ger","clin"]:A
 let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!Array.isArray(S.projetos)||!S.projetos.length){const p=novoProjeto("Meu primeiro projeto");S={cur:p.id,projetos:[p]}}
 S.projetos.forEach(normaliza);
-let cfg={key:"",model:"claude-sonnet-5-5"};try{Object.assign(cfg,JSON.parse(localStorage.getItem(CFG))||{})}catch(e){}
+let cfg={model:"claude-sonnet-5-5"};
+/* segurança: chave de API nunca fica no navegador; remove qualquer chave gravada por versões anteriores (0.7 a 0.13) */
+try{const v=JSON.parse(localStorage.getItem(CFG)||"null");if(v&&v.model)cfg.model=v.model;if(v&&("key" in v))localStorage.setItem(CFG,JSON.stringify({model:cfg.model}))}catch(e){try{localStorage.removeItem(CFG)}catch(_){}}
 const projVis=()=>S.projetos.filter(p=>!p.oculto);
 let mostrarOcultos=false;
 const projMenu=()=>mostrarOcultos&&podeGerir()?S.projetos:projVis();
@@ -1226,7 +1230,7 @@ async function importarExtras(files){const p=P();const L=[...files||[]];if(!L.le
 let iaMsg=null,iaUndo=null,iaBusy=false,iaProg=0,iaPid=null,iaNuvemFalta=false,iaAuto=null;
 const IA_FUNC="analisar-documentos",IA_ESPERA=20;
 const IA_AUTO_ATIVA=false;/* ligar quando a função "analisar-documentos" estiver instalada no Supabase */
-function iaModo(){if(!IA_AUTO_ATIVA)return null;if(USER&&SB&&nuvemAtiva()&&!iaNuvemFalta)return"nuvem";if(cfg.key)return"chave";return null}
+function iaModo(){if(!IA_AUTO_ATIVA)return null;if(USER&&SB&&nuvemAtiva()&&!iaNuvemFalta)return"nuvem";return null}/* só pelo servidor: a chave fica guardada no Supabase, nunca no navegador */
 const iaModoNome=m=>({nuvem:"IA da equipe (servidor)",chave:"chave de API deste navegador"}[m]||"");
 function montarPedido(p=P()){
  const catalogo=ETAPAS.map(e=>({etapa_id:e.id,etapa:e.t,perguntas:e.qs.map(q=>({pergunta_id:q.id,pergunta:q.q,escolha:q.tp==="m"?"varias":"uma",opcoes:q.o.map(o=>ov(o).v)}))}));
@@ -1325,8 +1329,8 @@ async function chamarIA(prompt,onProg){
  const body={model:cfg.model||"claude-sonnet-5-5",max_tokens:16000,stream:true,messages:[{role:"user",content:prompt}]};let r;
  if(modo==="nuvem"){let tk="";try{const{data}=await SB.auth.getSession();tk=data&&data.session&&data.session.access_token||""}catch(e){}
   r=await fetch(nuvemURL().replace(/\/$/,"")+"/functions/v1/"+IA_FUNC,{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+tk,apikey:nuvemKEY()},body:JSON.stringify(body)});
-  if(r.status===404){iaNuvemFalta=true;if(cfg.key)return chamarIA(prompt,onProg);throw Object.assign(new Error("sem_funcao"),{cod:"sem_funcao"})}}
- else r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify(body)});
+  if(r.status===404){iaNuvemFalta=true;throw Object.assign(new Error("sem_funcao"),{cod:"sem_funcao"})}}
+ else throw Object.assign(new Error("sem_ia"),{cod:"sem_ia"});
  if(!r.ok){const j=await r.json().catch(()=>({}));if(j.error==="sem_chave")throw Object.assign(new Error("sem_chave"),{cod:"sem_chave"});
   throw new Error((j.error&&j.error.message)||j.message||j.msg||(typeof j.error==="string"?j.error:"")||("erro "+r.status))}
  return lerSSE(r,onProg)}
@@ -2046,7 +2050,7 @@ document.addEventListener("input",ev=>{const t=ev.target,d=t.dataset,p=P();
  else if(d.aud){const k=d.k;p.audit[k]=Object.assign({v:"",obs:""},p.audit[k]||{});p.audit[k][d.aud]=t.value;save()}
  else if(d.audi){p.auditInfo[d.audi]=t.value;save()}
  else if(d.ad&&t.tagName==="TEXTAREA"){const a=p.aderencia.find(x=>x.id===d.id);if(a){a[d.ad]=t.value;save()}}
- else if(d.cfg){cfg[d.cfg]=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify(cfg))}catch(e){}const bt=document.querySelector('[data-act="api-run"]');if(bt&&!iaBusy)bt.disabled=!cfg.key}
+ else if(d.cfg){if(d.cfg==="model"){cfg.model=t.value.trim();try{localStorage.setItem(CFG,JSON.stringify({model:cfg.model}))}catch(e){}}}
 });
 document.addEventListener("change",ev=>{const t=ev.target,d=t.dataset,p=P();
  if(d.logf&&d.logf!=="busca"){logFiltro[d.logf]=t.value;logFiltro.lim=150;render();return}
@@ -2182,7 +2186,9 @@ window.addEventListener("focus",()=>atualizarDaNuvem());
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")atualizarDaNuvem()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&$("login").style.display==="flex"&&ev.target.closest&&ev.target.closest("#login")){ev.preventDefault();acaoLogin()}});
 async function sair(){try{if(sync.dirty.size||sync.del.size)await enviarNuvem()}catch(e){}if(sync.dirty.size&&!confirmSair){confirmSair=true;toast("Há alterações ainda não enviadas. Clique em Sair de novo para sair mesmo assim.",4000);return}
- confirmSair=false;try{await SB.auth.signOut()}catch(e){}USER=null;EQUIPE=[];MEU=null;tab="painel";projSel=false;sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
+ confirmSair=false;const uidSaida=USER&&USER.id;try{await SB.auth.signOut()}catch(e){}
+ /* segurança: ao sair, nada do projeto fica guardado neste navegador (computadores compartilhados) */
+ try{if(uidSaida)localStorage.removeItem(KEY+"_u_"+uidSaida);Object.keys(localStorage).filter(k=>k.startsWith("sb-")&&k.endsWith("-auth-token")).forEach(k=>localStorage.removeItem(k));sessionStorage.clear()}catch(e){}USER=null;EQUIPE=[];MEU=null;tab="painel";projSel=false;sync.dirty.clear();sync.del.clear();S={cur:null,projetos:[novoProjeto()]};S.cur=S.projetos[0].id;$("app").innerHTML="";telaLogin("entrar",null)}
 let confirmSair=false;
 iniciarNuvem();
 </script>
